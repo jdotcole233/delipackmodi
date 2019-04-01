@@ -13,11 +13,23 @@
             android:name=".Homedashboard_user"
             android:label="@string/title_activity_homedashboard_user"></activity>
         <activity android:name=".MainActivity">
+
+        </activity>
+
+        <activity android:name=".SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".SigninActivity" >
+
+        </activity>
+
+        <activity android:name=".SignupActivity" >
+
         </activity>
 
         <meta-data

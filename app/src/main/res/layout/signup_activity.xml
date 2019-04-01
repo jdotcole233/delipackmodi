@@ -125,4 +125,18 @@
             android:textSize="18sp" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/registerbackbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="294dp"
+        android:layout_marginRight="294dp"
+        android:layout_marginBottom="14dp"
+        android:text="back"
+        android:background="#00ffffff"
+        />
 </RelativeLayout>
