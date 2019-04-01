@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_screen_background"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/splashscreen_background">
 
     <TextView
         android:id="@+id/textView2"
@@ -12,70 +13,118 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="141dp"
-        android:layout_marginRight="141dp"
-        android:layout_marginBottom="583dp"
-        android:fontFamily="sans-serif"
+        android:layout_marginEnd="124dp"
+        android:layout_marginRight="124dp"
+        android:layout_marginBottom="574dp"
+        android:fontFamily="@font/amiko_bold"
         android:text="Lets get started"
-        android:textColor="@android:color/background_light"
+        android:textColor="@color/colorAccent"
         android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="111dp"
-        android:layout_marginRight="111dp"
-        android:layout_marginBottom="313dp"
-        android:fontFamily="sans-serif-medium"
-        android:text=" Login to Delipack"
-        android:textColor="@android:color/background_light"
-        android:textSize="24sp" />
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="70dp"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="231dp"
         android:background="@drawable/rounded_input_signin"
+        android:drawableLeft="@drawable/ic_phone_android_black_24dp"
+        android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Phone Number"
         android:inputType="phone"
         android:paddingLeft="20dp"
-        android:textColorHint="@android:color/background_light" />
+        android:textColorHint="@color/colorAccent" />
 
     <EditText
         android:id="@+id/editText2"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="70dp"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="171dp"
+        android:layout_marginBottom="153dp"
         android:background="@drawable/rounded_input_signin"
+        android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
+        android:drawablePadding="10dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
         android:paddingLeft="20dp"
-        android:textColorHint="@android:color/background_light" />
+        android:textColorHint="@color/colorAccent" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="70dp"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="113dp"
-        android:background="@drawable/rounded_home_buttons"
-        android:elevation="50dp"
+        android:layout_marginBottom="67dp"
+        android:background="@drawable/register_btn_background"
+        android:elevation="40dp"
+        android:fontFamily="@font/amiko_semibold"
         android:text="Sign in"
         android:textColor="@android:color/background_light"
-        android:textSize="17sp" />
+        android:textSize="19sp"
+        />
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:elevation="40dp"
+        android:layout_marginTop="100dp"
+        android:foregroundGravity="center"
+        app:cardBackgroundColor="#e6e6e6"
+        app:cardCornerRadius="200dp"
+        android:alpha="0.9"
+        android:layout_centerHorizontal="true"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                app:srcCompat="@drawable/ic_moped"
+                tools:ignore="VectorDrawableCompat" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/alegreya_sc_black_italic"
+                android:gravity="center"
+                android:text="@string/homecompname"
+                android:textAllCaps="false"
+                android:textColor="#ffbf00"
+                android:textSize="62sp"
+                />
+
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/amiko_bold"
+                android:text="Delivery @ Ease"
+                android:textAllCaps="true"
+                android:textColor="#ffbf00"
+                android:textSize="18sp"
+                android:layout_marginTop="-15dp"
+                />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 </RelativeLayout>

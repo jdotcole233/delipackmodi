@@ -3,5 +3,9 @@
     <string name="sign_in_btn">Sign in</string>
     <string name="sign_up_btn">Register</string>
     <string name="homecompname">DeliPack</string>
+    <string name="title_activity_homedashboard_user">Homedashboard</string>
+    <string name="tilehistory">History</string>
+    <string name="locationsearch">Search</string>
+    <string name="user_profile">Profile</string>
 
 </resources>
