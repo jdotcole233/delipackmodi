@@ -33,6 +33,7 @@
         >
 
         <EditText
+            android:id="@+id/first_name"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginLeft="20dp"
@@ -44,9 +45,12 @@
             android:fontFamily="sans-serif"
             android:hint="First Name"
             android:paddingLeft="10dp"
-            android:textColorHint="@color/colorAccent" />
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            />
 
         <EditText
+            android:id="@+id/last_name"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginLeft="20dp"
@@ -59,26 +63,31 @@
             android:fontFamily="sans-serif"
             android:hint="Last Name"
             android:paddingLeft="10dp"
-            android:textColorHint="@color/colorAccent" />
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            />
 
         <EditText
+            android:id="@+id/phone_number"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/rounded_input_signin"
-            android:drawableLeft="@drawable/ic_phone_android_black_24dp"
+            android:drawableLeft="@drawable/ic_email_black_24dp"
             android:drawablePadding="5dp"
             android:elevation="8dp"
             android:fontFamily="sans-serif"
-            android:hint="Phone Number"
+            android:hint="Email (optional)"
             android:paddingLeft="10dp"
             android:textColorHint="@color/colorAccent"
             android:inputType="number"
+            android:textColor="@color/colorAccent"
             />
 
         <EditText
+            android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginLeft="20dp"
@@ -92,9 +101,12 @@
             android:hint="Password"
             android:inputType="textPassword"
             android:paddingLeft="10dp"
-            android:textColorHint="@color/colorAccent" />
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            />
 
         <EditText
+            android:id="@+id/confirm_password"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginLeft="20dp"
@@ -108,11 +120,12 @@
             android:hint="Password again"
             android:inputType="textPassword"
             android:paddingLeft="10dp"
-
-
-            android:textColorHint="@color/colorAccent" />
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"
+            />
 
         <Button
+            android:id="@+id/registerationbutton"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginLeft="20dp"
