@@ -15,5 +15,9 @@
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_person_outline_black_24dp"
         android:title="@string/user_profile" />
+    <item
+        android:id="@+id/logout_user"
+        android:icon="@drawable/ic_exit_to_app_black_24dp"
+        android:title="@string/logout_user" />
 
 </menu>

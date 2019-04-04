@@ -7,5 +7,6 @@
     <string name="tilehistory">History</string>
     <string name="locationsearch">Search</string>
     <string name="user_profile">Profile</string>
+    <string name="logout_user">Logout</string>
 
 </resources>

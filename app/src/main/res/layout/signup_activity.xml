@@ -68,7 +68,7 @@
             />
 
         <EditText
-            android:id="@+id/phone_number"
+            android:id="@+id/email_user"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginLeft="20dp"
@@ -82,7 +82,7 @@
             android:hint="Email (optional)"
             android:paddingLeft="10dp"
             android:textColorHint="@color/colorAccent"
-            android:inputType="number"
+            android:inputType="text"
             android:textColor="@color/colorAccent"
             />
 

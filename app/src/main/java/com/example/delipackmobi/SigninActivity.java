@@ -20,7 +20,7 @@ public class SigninActivity extends AppCompatActivity {
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent back_home_intent = new Intent(SigninActivity.this, MainActivity.class);
+                Intent back_home_intent = new Intent(SigninActivity.this, Homedashboard_user.class);
                 startActivity(back_home_intent);
                 finish();
             }

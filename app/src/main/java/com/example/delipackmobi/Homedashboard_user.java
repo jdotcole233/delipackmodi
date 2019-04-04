@@ -18,13 +18,16 @@ public class Homedashboard_user extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.tilehistory);
+//                    mTextMessage.setText(R.string.tilehistory);
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.locationsearch);
+//                    mTextMessage.setText(R.string.locationsearch);
                     return true;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.user_profile);
+//                    mTextMessage.setText(R.string.user_profile);
+                    return true;
+                case R.id.logout_user:
+//                    mTextMessage.setText(R.string.user_profile);
                     return true;
             }
             return false;
@@ -36,7 +39,7 @@ public class Homedashboard_user extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homedashboard_user);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
+//        mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }

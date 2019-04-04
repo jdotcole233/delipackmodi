@@ -17,6 +17,9 @@ import com.thrivecom.ringcaptcha.RingcaptchaApplication;
 import com.thrivecom.ringcaptcha.RingcaptchaApplicationHandler;
 import com.thrivecom.ringcaptcha.RingcaptchaVerification;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 import cz.msebera.android.httpclient.Header;
@@ -27,7 +30,7 @@ public class SignupActivity extends AppCompatActivity {
     private Button back_btn;
     private EditText firstName;
     private EditText lastName;
-    private EditText phoneNumber;
+    private EditText email;
     private EditText password;
     private EditText confirmPassword;
     private  Button registerButton;
@@ -42,7 +45,7 @@ public class SignupActivity extends AppCompatActivity {
         back_btn = findViewById(R.id.registerbackbtn);
         firstName = findViewById(R.id.first_name);
         lastName = findViewById(R.id.last_name);
-        phoneNumber = findViewById(R.id.phone_number);
+        email = findViewById(R.id.email_user);
         password = findViewById(R.id.password);
         confirmPassword = findViewById(R.id.confirm_password);
         registerButton = findViewById(R.id.registerationbutton);
@@ -54,7 +57,7 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (firstName.getText().toString().isEmpty() || lastName.getText().toString().isEmpty() ||
-                        phoneNumber.getText().toString().isEmpty() || password.getText().toString().isEmpty() ||
+                        password.getText().toString().isEmpty() ||
                         confirmPassword.getText().toString().isEmpty()){
                     //output error message
 
@@ -63,10 +66,10 @@ public class SignupActivity extends AppCompatActivity {
 
                 } else {
 
-                    if(phoneNumber.getText().length() < 10 || phoneNumber.getText().length() > 10){
-                            Log.i("delipack", "phone number must be 10 ");
-                            return;
-                    }
+//                    if(phoneNumber.getText().length() < 10 || phoneNumber.getText().length() > 10){
+//                            Log.i("delipack", "phone number must be 10 ");
+//                            return;
+//                    }
 
 
                     if (password.getText().length() < 8){
@@ -96,21 +99,48 @@ public class SignupActivity extends AppCompatActivity {
                                     RequestParams requestParams = new RequestParams();
                                     requestParams.add("first_name", firstName.getText().toString());
                                     requestParams.add("last_name", lastName.getText().toString());
+                                    requestParams.add("email", email.getText().toString());
                                     requestParams.add("phone_number",  ringObj.getPhoneNumber().toString());
                                     requestParams.add("password", password.getText().toString());
 
-                                    register_user.post(POSTURL, requestParams, new AsyncHttpResponseHandler() {
+                                    register_user.post(POSTURL, requestParams, new JsonHttpResponseHandler(){
                                         @Override
-                                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                            // If the response is JSONObject instead of expected JSONArray
+                                            Log.i("delipack", response.toString());
                                             Intent registerconfirmed = new Intent(SignupActivity.this, Homedashboard_user.class);
                                             startActivity(registerconfirmed);
                                             finish();
                                         }
 
                                         @Override
-                                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+//                                            super.onSuccess(statusCode, headers, responseString);
+                                            Log.i("delipack", "in Stiring response " + responseString);
+                                        }
+
+                                        @Override
+                                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+//                                            super.onSuccess(statusCode, headers, response);
+                                            Log.i("delipack", "in Array response" +  response);
+                                        }
+
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                                            super.onFailure(statusCode, headers, throwable, errorResponse);
+
+                                            Log.i("delipack", errorResponse + "status code in object response");
 
                                         }
+
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+//                                            super.onFailure(statusCode, headers, responseString, throwable);
+
+                                            Log.i("delipack", statusCode + "status in throwable");
+
+                                        }
+
                                     });
                                 }
 
