@@ -6,13 +6,17 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.delipackmobi.Model.PickUpDeliveryModel;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.GeoDataClient;
@@ -36,14 +40,9 @@ public class Homedashboard_user extends AppCompatActivity {
     HistoryFragment historyFragment;
     AutocompleteSupportFragment autocompleteFragment;
     AutocompleteSupportFragment autocompleteFragment1;
-    AutoCompleteTextView search_for;
-    PlaceAutocompleteAdapter placeAutocompleteAdapter;
-    List<Place.Field> places_hash;
-    private final static  LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-48, -160), new LatLng(78, 160));
-    GeoDataClient geoDataClient;
-    private static final String[] COUNTRIES = new String[] {
-            "Belgium", "France", "Italy", "Germany", "Spain"
-    };
+    private Button rider_search_btn;
+    private PickUpDeliveryModel pickUpDeliveryModel;
+    private CardView resultcard;
 
 
     @Override
@@ -58,23 +57,57 @@ public class Homedashboard_user extends AppCompatActivity {
         searchRiderFragment = new SearchRiderFragment();
         profileFragment = new ProfileFragment();
         historyFragment = new HistoryFragment();
-
-         places_hash = Arrays.asList(Place.Field.ID, Place.Field.NAME);
-
-         for (Place.Field a : places_hash){
-             System.out.println("Places : " + a.toString());
-         }
-
-//         ArrayAdapter<Place.Field> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, places_hash);
-//        search_for = findViewById(R.id.searchfor);
-//        search_for.setAdapter(adapter);
+        rider_search_btn = findViewById(R.id.rider_search);
+        pickUpDeliveryModel = new PickUpDeliveryModel();
+        resultcard = findViewById(R.id.search_result_cardview);
 
 
-//        geoDataClient =  Places.
 
-//        placeAutocompleteAdapter = new PlaceAutocompleteAdapter(this, geoDataClient, LAT_LNG_BOUNDS, null);
 
-//        search_for.setAdapter(placeAutocompleteAdapter);
+        rider_search_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if (pickUpDeliveryModel != null){
+
+                    if (pickUpDeliveryModel.getFromInformation() == null){
+                            Toast.makeText(Homedashboard_user.this, "You need to fill a Pick up location", Toast.LENGTH_SHORT).show();
+                            return;
+                    } else if (pickUpDeliveryModel.getDeliveryInformation() == null){
+                            Toast.makeText(Homedashboard_user.this, "Delivery information cannot be empty", Toast.LENGTH_SHORT).show();
+                            return;
+                    } else {
+                        Toast.makeText(Homedashboard_user.this, "Everything is good", Toast.LENGTH_SHORT).show();
+                        resultcard.setVisibility(View.VISIBLE);
+                    }
+
+
+                    for(String a: pickUpDeliveryModel.getDeliveryInformation().values())
+                         Log.i("delipack",  a.toString());
+
+                    for(String a: pickUpDeliveryModel.getFromInformation().values())
+                        Log.i("delipack",  a.toString());
+
+                } else {
+                    Toast.makeText(Homedashboard_user.this, "Fill out both forms to find rider", Toast.LENGTH_SHORT).show();
+
+                    return;
+                }
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -90,8 +123,16 @@ public class Homedashboard_user extends AppCompatActivity {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
+                HashMap<String, String> place_from = new HashMap<>();
+                if (place != null){
+                    place_from.put(place.getId().toString(),place.getName().toString());
+                    pickUpDeliveryModel.setFromInformation(place_from);
+                    Log.i("g", "Place: " + place.getName() + ", " + place.getId());
+
+                } else{
+                    place_from = null;
+                }
                 // TODO: Get info about the selected place.
-                Log.i("g", "Place: " + place.getName() + ", " + place.getId());
             }
 
             @Override
@@ -113,8 +154,15 @@ public class Homedashboard_user extends AppCompatActivity {
         autocompleteFragment1.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                Log.i("g", "Place: " + place.getName() + ", " + place.getId());
+                HashMap<String, String> place_delivery = new HashMap<>();
+                if (place != null){
+                    place_delivery.put(place.getId().toString(),place.getName().toString());
+                    pickUpDeliveryModel.setDeliveryInformation(place_delivery);
+                    Log.i("g", "Place: " + place.getName() + ", " + place.getId());
+
+                } else{
+                    place_delivery = null;
+                }
             }
 
             @Override
