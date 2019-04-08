@@ -1,14 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    tools:context=".ProfileFragment"
+    android:background="@drawable/splashscreen_background"
+    android:orientation="vertical"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="280dp"
+       android:background="#81d4fa
+"
+       android:orientation="vertical"
+       >
+
+       <ImageView
+           android:id="@+id/profile_picture"
+           android:layout_width="match_parent"
+           android:layout_height="150dp"
+           android:src="@drawable/deli_s"
+           />
+
+       <TextView
+           android:id="@+id/user_name"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="Kwame Sefa"
+           android:textColor="#FFF"
+           android:textAlignment="center"
+           android:textSize="35sp"
+           android:fontFamily="@font/amiko_semibold"
+
+           />
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="horizontal"
+           android:background="#ff0000"
+           >
+
+           <LinearLayout
+               android:layout_width="205dp"
+               android:layout_height="200dp"
+               android:orientation="vertical"
+               android:background="#29b6f6"
+               >
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:textSize="32sp"
+                   android:text="400"
+                   android:textColor="#FFF"
+                   android:textAlignment="center"
+                   />
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:textColor="#FFF"
+                   android:textSize="20sp"
+                   android:text="Packages"
+                   android:textAlignment="center"
+                   />
+
+           </LinearLayout>
+           <LinearLayout
+               android:layout_width="206dp"
+               android:layout_height="200dp"
+               android:orientation="vertical"
+               android:background="#0d47a1"
+               >
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:textSize="32sp"
+                   android:text="400"
+                   android:textColor="#FFF"
+                   android:textAlignment="center"
+                   />
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:textColor="#FFFF"
+                   android:textSize="20sp"
+                   android:text="Packages"
+                   android:textAlignment="center"
+                   />
+
+           </LinearLayout>
+
+
+       </LinearLayout>
+
+   </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        android:background="#FFF"
+        android:paddingTop="5dp"
+        android:paddingLeft="10dp"
+        >
 
-</FrameLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="First Name"
+            android:textColor="@color/colorAccent"
+            android:textSize="15sp"
+            android:fontFamily="@font/amiko_semibold"
+            android:paddingLeft="5dp"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Kwame"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"
+            android:textSize="20sp"
+            android:fontFamily="@font/amiko_semibold"
+
+            />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Last Name"
+            android:textColor="@color/colorAccent"
+            android:textSize="15sp"
+            android:fontFamily="@font/amiko_semibold"
+            android:paddingLeft="5dp"
+
+
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Sefa"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"
+            android:textSize="20sp"
+            android:fontFamily="@font/amiko_semibold"
+
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phone Number"
+            android:textColor="@color/colorAccent"
+            android:textSize="15sp"
+            android:fontFamily="@font/amiko_semibold"
+            android:paddingLeft="5dp"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="02456676655"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"
+            android:textSize="20sp"
+            android:fontFamily="@font/amiko_semibold"
+
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

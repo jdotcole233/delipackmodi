@@ -38,10 +38,10 @@ dependencies {
     implementation 'com.ringcaptcha.android:ringcaptcha:1.2.0'
     implementation 'com.loopj.android:android-async-http:1.4.9'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
-//    implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.android.libraries.places:places:1.0.0'
-//    implementation  'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.google.android.gms:play-services-places:15.0.1'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+
 
 
 
