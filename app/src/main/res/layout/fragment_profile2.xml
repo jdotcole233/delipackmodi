@@ -11,16 +11,16 @@
    <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="280dp"
-       android:background="#81d4fa
-"
+       android:background="@drawable/bottom_navigation_background"
        android:orientation="vertical"
        >
 
        <ImageView
            android:id="@+id/profile_picture"
            android:layout_width="match_parent"
-           android:layout_height="150dp"
+           android:layout_height="130dp"
            android:src="@drawable/deli_s"
+           android:layout_marginTop="5dp"
            />
 
        <TextView
@@ -32,6 +32,18 @@
            android:textAlignment="center"
            android:textSize="35sp"
            android:fontFamily="@font/amiko_semibold"
+
+           />
+       <TextView
+           android:id="@+id/user_phone"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="02456676655"
+           android:textColor="#000"
+           android:textAlignment="center"
+           android:textSize="18sp"
+           android:fontFamily="@font/amiko_semibold"
+           android:layout_marginTop="-4dp"
 
            />
 
@@ -76,7 +88,7 @@
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:textSize="32sp"
-                   android:text="400"
+                   android:text="GHC 5"
                    android:textColor="#FFF"
                    android:textAlignment="center"
                    />
@@ -85,7 +97,7 @@
                    android:layout_height="wrap_content"
                    android:textColor="#FFFF"
                    android:textSize="20sp"
-                   android:text="Packages"
+                   android:text="Discount"
                    android:textAlignment="center"
                    />
 
@@ -166,7 +178,17 @@
             android:textColorHint="@color/colorAccent"
             android:textSize="20sp"
             android:fontFamily="@font/amiko_semibold"
+            android:editable="false"
 
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update"
+            android:background="@drawable/confirm_button"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/amiko_semibold"
             />
 
     </LinearLayout>

@@ -38,7 +38,7 @@ public class CustomerHistoryAdapter extends RecyclerView.Adapter<CustomerHistory
             myViewHolder.company_name.setText(customerHistoryList.get(i).getCompany_name());
             myViewHolder.pickup.setText(customerHistoryList.get(i).getPickup_location());
             myViewHolder.delivery.setText(customerHistoryList.get(i).getDelivery_location());
-            myViewHolder.price.setText(customerHistoryList.get(i).getPrice());
+//            myViewHolder.price.setText(customerHistoryList.get(i).getPrice());
     }
 
 
@@ -65,7 +65,7 @@ public class CustomerHistoryAdapter extends RecyclerView.Adapter<CustomerHistory
             company_name = itemView.findViewById(R.id.company_name);
             pickup = itemView.findViewById(R.id.pick_up_from);
             delivery = itemView.findViewById(R.id.deliver_to);
-            price = itemView.findViewById(R.id.price);
+//            price = itemView.findViewById(R.id.price);
 
         }
     }
