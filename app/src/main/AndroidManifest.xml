@@ -40,6 +40,9 @@
             >
 
         </activity>
+        <activity android:name=".MobileMoneyPayment" android:theme="@style/AppTheme.HistoryCustomTheme" >
+
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"

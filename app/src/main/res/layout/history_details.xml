@@ -34,18 +34,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="490dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:background="@drawable/login_screen_background"
             android:orientation="vertical"
             android:gravity="center"
 
             >
+
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:padding="7dp"
+                android:padding="3dp"
                 >
                 <TableRow
                     android:layout_width="match_parent"
@@ -177,6 +176,12 @@
             </TableLayout>
 
 
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#FFF" />
+
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -265,6 +270,13 @@
                 </TableRow>
 
             </TableLayout>
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#FFF" />
+
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -326,6 +338,8 @@
                 
 
             </TableLayout>
+
+
         </LinearLayout>
     </RelativeLayout>
 

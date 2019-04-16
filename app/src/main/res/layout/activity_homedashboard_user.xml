@@ -8,19 +8,19 @@
     tools:context=".Homedashboard_user"
     >
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/fragmentFrame"
         android:layout_width="match_parent"
-        android:layout_height="605dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="7dp"
+        android:layout_height="568dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/splashscreen_background"
-        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.474"
+        tools:layout_editor_absoluteX="37dp">
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

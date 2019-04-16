@@ -13,7 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.delipackmobi.Model.PickUpDeliveryModel;
@@ -40,11 +44,14 @@ public class SearchRiderFragment extends Fragment {
 
     AutocompleteSupportFragment autocompleteFragment;
     AutocompleteSupportFragment autocompleteFragment1;
-    private Button rider_search_btn, confirm_button;
+    private Button rider_search_btn, confirm_button, confirm_payment, make_payment;
     private PickUpDeliveryModel pickUpDeliveryModel;
     private CardView resultcard, confirmcardview;
-    private Animation animation;
-    private Animation animationout;
+    private Animation animation, animationout, animationmove;
+    private TextView confirm_textview;
+    private Spinner paymentSpinner;
+    private String payment_selection;
+//    private Animation animationout;
 
     public SearchRiderFragment() {
         // Required empty public constructor
@@ -74,12 +81,32 @@ public class SearchRiderFragment extends Fragment {
 
         animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide);
         animationout = AnimationUtils.loadAnimation(getContext(), R.anim.slideout);
+        animationmove = AnimationUtils.loadAnimation(getContext(), R.anim.move);
 
         rider_search_btn = getActivity().findViewById(R.id.rider_search);
         pickUpDeliveryModel = new PickUpDeliveryModel();
         resultcard = getActivity().findViewById(R.id.search_result_cardview);
         confirm_button = getActivity().findViewById(R.id.confirm_btn);
         confirmcardview = getActivity().findViewById(R.id.confirm_cardview);
+        confirm_payment = getActivity().findViewById(R.id.confirm_payment);
+        confirm_textview = getActivity().findViewById(R.id.confirmation_text);
+        make_payment = getActivity().findViewById(R.id.make_payment);
+        paymentSpinner = getActivity().findViewById(R.id.payment_choice);
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.payment_option, android.R.layout.simple_spinner_item);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        paymentSpinner.setAdapter(arrayAdapter);
+
+        paymentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                payment_selection = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
 
@@ -101,7 +128,7 @@ public class SearchRiderFragment extends Fragment {
                     } else {
                         Toast.makeText(getActivity(), "Everything is good", Toast.LENGTH_SHORT).show();
                         resultcard.setVisibility(View.VISIBLE);
-                        resultcard.setAnimation(animation);
+//                        resultcard.setAnimation(animation);
                     }
 
 
@@ -127,9 +154,50 @@ public class SearchRiderFragment extends Fragment {
 
                 //perform some checks
                 resultcard.setVisibility(View.INVISIBLE);
-                resultcard.setAnimation(animationout);
-                confirmcardview.setAnimation(animation);
+//                resultcard.setAnimation(animationout);
+
+//                confirmcardview.setAnimation(animation);
                 confirmcardview.setVisibility(View.VISIBLE);
+            }
+        });
+
+        confirm_payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmcardview.setY(1400.0f);
+
+                ViewGroup.LayoutParams layoutParams = confirmcardview.getLayoutParams();
+                layoutParams.height = confirmcardview.getHeight() + 310;
+//                confirmcardview.setAnimation(animationmove);
+//                System.out.println(confirmcardview.getHeight());
+                confirmcardview.setLayoutParams(layoutParams);
+                confirm_textview.setText("Choose payment method");
+                confirm_payment.setVisibility(View.INVISIBLE);
+                paymentSpinner.setVisibility(View.VISIBLE);
+                make_payment.setVisibility(View.VISIBLE);
+
+
+            }
+        });
+
+        make_payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!payment_selection.isEmpty()){
+                    if(payment_selection.equals("Mobile Money")){
+                            startActivity(new Intent(getActivity(), MobileMoneyPayment.class));
+                            confirmcardview.setVisibility(View.INVISIBLE);
+                    } else if (payment_selection.equals("Cash")){
+                        Toast.makeText(getActivity(), "Cash Selected", Toast.LENGTH_LONG).show();
+                    } else if (payment_selection.equals("Select payment option")){
+                        Toast.makeText(getActivity(), "Select a payment option", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                } else {
+                    Toast.makeText(getActivity(), "Select a payment option", Toast.LENGTH_LONG).show();
+                    return;
+                }
             }
         });
 
