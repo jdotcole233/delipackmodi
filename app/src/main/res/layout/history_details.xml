@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/login_screen_background"
+    android:layout_centerInParent="true"
+    android:gravity="center"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/splashscreen_background"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/activity_vertical_margin"
+            android:fontFamily="@font/amiko_semibold"
+            android:gravity="center"
+            android:text="History Details"
+            android:textColor="#FFF"
+            android:textSize="15sp" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#b3e5fc"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="490dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/login_screen_background"
+            android:orientation="vertical"
+            android:gravity="center"
+
+            >
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:padding="7dp"
+                >
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    >
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Pick up"
+                        android:padding="10dp"
+                        android:fontFamily="@font/amiko_semibold"
+                        />
+
+                    <TextView
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:padding="10dp"
+                        android:text="Ashonmang-Abokobi Road"
+                        android:fontFamily="sans-serif-light"
+
+                        />
+
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Deliver to"
+                        android:padding="10dp"
+                        android:fontFamily="@font/amiko_semibold"
+                        />
+
+                    <TextView
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Wisconsin-Abokobi Road"
+                        android:padding="10dp"
+                        android:fontFamily="sans-serif-light"
+
+                        />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Company"
+                        android:padding="10dp"
+                        android:fontFamily="@font/amiko_semibold"
+                        />
+
+                    <TextView
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="VickaVelli delivery"
+                        android:padding="10dp"
+                        android:fontFamily="sans-serif-light"
+
+                        />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Rider"
+                        android:padding="10dp"
+                        android:fontFamily="@font/amiko_semibold"
+                        />
+
+                    <TextView
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Kwasi Asamoah"
+                        android:padding="10dp"
+                        android:fontFamily="sans-serif-light"
+                        />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Bike"
+                        android:padding="10dp"
+                        android:fontFamily="@font/amiko_semibold"
+                        />
+
+                    <TextView
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="GS-3472"
+                        android:padding="10dp"
+                        android:fontFamily="sans-serif-light"
+
+                        />
+                </TableRow>
+            </TableLayout>
+
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:padding="7dp"
+                >
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Date"
+                        android:padding="10dp"
+                        android:fontFamily="@font/amiko_semibold"
+                        />
+
+                    <TextView
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Tue Apr 16 2019 17:43:21"
+                        android:padding="10dp"
+                        android:fontFamily="sans-serif-light"
+
+                        />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Trans ID"
+                        android:padding="10dp"
+                        android:fontFamily="@font/amiko_semibold"
+                        />
+
+                    <TextView
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="TG63552635"
+                        android:padding="10dp"
+                        android:fontFamily="sans-serif-light"
+
+                        />
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Status"
+                        android:padding="10dp"
+                        android:fontFamily="@font/amiko_semibold"
+                        />
+
+                    <TextView
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#009624"
+                        android:text="Success"
+                        android:padding="10dp"
+                        android:fontFamily="sans-serif-light"
+
+                        />
+
+                </TableRow>
+
+            </TableLayout>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:padding="7dp"
+                >
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Payment"
+                        android:padding="10dp"
+                        android:fontFamily="@font/amiko_semibold"
+                        />
+
+                    <TextView
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Mobile Money"
+                        android:padding="10dp"
+                        android:fontFamily="sans-serif-light"
+
+                        />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="Charges"
+                        android:padding="10dp"
+                        android:fontFamily="@font/amiko_semibold"
+                        />
+
+                    <TextView
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:text="GHS 15.89"
+                        android:padding="10dp"
+                        android:fontFamily="sans-serif-light"
+
+                        />
+                </TableRow>
+                
+
+            </TableLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -38,9 +40,11 @@ public class SearchRiderFragment extends Fragment {
 
     AutocompleteSupportFragment autocompleteFragment;
     AutocompleteSupportFragment autocompleteFragment1;
-    private Button rider_search_btn;
+    private Button rider_search_btn, confirm_button;
     private PickUpDeliveryModel pickUpDeliveryModel;
-    private CardView resultcard;
+    private CardView resultcard, confirmcardview;
+    private Animation animation;
+    private Animation animationout;
 
     public SearchRiderFragment() {
         // Required empty public constructor
@@ -68,9 +72,15 @@ public class SearchRiderFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
 
+        animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide);
+        animationout = AnimationUtils.loadAnimation(getContext(), R.anim.slideout);
+
         rider_search_btn = getActivity().findViewById(R.id.rider_search);
         pickUpDeliveryModel = new PickUpDeliveryModel();
         resultcard = getActivity().findViewById(R.id.search_result_cardview);
+        confirm_button = getActivity().findViewById(R.id.confirm_btn);
+        confirmcardview = getActivity().findViewById(R.id.confirm_cardview);
+
 
 
 
@@ -91,6 +101,7 @@ public class SearchRiderFragment extends Fragment {
                     } else {
                         Toast.makeText(getActivity(), "Everything is good", Toast.LENGTH_SHORT).show();
                         resultcard.setVisibility(View.VISIBLE);
+                        resultcard.setAnimation(animation);
                     }
 
 
@@ -110,7 +121,17 @@ public class SearchRiderFragment extends Fragment {
         });
 
 
+        confirm_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                //perform some checks
+                resultcard.setVisibility(View.INVISIBLE);
+                resultcard.setAnimation(animationout);
+                confirmcardview.setAnimation(animation);
+                confirmcardview.setVisibility(View.VISIBLE);
+            }
+        });
 
 
 
