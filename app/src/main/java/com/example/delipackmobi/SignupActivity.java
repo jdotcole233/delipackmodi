@@ -35,6 +35,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText confirmPassword;
     private  Button registerButton;
     private final static String POSTURL = "http://192.168.100.7:8000/registercutomer";
+    private DeliPackAlert deliPackAlert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +60,7 @@ public class SignupActivity extends AppCompatActivity {
                 if (firstName.getText().toString().isEmpty() || lastName.getText().toString().isEmpty() ||
                         password.getText().toString().isEmpty() ||
                         confirmPassword.getText().toString().isEmpty()){
-                    //output error message
-
-                    Log.i("delipack", "All fields are mandatory");
+                    new DeliPackAlert(SignupActivity.this, "Mandatory fields", "All fields must be field before you can be registered").showDeliPackAlert();
                     return;
 
                 } else {
@@ -74,21 +73,22 @@ public class SignupActivity extends AppCompatActivity {
 
                     if (password.getText().length() < 8){
                         //output error message
-                        Log.i("delipack", "password must be more than 8 characters");
+                        String message = "password must be more than 8 characters";
+                        new DeliPackAlert(SignupActivity.this, "Password count", message).showDeliPackAlert();
                         return;
                     } else {
 
                         if (!password.getText().toString().equals(confirmPassword.getText().toString())) {
                             //output error message
-
-                            Log.i("delipack", "password has be the same");
+                            String message = "It appears your choosen passwords do not match, check and try again!!! ";
+                            new DeliPackAlert(SignupActivity.this, "Password mismatch", message).showDeliPackAlert();
                             return;
 
                         } else {
 
                             //pass  validation
 
-                            Log.i("delipack", "Everything is passed");
+//                            Log.i("delipack", "Everything is passed");
 
 
                             RingcaptchaApplication.onboard(getApplicationContext(), "5ygi4e1y1o8esa6i3uqe", "ni4ozypimupy6osi1y3a", new RingcaptchaApplicationHandler() {
@@ -128,16 +128,16 @@ public class SignupActivity extends AppCompatActivity {
                                         @Override
                                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
 //                                            super.onFailure(statusCode, headers, throwable, errorResponse);
-
-                                            Log.i("delipack", errorResponse + "status code in object response");
+                                            new DeliPackAlert(SignupActivity.this, "Network failure", "Something went wrong with the internet, please try again").showDeliPackAlert();
+//                                            Log.i("delipack", errorResponse + "status code in object response");
 
                                         }
 
                                         @Override
                                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 //                                            super.onFailure(statusCode, headers, responseString, throwable);
-
-                                            Log.i("delipack", statusCode + "status in throwable");
+                                            new DeliPackAlert(SignupActivity.this, "Network failure", "Something went wrong with the internet, please try again").showDeliPackAlert();
+//                                            Log.i("delipack", statusCode + "status in throwable");
 
                                         }
 
@@ -146,7 +146,9 @@ public class SignupActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onCancel() {
-                                    Log.i("delipack", "canceled");
+                                    new DeliPackAlert(SignupActivity.this, "Verification canceled", "You cancelled verfication process").showDeliPackAlert();
+
+//                                    Log.i("delipack", "canceled");
                                 }
                             });
 
