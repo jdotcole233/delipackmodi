@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -23,7 +25,9 @@ public class SigninActivity extends AppCompatActivity {
     private EditText customerPhoneNumber, customerPassword;
     private AsyncHttpClient asyncHttpClient;
     private DeliPackAlert deliPackAlert;
-    private static final String LOGIN_URL = "http://192.168.100.7:8000/customer_login";
+    private View viewloader;
+    private RelativeLayout relativeLayout;
+    private static final String LOGIN_URL = "http://192.168.100.4:8000/customer_login";
 
 
 
@@ -36,7 +40,8 @@ public class SigninActivity extends AppCompatActivity {
         customerPhoneNumber = findViewById(R.id.customerPhoneNumber);
         customerPassword = findViewById(R.id.customerPassword);
         asyncHttpClient = new AsyncHttpClient();
-
+        viewloader = getLayoutInflater().inflate(R.layout.delipack_event_loader, null);
+        relativeLayout = viewloader.findViewById(R.id.loaderlayout);
 
 
         customerSignin.setOnClickListener(new View.OnClickListener() {
@@ -58,12 +63,13 @@ public class SigninActivity extends AppCompatActivity {
                     requestParams.add("phone_number", customerphone);
                     requestParams.add("password", customerpassword);
                     System.out.println("Loading");
+//                    startActivity(new Intent(SigninActivity.this, DeliPackEventLoader.class));
 
                     asyncHttpClient.post(LOGIN_URL, requestParams, new JsonHttpResponseHandler(){
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
-
+//                            viewloader.setVisibility(View.INVISIBLE);
                             try {
                                 String response_validate = response.getString("success_cue");
                                 if (response_validate.contains("Success")){
