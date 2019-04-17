@@ -22,7 +22,7 @@
         android:textSize="20sp" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/customerPhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
@@ -36,10 +36,12 @@
         android:hint="Phone Number"
         android:inputType="phone"
         android:paddingLeft="20dp"
-        android:textColorHint="@color/colorAccent" />
+        android:textColorHint="@color/colorAccent"
+        android:textColor="#000"
+        />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/customerPassword"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
@@ -53,10 +55,12 @@
         android:hint="Password"
         android:inputType="textPassword"
         android:paddingLeft="20dp"
-        android:textColorHint="@color/colorAccent" />
+        android:textColorHint="@color/colorAccent"
+        android:textColor="#000"
+        />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/customerSigninButton"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
