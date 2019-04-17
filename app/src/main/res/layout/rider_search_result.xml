@@ -125,7 +125,7 @@
                     android:layout_height="100dp"
                     app:cardCornerRadius="10dp"
                     app:cardBackgroundColor="#eceff1"
-                    app:cardElevation="10dp"
+                    app:cardElevation="20dp"
 
                     >
                     <TextView
@@ -143,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:text=" 15.0"
                         android:textAlignment="center"
-                        android:textSize="29dp"
+                        android:textSize="32dp"
                         android:textColor="#000"
                         android:padding="5dp"
                         android:fontFamily="sans-serif-light"
@@ -233,9 +233,10 @@
                             android:layout_marginTop="110dp"
                             android:layout_marginRight="10dp"
                             android:background="@drawable/confirm_button_bg"
-                            android:text="payment"
+                            android:text="Make payment"
                             android:textColor="#FFF"
                             android:textSize="20sp"
+                            android:fontFamily="@font/amiko_semibold"
                             />
                     </LinearLayout>
                 </RelativeLayout>

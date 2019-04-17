@@ -13,7 +13,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="payment_option" >
-        <item>Select payment option</item>
+        <item></item>
         <item>Cash</item>
         <item>Mobile Money</item>
     </string-array>
