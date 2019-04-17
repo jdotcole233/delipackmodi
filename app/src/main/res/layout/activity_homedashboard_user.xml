@@ -11,7 +11,7 @@
     <RelativeLayout
         android:id="@+id/fragmentFrame"
         android:layout_width="match_parent"
-        android:layout_height="568dp"
+        android:layout_height="564dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/splashscreen_background"
         app:layout_constraintBottom_toTopOf="@+id/navigation"

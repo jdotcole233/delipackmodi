@@ -13,6 +13,7 @@ import com.example.delipackmobi.R;
 
 public class MobileMoneyPayment extends AppCompatActivity {
 
+    private ImageButton cancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +22,18 @@ public class MobileMoneyPayment extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        int width = (int) (displayMetrics.widthPixels * 0.95);
-        int height = (int) (displayMetrics.heightPixels * 0.85);
+        int width = (int) (displayMetrics.widthPixels);
+        int height = (int) (displayMetrics.heightPixels);
 
         getWindow().setLayout(width, height);
+        cancelButton = findViewById(R.id.cancelsearchresult);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
 

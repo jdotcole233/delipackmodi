@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/login_screen_background"
     android:layout_centerInParent="true"
     android:gravity="center"
-    android:id="@+id/mmlayout"
-    >
+    android:id="@+id/mmlayout">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -58,20 +57,41 @@
 
             />
 
-        <Button
-            android:id="@+id/mobilemoneypaybtn"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/register_btn_background"
-            android:elevation="18dp"
-            android:fontFamily="@font/amiko_semibold"
-            android:text="Pay"
-            android:textSize="18sp"
-            android:textColor="#FFF"
-            />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="13dp"
+            >
+
+            <ImageButton
+                android:id="@+id/cancelsearchresult"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                app:srcCompat="@drawable/ic_close_black_24dp"
+                android:padding="10dp"
+                android:background="@drawable/confirm_button"
+                android:layout_marginLeft="1dp"
+
+
+                />
+            <Button
+                android:id="@+id/mobilemoneypaybtn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/confirm_button_bg"
+                android:elevation="18dp"
+                android:fontFamily="@font/amiko_semibold"
+                android:text="Pay"
+                android:textSize="18sp"
+                android:textColor="#FFF"
+                />
+
+        </LinearLayout>
 
     </LinearLayout>
 

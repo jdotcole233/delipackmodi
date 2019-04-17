@@ -44,6 +44,10 @@
 
         </activity>
 
+        <activity android:name=".SearchResult" android:theme="@style/AppTheme.HistoryCustomTheme">
+
+        </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

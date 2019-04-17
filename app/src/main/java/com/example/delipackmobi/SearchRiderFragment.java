@@ -86,27 +86,12 @@ public class SearchRiderFragment extends Fragment {
         rider_search_btn = getActivity().findViewById(R.id.rider_search);
         pickUpDeliveryModel = new PickUpDeliveryModel();
         resultcard = getActivity().findViewById(R.id.search_result_cardview);
-        confirm_button = getActivity().findViewById(R.id.confirm_btn);
-        confirmcardview = getActivity().findViewById(R.id.confirm_cardview);
-        confirm_payment = getActivity().findViewById(R.id.confirm_payment);
-        confirm_textview = getActivity().findViewById(R.id.confirmation_text);
-        make_payment = getActivity().findViewById(R.id.make_payment);
-        paymentSpinner = getActivity().findViewById(R.id.payment_choice);
-        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.payment_option, android.R.layout.simple_spinner_item);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        paymentSpinner.setAdapter(arrayAdapter);
-
-        paymentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                payment_selection = parent.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//        confirm_button = getActivity().findViewById(R.id.confirm_btn);
+//        confirmcardview = getActivity().findViewById(R.id.confirm_cardview);
+//        confirm_payment = getActivity().findViewById(R.id.confirm_payment);
+//        confirm_textview = getActivity().findViewById(R.id.confirmation_text);
+//        make_payment = getActivity().findViewById(R.id.make_payment);
+//        paymentSpinner = getActivity().findViewById(R.id.payment_choice);
 
 
 
@@ -127,7 +112,8 @@ public class SearchRiderFragment extends Fragment {
                         return;
                     } else {
                         Toast.makeText(getActivity(), "Everything is good", Toast.LENGTH_SHORT).show();
-                        resultcard.setVisibility(View.VISIBLE);
+                        startActivity(new Intent(getActivity(), SearchResult.class));
+//                        resultcard.setVisibility(View.VISIBLE);
 //                        resultcard.setAnimation(animation);
                     }
 
@@ -148,58 +134,58 @@ public class SearchRiderFragment extends Fragment {
         });
 
 
-        confirm_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        confirm_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                //perform some checks
+//                resultcard.setVisibility(View.INVISIBLE);
+////                resultcard.setAnimation(animationout);
+//
+////                confirmcardview.setAnimation(animation);
+//                confirmcardview.setVisibility(View.VISIBLE);
+//            }
+//        });
 
-                //perform some checks
-                resultcard.setVisibility(View.INVISIBLE);
-//                resultcard.setAnimation(animationout);
+//        confirm_payment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                confirmcardview.setY(700.0f);
+//
+//                ViewGroup.LayoutParams layoutParams = confirmcardview.getLayoutParams();
+//                layoutParams.height = confirmcardview.getHeight() + 310;
+////                confirmcardview.setAnimation(animationmove);
+////                System.out.println(confirmcardview.getHeight());
+//                confirmcardview.setLayoutParams(layoutParams);
+//                confirm_textview.setText("Choose payment method");
+//                confirm_payment.setVisibility(View.INVISIBLE);
+//                paymentSpinner.setVisibility(View.VISIBLE);
+//                make_payment.setVisibility(View.VISIBLE);
+//
+//
+//            }
+//        });
 
-//                confirmcardview.setAnimation(animation);
-                confirmcardview.setVisibility(View.VISIBLE);
-            }
-        });
-
-        confirm_payment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmcardview.setY(1400.0f);
-
-                ViewGroup.LayoutParams layoutParams = confirmcardview.getLayoutParams();
-                layoutParams.height = confirmcardview.getHeight() + 310;
-//                confirmcardview.setAnimation(animationmove);
-//                System.out.println(confirmcardview.getHeight());
-                confirmcardview.setLayoutParams(layoutParams);
-                confirm_textview.setText("Choose payment method");
-                confirm_payment.setVisibility(View.INVISIBLE);
-                paymentSpinner.setVisibility(View.VISIBLE);
-                make_payment.setVisibility(View.VISIBLE);
-
-
-            }
-        });
-
-        make_payment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!payment_selection.isEmpty()){
-                    if(payment_selection.equals("Mobile Money")){
-                            startActivity(new Intent(getActivity(), MobileMoneyPayment.class));
-                            confirmcardview.setVisibility(View.INVISIBLE);
-                    } else if (payment_selection.equals("Cash")){
-                        Toast.makeText(getActivity(), "Cash Selected", Toast.LENGTH_LONG).show();
-                    } else if (payment_selection.equals("Select payment option")){
-                        Toast.makeText(getActivity(), "Select a payment option", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                } else {
-                    Toast.makeText(getActivity(), "Select a payment option", Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }
-        });
+//        make_payment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(!payment_selection.isEmpty()){
+//                    if(payment_selection.equals("Mobile Money")){
+//                            startActivity(new Intent(getActivity(), MobileMoneyPayment.class));
+//                            confirmcardview.setVisibility(View.INVISIBLE);
+//                    } else if (payment_selection.equals("Cash")){
+//                        Toast.makeText(getActivity(), "Cash Selected", Toast.LENGTH_LONG).show();
+//                    } else if (payment_selection.equals("Select payment option")){
+//                        Toast.makeText(getActivity(), "Select a payment option", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//
+//                } else {
+//                    Toast.makeText(getActivity(), "Select a payment option", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//            }
+//        });
 
 
 
