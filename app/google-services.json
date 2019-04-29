@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "636386670726",
+    "firebase_url": "https://delipack-2d2ca.firebaseio.com",
+    "project_id": "delipack-2d2ca",
+    "storage_bucket": "delipack-2d2ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636386670726:android:1219b02061f1b55c",
+        "android_client_info": {
+          "package_name": "com.example.delipackdriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "636386670726-5gsjsq2vngti64d5ljrgkiff3i64h3e6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjef3_8TQCY_XqpomqnSeTXYCdBHAYIXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "636386670726-5gsjsq2vngti64d5ljrgkiff3i64h3e6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636386670726:android:7e2a15af07dc4326",
+        "android_client_info": {
+          "package_name": "com.example.delipackmobi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "636386670726-5gsjsq2vngti64d5ljrgkiff3i64h3e6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjef3_8TQCY_XqpomqnSeTXYCdBHAYIXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "636386670726-5gsjsq2vngti64d5ljrgkiff3i64h3e6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

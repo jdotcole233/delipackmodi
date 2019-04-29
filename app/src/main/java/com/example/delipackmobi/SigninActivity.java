@@ -27,7 +27,7 @@ public class SigninActivity extends AppCompatActivity {
     private DeliPackAlert deliPackAlert;
     private View viewloader;
     private RelativeLayout relativeLayout;
-    private static final String LOGIN_URL = "http://192.168.100.7:8000/customer_login";
+    private static final String LOGIN_URL = "http://192.168.100.5:8000/customer_login";
 
 
 
