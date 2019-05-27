@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.delipackmobi">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -13,47 +13,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
-        tools:replace="android:theme"
-        >
+        tools:replace="android:theme">
+        <activity android:name=".CashOptionSelected"></activity>
         <activity
             android:name=".Homedashboard_user"
-            android:label="@string/title_activity_homedashboard_user"></activity>
-        <activity android:name=".MainActivity">
-
-        </activity>
-
-        <activity android:name=".SplashActivity" >
+            android:label="@string/title_activity_homedashboard_user" />
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".SigninActivity" >
-
-        </activity>
-
-        <activity android:name=".SignupActivity" >
-
-        </activity>
-
-        <activity android:name=".HistoryDetails"
-            android:theme="@style/AppTheme.HistoryCustomTheme"
-            >
-
-        </activity>
-        <activity android:name=".MobileMoneyPayment" android:theme="@style/AppTheme.HistoryCustomTheme" >
-
-        </activity>
-
-        <activity android:name=".SearchResult" android:theme="@style/AppTheme.HistoryCustomTheme">
-
-        </activity>
-
-        <activity android:name=".DeliPackEventLoader" android:theme="@style/AppTheme.TransparentTheme">
-
-        </activity>
+        <activity android:name=".SigninActivity"></activity>
+        <activity android:name=".SignupActivity"></activity>
+        <activity
+            android:name=".HistoryDetails"
+            android:theme="@style/AppTheme.HistoryCustomTheme"></activity>
+        <activity
+            android:name=".MobileMoneyPayment"
+            android:theme="@style/AppTheme.HistoryCustomTheme"></activity>
+        <activity
+            android:name=".SearchResult"
+            android:theme="@style/AppTheme.HistoryCustomTheme"></activity>
+        <activity
+            android:name=".DeliPackEventLoader"
+            android:theme="@style/AppTheme.TransparentTheme"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

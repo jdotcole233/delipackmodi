@@ -12,10 +12,15 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string-array name="payment_option" >
+    <string-array name="payment_option">
         <item></item>
         <item>Cash</item>
         <item>Mobile Money</item>
+    </string-array>
+
+    <string-array name="cash_payment_option">
+        <item >Pay at pick up</item>
+        <item >Pay on delivery</item>
     </string-array>
 
 </resources>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#FFF">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/splashscreen_background"
+        >
+
+
+        <TextView
+            android:id="@+id/alertTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/activity_vertical_margin"
+            android:fontFamily="@font/amiko_semibold"
+            android:gravity="center"
+            android:text="Cash Option"
+            android:textColor="#FFF"
+            android:textSize="15sp" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/alertMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose cash payment option"
+        android:textColor="#000"
+        android:textSize="22sp"
+        android:padding="15dp"
+        android:fontFamily="sans-serif-light"
+        android:textAlignment="center"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <Spinner
+            android:id="@+id/cash_choice"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rounded_input_signin"
+            android:spinnerMode="dropdown"
+            android:popupBackground="@color/quantum_white_100"
+            >
+
+        </Spinner>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <ImageButton
+                android:id="@+id/cancelcashoption"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                app:srcCompat="@drawable/ic_close_black_24dp"
+                android:padding="10dp"
+                android:background="@drawable/confirm_button"
+                android:layout_marginLeft="10dp"
+                />
+            <Button
+                android:id="@+id/cash_payment_button"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/confirm_button_bg"
+                android:text="Confirm pick up"
+                android:textColor="#FFF"
+                android:textSize="20sp"
+                android:fontFamily="@font/amiko_semibold"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

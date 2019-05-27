@@ -69,7 +69,9 @@ public class SearchResult extends AppCompatActivity {
 //                        confirmcardview.setVisibility(View.INVISIBLE);
                     } else if (payment_selection.equals("Cash")){
 //                        Toast.makeText(SearchResult.this, "Cash Selected", Toast.LENGTH_LONG).show();
-                        new DeliPackAlert(SearchResult.this, "Payment option", "Cash payment selected").showDeliPackAlert();
+//                        new DeliPackAlert(SearchResult.this, "Payment option", "Cash payment selected").showDeliPackAlert();
+                        startActivity(new Intent(SearchResult.this, CashOptionSelected.class));
+
                     } else if (payment_selection.equals("Select payment option")){
                         new DeliPackAlert(SearchResult.this, "Payment option", "Select a payment option").showDeliPackAlert();
 //                        Toast.makeText(SearchResult.this, "Select a payment option", Toast.LENGTH_LONG).show();

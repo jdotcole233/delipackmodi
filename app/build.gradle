@@ -24,7 +24,7 @@ android {
 
 }
 
-      configurations.all  {exclude group: "com.android.volley"}
+configurations.all { exclude group: "com.android.volley" }
 
 
 dependencies {

@@ -175,7 +175,7 @@ public class SearchRiderFragment extends Fragment {
                         progressBar.setVisibility(View.VISIBLE);
                         loadertext.setVisibility(View.VISIBLE);
                         findClosestBiker();
-//                        startActivity(new Intent(getActivity(), SearchResult.class));
+                        startActivity(new Intent(getActivity(), SearchResult.class));
 
                     }
 
@@ -303,12 +303,12 @@ public class SearchRiderFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    loadertext.setVisibility(View.INVISIBLE);
-                    progressBar.setVisibility(View.INVISIBLE);
-                    rider_search_btn.setVisibility(View.VISIBLE);
-                    searchRiderCardView.setVisibility(View.INVISIBLE);
-                    startActivity(new Intent(getActivity(), SearchResult.class));
-                    getActivity().finish();
+//                    loadertext.setVisibility(View.INVISIBLE);
+//                    progressBar.setVisibility(View.INVISIBLE);
+//                    rider_search_btn.setVisibility(View.VISIBLE);
+//                    searchRiderCardView.setVisibility(View.INVISIBLE);
+//                    startActivity(new Intent(getActivity(), SearchResult.class));
+//                    getActivity().finish();
 
                     /*
                     * Proceed to payment for service from here
@@ -332,7 +332,7 @@ public class SearchRiderFragment extends Fragment {
 
 
 
-    Double proximity = 0.3;
+    Double proximity = 0.2;
     Boolean riderFound = false;
     String riderID;
     /*
@@ -360,12 +360,20 @@ public class SearchRiderFragment extends Fragment {
                     DatabaseReference driverfounddatabase = FirebaseDatabase.getInstance()
                             .getReference()
                             .child("RiderCustomerConnect").child(key);
+                    DatabaseReference updatedriverobject = FirebaseDatabase.getInstance().getReference()
+                            .child("rider").child(key);
 
-                    HashMap map = new HashMap();
-                    map.put("customer_id", 1);
-                    driverfounddatabase.updateChildren(map);
-                    Intent intent = new Intent();
-                    intent.putExtra("rider_id", key);
+                    driverfounddatabase.setValue("","");
+//
+//                    HashMap<String, Object> map = new HashMap();
+//                    map.put("customer_id", 1);
+//                    map.put("payment_made","");
+//
+//                    updatedriverobject.setValue(map);
+//
+//                    driverfounddatabase.updateChildren(map);
+//                    Intent intent = new Intent();
+//                    intent.putExtra("rider_id", key);
 
 
                 }
@@ -384,8 +392,8 @@ public class SearchRiderFragment extends Fragment {
             @Override
             public void onGeoQueryReady() {
                 if(!riderFound){
-                    proximity++;
-                    if (proximity >= 12.3){
+                    proximity += 0.2;
+                    if (proximity >= 5){
                         System.out.println("Done searching");
                         return;
                     }

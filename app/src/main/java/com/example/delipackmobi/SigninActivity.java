@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -26,6 +27,7 @@ public class SigninActivity extends AppCompatActivity {
     private AsyncHttpClient asyncHttpClient;
     private DeliPackAlert deliPackAlert;
     private View viewloader;
+    private ProgressBar progressBar;
     private RelativeLayout relativeLayout;
     private static final String LOGIN_URL = "http://192.168.100.5:8000/customer_login";
 
@@ -42,6 +44,8 @@ public class SigninActivity extends AppCompatActivity {
         asyncHttpClient = new AsyncHttpClient();
         viewloader = getLayoutInflater().inflate(R.layout.delipack_event_loader, null);
         relativeLayout = viewloader.findViewById(R.id.loaderlayout);
+        progressBar = findViewById(R.id.loginloader);
+        progressBar.setVisibility(View.INVISIBLE);
 
 
         customerSignin.setOnClickListener(new View.OnClickListener() {
@@ -64,12 +68,14 @@ public class SigninActivity extends AppCompatActivity {
                     requestParams.add("password", customerpassword);
                     System.out.println("Loading");
 //                    startActivity(new Intent(SigninActivity.this, DeliPackEventLoader.class));
-
+                    deactivateWidgets();
                     asyncHttpClient.post(LOGIN_URL, requestParams, new JsonHttpResponseHandler(){
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
 //                            viewloader.setVisibility(View.INVISIBLE);
+//                            progressBar.setVisibility(View.INVISIBLE);
+                            activateWidgets();
                             try {
                                 String response_validate = response.getString("success_cue");
                                 if (response_validate.contains("Success")){
@@ -95,12 +101,17 @@ public class SigninActivity extends AppCompatActivity {
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
                             System.out.println(errorResponse);
+//                            progressBar.setVisibility(View.INVISIBLE);
+                            activateWidgets();
+
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
                             System.out.println(responseString);
+//                            progressBar.setVisibility(View.INVISIBLE);
+                            activateWidgets();
                         }
 
                     });
@@ -127,4 +138,22 @@ public class SigninActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void deactivateWidgets(){
+        progressBar.setVisibility(View.VISIBLE);
+        customerSignin.setClickable(false);
+        back_btn.setClickable(false);
+        customerPhoneNumber.setEnabled(false);
+        customerPassword.setEnabled(false);
+    }
+
+    private  void activateWidgets(){
+        progressBar.setVisibility(View.INVISIBLE);
+        customerSignin.setClickable(true);
+        back_btn.setClickable(true);
+        customerPhoneNumber.setEnabled(true);
+        customerPassword.setEnabled(true);
+    }
+
 }
