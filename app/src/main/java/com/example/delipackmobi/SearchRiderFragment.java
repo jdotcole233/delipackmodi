@@ -176,7 +176,6 @@ public class SearchRiderFragment extends Fragment {
                         progressBar.setVisibility(View.VISIBLE);
                         loadertext.setVisibility(View.VISIBLE);
                         findClosestBiker();
-                        startActivity(new Intent(getActivity(), SearchResult.class));
 
                     }
 
@@ -295,7 +294,7 @@ public class SearchRiderFragment extends Fragment {
      */
 
     public void getRiderResponse(){
-        DatabaseReference riderresponse = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest").child("rideraccepted");
+        DatabaseReference riderresponse = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest").child("rideraccepted").child("1");
         riderresponse.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -305,6 +304,9 @@ public class SearchRiderFragment extends Fragment {
                     progressBar.setVisibility(View.INVISIBLE);
                     rider_search_btn.setVisibility(View.VISIBLE);
                     searchRiderCardView.setVisibility(View.INVISIBLE);
+                    rider_search_btn.setVisibility(View.VISIBLE);
+                    searchRiderCardView.setVisibility(View.INVISIBLE);
+
                     startActivity(new Intent(getActivity(), SearchResult.class));
 //                    getActivity().finish();
 
@@ -330,7 +332,7 @@ public class SearchRiderFragment extends Fragment {
 
 
 
-    Double proximity = 0.2;
+    Double proximity = 0.1;
     Boolean riderFound = false;
     String riderID;
     /*
@@ -343,8 +345,8 @@ public class SearchRiderFragment extends Fragment {
      */
 
     public void findClosestBiker(){
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("RidersLocationAvailable");
-        System.out.println("FInd driver" + databaseReference);
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("RiderLocationAvailable");
+        System.out.println("iInd driver" + databaseReference);
         GeoFire geoFire = new GeoFire(databaseReference);
         GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(pickUpFromLatLng.latitude, pickUpFromLatLng.longitude), proximity);
         geoQuery.removeAllListeners();
@@ -359,9 +361,19 @@ public class SearchRiderFragment extends Fragment {
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference databasecustomer = database.getReference().child("CustomerRiderRequest").child("1"); //set first child value to customer id
                     databasecustomer.child("rideraccepted").setValue("");
+                    System.out.println("found rider");
 
                     DatabaseReference databaserider = database.getReference().child("RiderFoundForCustomer").child(riderID);
                     databaserider.child("customer_id").setValue("1");
+
+//                    progressBar.setVisibility(View.INVISIBLE);
+                    loadertext.setText("Rider should accept");
+//                    rider_search_btn.setVisibility(View.VISIBLE);
+//                    searchRiderCardView.setVisibility(View.INVISIBLE);
+
+//                    startActivity(new Intent(getActivity(), SearchResult.class));
+
+
 
 
 
@@ -381,11 +393,12 @@ public class SearchRiderFragment extends Fragment {
             @Override
             public void onGeoQueryReady() {
                 if(!riderFound){
-                    proximity += 0.2;
-                    if (proximity >= 5){
-                        System.out.println("Done searching");
-                        return;
-                    }
+                    proximity += 0.1;
+                    System.out.println("searching " + proximity );
+//                    if (proximity >= 5){
+//                        System.out.println("Done searching");
+//                        return;
+//                    }
                     findClosestBiker();
 
                 }
