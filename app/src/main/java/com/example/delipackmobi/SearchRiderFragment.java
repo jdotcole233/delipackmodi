@@ -64,6 +64,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.FINGERPRINT_SERVICE;
@@ -280,11 +281,7 @@ public class SearchRiderFragment extends Fragment {
                 Log.i("g", "An error occurred: " + status);
             }
         });
-
-
         getRiderResponse();
-
-
     }
 
 
@@ -298,16 +295,17 @@ public class SearchRiderFragment extends Fragment {
      */
 
     public void getRiderResponse(){
-        DatabaseReference riderresponse = FirebaseDatabase.getInstance().getReference().child("RiderCustomerConnect").child("rider_id").child("");
+        DatabaseReference riderresponse = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest").child("rideraccepted");
         riderresponse.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-//                    loadertext.setVisibility(View.INVISIBLE);
-//                    progressBar.setVisibility(View.INVISIBLE);
-//                    rider_search_btn.setVisibility(View.VISIBLE);
-//                    searchRiderCardView.setVisibility(View.INVISIBLE);
-//                    startActivity(new Intent(getActivity(), SearchResult.class));
+
+                    loadertext.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
+                    rider_search_btn.setVisibility(View.VISIBLE);
+                    searchRiderCardView.setVisibility(View.INVISIBLE);
+                    startActivity(new Intent(getActivity(), SearchResult.class));
 //                    getActivity().finish();
 
                     /*
@@ -337,7 +335,7 @@ public class SearchRiderFragment extends Fragment {
     String riderID;
     /*
      * System search for near by  driver using GeoFire
-     * If driver is not found within 0.3 km radius, the system
+     * If driver is not found within 0.2 km radius, the system
      * increase search range plus 1
      * If rider is found, the riders id and saved globally
      * and the child object [riderID] in RiderCustomerConnect is
@@ -345,7 +343,7 @@ public class SearchRiderFragment extends Fragment {
      */
 
     public void findClosestBiker(){
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("RidersLocationAvailable");
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("RidersLocationAvailable");
         System.out.println("FInd driver" + databaseReference);
         GeoFire geoFire = new GeoFire(databaseReference);
         GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(pickUpFromLatLng.latitude, pickUpFromLatLng.longitude), proximity);
@@ -357,23 +355,14 @@ public class SearchRiderFragment extends Fragment {
                     riderFound = true;
                     riderID = key;
 
-                    DatabaseReference driverfounddatabase = FirebaseDatabase.getInstance()
-                            .getReference()
-                            .child("RiderCustomerConnect").child(key);
-                    DatabaseReference updatedriverobject = FirebaseDatabase.getInstance().getReference()
-                            .child("rider").child(key);
+                    // Create a structure for driver found for customer
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference databasecustomer = database.getReference().child("CustomerRiderRequest").child("1"); //set first child value to customer id
+                    databasecustomer.child("rideraccepted").setValue("");
 
-                    driverfounddatabase.setValue("","");
-//
-//                    HashMap<String, Object> map = new HashMap();
-//                    map.put("customer_id", 1);
-//                    map.put("payment_made","");
-//
-//                    updatedriverobject.setValue(map);
-//
-//                    driverfounddatabase.updateChildren(map);
-//                    Intent intent = new Intent();
-//                    intent.putExtra("rider_id", key);
+                    DatabaseReference databaserider = database.getReference().child("RiderFoundForCustomer").child(riderID);
+                    databaserider.child("customer_id").setValue("1");
+
 
 
                 }
