@@ -19,8 +19,8 @@
     </string-array>
 
     <string-array name="cash_payment_option">
-        <item >Pay at pick up</item>
-        <item >Pay on delivery</item>
+        <item>Pay at pick up</item>
+        <item>Pay on delivery</item>
     </string-array>
 
 </resources>

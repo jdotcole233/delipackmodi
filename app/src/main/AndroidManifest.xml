@@ -14,11 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:replace="android:theme">
-        <activity android:name=".CashOptionSelected"></activity>
+        <activity android:name=".RiderPickedUpInformation"></activity>
+        <activity android:name=".CashOptionSelected" />
         <activity
             android:name=".Homedashboard_user"
             android:label="@string/title_activity_homedashboard_user" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,20 +27,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SigninActivity"></activity>
-        <activity android:name=".SignupActivity"></activity>
+        <activity android:name=".SigninActivity" />
+        <activity android:name=".SignupActivity" />
         <activity
             android:name=".HistoryDetails"
-            android:theme="@style/AppTheme.HistoryCustomTheme"></activity>
+            android:theme="@style/AppTheme.HistoryCustomTheme" />
         <activity
             android:name=".MobileMoneyPayment"
-            android:theme="@style/AppTheme.HistoryCustomTheme"></activity>
+            android:theme="@style/AppTheme.HistoryCustomTheme" />
         <activity
             android:name=".SearchResult"
-            android:theme="@style/AppTheme.HistoryCustomTheme"></activity>
+            android:theme="@style/AppTheme.HistoryCustomTheme" />
         <activity
             android:name=".DeliPackEventLoader"
-            android:theme="@style/AppTheme.TransparentTheme"></activity>
+            android:theme="@style/AppTheme.TransparentTheme" />
 
         <meta-data
             android:name="preloaded_fonts"

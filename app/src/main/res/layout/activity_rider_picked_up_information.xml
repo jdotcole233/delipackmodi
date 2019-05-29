@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RiderPickedUpInformation"
+    android:orientation="vertical"
+    android:background="@color/quantum_white_100"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/splashscreen_background"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/deli_s" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Working Hours"
+            android:textColor="#000"
+            android:fontFamily="sans-serif-light"
+            android:textSize="25sp"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            />
+
+    </LinearLayout>
+    <TableLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="1dp"
+        >
+        <TableRow>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mon - Sat"
+                android:textColor="#000"
+                android:fontFamily="sans-serif-light"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="24hrs"
+                android:textColor="#000"
+                android:fontFamily="sans-serif-light"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:paddingLeft="30dp"
+                />
+
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sundays"
+                android:textColor="#000"
+                android:fontFamily="sans-serif-light"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="24hrs"
+                android:textColor="#000"
+                android:fontFamily="sans-serif-light"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:paddingLeft="30dp"
+                />
+
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Holidays"
+                android:textColor="#000"
+                android:fontFamily="sans-serif-light"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="24hrs"
+                android:textColor="#000"
+                android:fontFamily="sans-serif-light"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:paddingLeft="30dp"
+                />
+
+        </TableRow>
+
+    </TableLayout>
+    <TableLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        >
+        <TableRow
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contact Email"
+                android:textColor="#000"
+                android:textSize="25sp"
+                android:fontFamily="sans-serif-light"
+                android:padding="2dp"
+                />
+        </TableRow>
+    </TableLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableRow
+            android:padding="3dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="support@delivpack.com"
+                android:textSize="20sp"
+                android:textColor="#000"
+                android:fontFamily="sans-serif-light"
+                />
+        </TableRow>
+        <TableRow
+            android:padding="3dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phone Number"
+                android:textSize="20sp"
+                android:textColor="#000"
+                android:fontFamily="sans-serif-light"
+                />
+        </TableRow>
+        <TableRow
+            android:padding="3dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="233 (503) 84 8404"
+                android:textSize="20sp"
+                android:textColor="#000"
+                android:fontFamily="sans-serif-light"
+                />
+        </TableRow>
+        <TableRow
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+            <Button
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:text="Request call back"
+                android:background="@drawable/register_btn_background"
+                android:gravity="center"
+                />
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="289dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:padding="1dp"
+            android:text="Find us on"
+            android:textColor="#000"
+            android:textSize="30sp" />
+    </LinearLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:padding="10dp"
+        >
+        <TableRow
+            android:layout_width="match_parent"
+            android:padding="5dp"
+            >
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/logo_instagram"
+                android:layout_marginRight="10dp"
+                />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/logo_facebook"
+                android:layout_marginRight="10dp"
+                />            android:padding="5dp"
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/logo_twitter"
+                android:scaleType="centerCrop"
+
+                />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
