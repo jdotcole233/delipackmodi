@@ -14,7 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:replace="android:theme">
-        <activity android:name=".RiderPickedUpInformation"></activity>
+        <activity android:name=".TripCompletedRatingMessage"></activity>
+        <activity android:name=".RateCompanyRider" />
+        <activity android:name=".PackageCancel" />
+        <activity android:name=".PackageInProgress" />
+        <activity android:name=".RiderPickedUpInformation" />
         <activity android:name=".CashOptionSelected" />
         <activity
             android:name=".Homedashboard_user"

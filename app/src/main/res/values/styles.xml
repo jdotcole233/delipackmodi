@@ -8,6 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="RatingBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">#A69D62</item>
+        <item name="colorControlActivated">#D3D3D3</item>
+    </style>
 
 
     <style name="AppTheme.HistoryCustomTheme" parent="Theme.AppCompat.Light.NoActionBar" >
