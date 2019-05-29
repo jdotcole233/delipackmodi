@@ -1,5 +1,7 @@
 package com.example.delipackmobi;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,12 +11,16 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class CashOptionSelected extends AppCompatActivity {
 
     private Spinner cashpaymentoption;
     private Button cash_btn;
     private ImageButton cancelcashbtn;
     private String cashoptionselected;
+    String riderIDFound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +29,11 @@ public class CashOptionSelected extends AppCompatActivity {
         cashpaymentoption = findViewById(R.id.cash_choice);
         cash_btn = findViewById(R.id.cash_payment_button);
         cancelcashbtn = findViewById(R.id.cancelcashoption);
+        Intent getRiderID = getIntent();
+        riderIDFound = getRiderID.getStringExtra("bikerID");
 
 
-        ArrayAdapter<CharSequence> cashspinner = ArrayAdapter.createFromResource(this, R.array.cash_payment_option, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> cashspinner = ArrayAdapter.createFromResource(getApplicationContext(), R.array.cash_payment_option, android.R.layout.simple_spinner_item);
         cashspinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cashpaymentoption.setAdapter(cashspinner);
 
@@ -46,7 +54,16 @@ public class CashOptionSelected extends AppCompatActivity {
         cash_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DeliPackAlert(CashOptionSelected.this, "Selection", cashoptionselected).showDeliPackAlert();
+                if (cashoptionselected.equals("Pay at pick up")){
+                    updatePaymentValueForRider(riderIDFound, CashOptionSelected.this, PackageInProgress.class);
+
+                } else if (cashoptionselected.equals("Pay on delivery")){
+                    updatePaymentValueForRider(riderIDFound, CashOptionSelected.this, PackageInProgress.class);
+
+                }else {
+                    return;
+                }
+//                new DeliPackAlert(CashOptionSelected.this, "Selection", cashoptionselected).showDeliPackAlert();
             }
         });
 
@@ -60,5 +77,15 @@ public class CashOptionSelected extends AppCompatActivity {
         });
 
 
+    }
+
+    public void updatePaymentValueForRider(String riderID, Context context, Class switchto){
+        DatabaseReference confirmpayment = FirebaseDatabase.getInstance().getReference()
+                .child("RiderFoundForCustomer")
+                .child(riderID)
+                .child("paymentapproved");
+        confirmpayment.setValue("true");
+        Intent changeActivitiies = new Intent(context, switchto);
+        startActivity(changeActivitiies);
     }
 }

@@ -19,6 +19,7 @@ public class SearchResult extends AppCompatActivity {
     private ImageButton cancelButton;
     private Spinner paymentMethod;
     private String payment_selection;
+    private String riderID;
 
 
     @Override
@@ -37,6 +38,9 @@ public class SearchResult extends AppCompatActivity {
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.payment_option, android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         paymentMethod.setAdapter(arrayAdapter);
+
+        Intent riderIDretrieve = getIntent();
+        riderID = riderIDretrieve.getStringExtra("riderID");
 
         paymentMethod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -65,12 +69,16 @@ public class SearchResult extends AppCompatActivity {
             public void onClick(View v) {
                 if(!payment_selection.isEmpty()){
                     if(payment_selection.equals("Mobile Money")){
-                        startActivity(new Intent(SearchResult.this, MobileMoneyPayment.class));
+//                        startActivity(new Intent(SearchResult.this, MobileMoneyPayment.class));
 //                        confirmcardview.setVisibility(View.INVISIBLE);
+                        new DeliPackAlert(SearchResult.this, "Payment option", "Coming soon").showDeliPackAlert();
+
                     } else if (payment_selection.equals("Cash")){
 //                        Toast.makeText(SearchResult.this, "Cash Selected", Toast.LENGTH_LONG).show();
 //                        new DeliPackAlert(SearchResult.this, "Payment option", "Cash payment selected").showDeliPackAlert();
-                        startActivity(new Intent(SearchResult.this, CashOptionSelected.class));
+                        Intent sendRiderID = new Intent(SearchResult.this, CashOptionSelected.class);
+                        sendRiderID.putExtra("bikerID", riderID);
+                        startActivity(sendRiderID);
 
                     } else if (payment_selection.equals("Select payment option")){
                         new DeliPackAlert(SearchResult.this, "Payment option", "Select a payment option").showDeliPackAlert();
@@ -88,4 +96,8 @@ public class SearchResult extends AppCompatActivity {
 
 
     }
+
+    //Query database for rider information display function
+
+    //Calculate delivery charges function
 }

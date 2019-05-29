@@ -29,7 +29,7 @@ public class SigninActivity extends AppCompatActivity {
     private View viewloader;
     private ProgressBar progressBar;
     private RelativeLayout relativeLayout;
-    private static final String LOGIN_URL = "http://172.20.10.3:8000/customer_login";
+    private static final String LOGIN_URL = "http://172.20.10.7:8000/customer_login";
 
 
 

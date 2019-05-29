@@ -51,9 +51,7 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/rounded_input_signin"
             android:spinnerMode="dropdown"
-            android:popupBackground="@color/quantum_white_100"
             >
-
         </Spinner>
 
         <LinearLayout

@@ -294,21 +294,27 @@ public class SearchRiderFragment extends Fragment {
      */
 
     public void getRiderResponse(){
-        DatabaseReference riderresponse = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest").child("rideraccepted").child("1");
+        DatabaseReference riderresponse = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest").child("1").child("rideraccepted");
         riderresponse.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
+                    Log.i("delipacksnapshot", dataSnapshot.toString());
 
-                    loadertext.setVisibility(View.INVISIBLE);
-                    progressBar.setVisibility(View.INVISIBLE);
-                    rider_search_btn.setVisibility(View.VISIBLE);
-                    searchRiderCardView.setVisibility(View.INVISIBLE);
-                    rider_search_btn.setVisibility(View.VISIBLE);
-                    searchRiderCardView.setVisibility(View.INVISIBLE);
-
-                    startActivity(new Intent(getActivity(), SearchResult.class));
-//                    getActivity().finish();
+                    if (!dataSnapshot.getValue().equals("")){
+                        loadertext.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.INVISIBLE);
+                        rider_search_btn.setVisibility(View.VISIBLE);
+                        searchRiderCardView.setVisibility(View.INVISIBLE);
+                        rider_search_btn.setVisibility(View.VISIBLE);
+                        searchRiderCardView.setVisibility(View.INVISIBLE);
+//                        startActivity(new Intent(getActivity(), SearchResult.class));
+//                        if(!riderID.isEmpty()){
+                            Intent sendRiderID = new Intent(getActivity(), SearchResult.class);
+                            sendRiderID.putExtra("riderID", riderID);
+                            startActivity(sendRiderID);
+//                        }
+                    }
 
                     /*
                     * Proceed to payment for service from here
@@ -316,6 +322,8 @@ public class SearchRiderFragment extends Fragment {
                     * Using putExtra
                      */
 
+                } else {
+                    System.out.println("Data changed else part " + dataSnapshot);
                 }
             }
 
@@ -365,6 +373,7 @@ public class SearchRiderFragment extends Fragment {
 
                     DatabaseReference databaserider = database.getReference().child("RiderFoundForCustomer").child(riderID);
                     databaserider.child("customer_id").setValue("1");
+                    databaserider.child("assigned").setValue("true");
 
 //                    progressBar.setVisibility(View.INVISIBLE);
                     loadertext.setText("Rider should accept");
@@ -372,7 +381,6 @@ public class SearchRiderFragment extends Fragment {
 //                    searchRiderCardView.setVisibility(View.INVISIBLE);
 
 //                    startActivity(new Intent(getActivity(), SearchResult.class));
-
 
 
 
