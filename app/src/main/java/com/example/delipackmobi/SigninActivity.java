@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.example.delipackmobi.CustomerContract.CustomerContract;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -19,6 +20,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
+
+import static com.example.delipackmobi.CustomerContract.CustomerContract.LOGIN_URL;
 
 public class SigninActivity extends AppCompatActivity {
 
@@ -29,7 +32,7 @@ public class SigninActivity extends AppCompatActivity {
     private View viewloader;
     private ProgressBar progressBar;
     private RelativeLayout relativeLayout;
-    private static final String LOGIN_URL = "http://172.20.10.7:8000/customer_login";
+    private CustomerContract savedContract;
 
 
 
@@ -46,6 +49,7 @@ public class SigninActivity extends AppCompatActivity {
         relativeLayout = viewloader.findViewById(R.id.loaderlayout);
         progressBar = findViewById(R.id.loginloader);
         progressBar.setVisibility(View.INVISIBLE);
+        savedContract = new CustomerContract(this);
 
 
         customerSignin.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +70,7 @@ public class SigninActivity extends AppCompatActivity {
                     RequestParams requestParams = new RequestParams();
                     requestParams.add("phone_number", customerphone);
                     requestParams.add("password", customerpassword);
-                    System.out.println("Loading");
+//                    System.out.println("Loading");
 //                    startActivity(new Intent(SigninActivity.this, DeliPackEventLoader.class));
                     deactivateWidgets();
                     asyncHttpClient.post(LOGIN_URL, requestParams, new JsonHttpResponseHandler(){
@@ -80,11 +84,12 @@ public class SigninActivity extends AppCompatActivity {
                                 String response_validate = response.getString("success_cue");
                                 if (response_validate.contains("Success")){
 //                                    new DeliPackAlert(SigninActivity.this, "Success", "Successful").showDeliPackAlert();
+                                    savedContract.setBasicCookies("customerInfomation", response.toString(),1,"/");
                                     startActivity(new Intent(SigninActivity.this, Homedashboard_user.class));
                                     finish();
 
                                 } else if (response_validate.contains("Deactivated")){
-                                    String message = "Sorry!! This account has been deactivated. Contact us at 'https://delipack.com/contact' to resolve any issues";
+                                    String message = "Sorry!! This account has been deactivated. Contact us at 'https://delivpack.com' to resolve any issues";
                                     new DeliPackAlert(SigninActivity.this, "Deactivated",  message).showDeliPackAlert();
 
                                 } else if (response_validate.contains("Failed")){

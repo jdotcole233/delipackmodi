@@ -26,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.delipackmobi.CustomerContract.CustomerContract;
 import com.example.delipackmobi.Model.PickUpDeliveryModel;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
@@ -61,6 +62,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONObject;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -89,6 +92,11 @@ public class SearchRiderFragment extends Fragment {
     private ProgressBar progressBar;
     private TextView loadertext;
     private CardView searchRiderCardView;
+    private TextView welcomeText;
+    private CustomerContract customerContract;
+    private String customer_first_name;
+    private String customer_last_name;
+    private String customer_phone_number;
 
 
     public SearchRiderFragment() {
@@ -126,6 +134,17 @@ public class SearchRiderFragment extends Fragment {
         progressBar = getActivity().findViewById(R.id.searchloader);
         loadertext = getActivity().findViewById(R.id.loadingtext);
         searchRiderCardView = getActivity().findViewById(R.id.searchridercardview);
+        welcomeText = getActivity().findViewById(R.id.welcomemessage);
+        customerContract = new CustomerContract(getActivity());
+
+        System.out.println("Customer cookies " + customerContract.getPersistentCookieStore().getCookies().get(0).getValue());
+        try{
+            JSONObject customerJSON = new JSONObject(customerContract.getPersistentCookieStore().getCookies().get(0).getValue());
+            welcomeText.setText("Nice to see you! " + customerJSON.getString("first_name"));
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
         mapView = getActivity().findViewById(R.id.customermap);
 
