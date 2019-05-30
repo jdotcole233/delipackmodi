@@ -87,5 +87,6 @@ public class CashOptionSelected extends AppCompatActivity {
         confirmpayment.setValue("true");
         Intent changeActivitiies = new Intent(context, switchto);
         startActivity(changeActivitiies);
+        finish();
     }
 }

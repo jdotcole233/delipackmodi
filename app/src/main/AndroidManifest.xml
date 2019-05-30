@@ -17,7 +17,7 @@
         <activity android:name=".TripCompletedRatingMessage"></activity>
         <activity android:name=".RateCompanyRider" />
         <activity android:name=".PackageCancel" />
-        <activity android:name=".PackageInProgress" />
+        <activity android:name=".PackageInProgress"  android:theme="@style/AppTheme.TransparentTheme"/>
         <activity android:name=".RiderPickedUpInformation" />
         <activity android:name=".CashOptionSelected" />
         <activity

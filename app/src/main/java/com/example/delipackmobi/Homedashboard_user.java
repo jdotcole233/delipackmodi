@@ -1,5 +1,6 @@
 package com.example.delipackmobi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -15,6 +16,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +42,7 @@ public class Homedashboard_user extends AppCompatActivity {
     SearchRiderFragment searchRiderFragment;
     ProfileFragment profileFragment;
     HistoryFragment historyFragment;
+    private ImageButton showmorebtn;
 
 
 
@@ -52,10 +55,23 @@ public class Homedashboard_user extends AppCompatActivity {
             Places.initialize(this, "AIzaSyDKBYaQubmWi0ockGK4hmMAPG_RcKcZ7mk");
         }
 
+        PackageInProgress.Homedardboardactivity = this;
+
         searchRiderFragment = new SearchRiderFragment();
         profileFragment = new ProfileFragment();
         historyFragment = new HistoryFragment();
+        showmorebtn = findViewById(R.id.showmoretripinprogress);
+        showmorebtn.setVisibility(View.INVISIBLE);
 
+        showmorebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent showinprogressactivity = new Intent(Homedashboard_user.this, PackageInProgress.class);
+                startActivity(showinprogressactivity);
+                showmorebtn.setVisibility(View.INVISIBLE);
+
+            }
+        });
 
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

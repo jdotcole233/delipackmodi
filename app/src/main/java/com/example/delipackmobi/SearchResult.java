@@ -79,6 +79,7 @@ public class SearchResult extends AppCompatActivity {
                         Intent sendRiderID = new Intent(SearchResult.this, CashOptionSelected.class);
                         sendRiderID.putExtra("bikerID", riderID);
                         startActivity(sendRiderID);
+                        finish();
 
                     } else if (payment_selection.equals("Select payment option")){
                         new DeliPackAlert(SearchResult.this, "Payment option", "Select a payment option").showDeliPackAlert();

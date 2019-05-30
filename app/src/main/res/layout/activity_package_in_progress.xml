@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="50dp"
         android:background="@drawable/splashscreen_background"
         android:orientation="horizontal"
         >
@@ -18,9 +18,11 @@
             android:src="@drawable/deli_s" />
 
         <ImageView
+            android:id="@+id/minimizeprogress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_expand_more_black_24dp"
+            android:background="@drawable/register_btn_background"
             />
 
     </LinearLayout>
@@ -33,14 +35,14 @@
 
         <!--Company logo display section-->
         <LinearLayout
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:orientation="vertical"
             >
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:src="@drawable/deli_s"
                 />
 
@@ -51,16 +53,16 @@
         <!--Company package transport information-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="7dp"
+            android:padding="10dp"
             >
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Company Name"
                 android:textColor="#000"
-                android:textSize="23sp"
+                android:textSize="16sp"
                 android:fontFamily="sans-serif"
                 />
             <TextView
@@ -68,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:text="Bike Reg Number"
                 android:textColor="#000"
-                android:textSize="23sp"
+                android:textSize="16sp"
                 android:fontFamily="sans-serif"
                 />
             <TextView
@@ -76,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:text="Pick up location"
                 android:textColor="#000"
-                android:textSize="23sp"
+                android:textSize="16sp"
                 android:fontFamily="sans-serif"
                 />
             <TextView
@@ -84,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:text="Destination Location"
                 android:textColor="#000"
-                android:textSize="23sp"
+                android:textSize="16sp"
                 android:fontFamily="sans-serif"
                 />
         </LinearLayout>
@@ -99,18 +101,22 @@
         android:gravity="center"
         >
         <Button
+            android:id="@+id/canceltripinaction"
             android:layout_width="170dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:text="Cancel"
             android:background="@drawable/register_btn_background"
+            android:textColor="#FFF"
             />
 
         <Button
+            android:id="@+id/callcustomer"
             android:layout_width="170dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:text="Call"
             android:layout_marginLeft="10dp"
             android:background="@drawable/confirm_button"
+            android:textColor="#FFF"
             />
     </LinearLayout>
 </LinearLayout>
