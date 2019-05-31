@@ -32,7 +32,7 @@ public class CashOptionSelected extends AppCompatActivity {
     private Button cash_btn;
     private ImageButton cancelcashbtn;
     private String cashoptionselected;
-    private String riderIDFound;
+    private String riderIDFound, customerID;
     private CustomerContract customerContract;
 
     @Override
@@ -50,6 +50,17 @@ public class CashOptionSelected extends AppCompatActivity {
         ArrayAdapter<CharSequence> cashspinner = ArrayAdapter.createFromResource(getApplicationContext(), R.array.cash_payment_option, android.R.layout.simple_spinner_item);
         cashspinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cashpaymentoption.setAdapter(cashspinner);
+
+        for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
+            if(cookie.getName().equals("customerInfomation")){
+                try {
+                    JSONObject customerIDinfo = new JSONObject(cookie.getValue());
+                    customerID = customerIDinfo.getString("customer_id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
 
         cashpaymentoption.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -70,9 +81,15 @@ public class CashOptionSelected extends AppCompatActivity {
             public void onClick(View v) {
                 if (cashoptionselected.equals("Pay at pick up")){
                     updatePaymentValueForRider(riderIDFound, CashOptionSelected.this, PackageInProgress.class);
+                    DatabaseReference updateAccepted = FirebaseDatabase.getInstance().getReference()
+                            .child("CustomerRiderRequest").child(customerID).child("rideraccepted");
+                    updateAccepted.setValue("paid");
 
                 } else if (cashoptionselected.equals("Pay on delivery")){
                     updatePaymentValueForRider(riderIDFound, CashOptionSelected.this, PackageInProgress.class);
+                    DatabaseReference updateAccepted = FirebaseDatabase.getInstance().getReference()
+                            .child("CustomerRiderRequest").child(customerID).child("rideraccepted");
+                    updateAccepted.setValue("paid");
 
                 }else {
                     return;

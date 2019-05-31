@@ -6,10 +6,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.delipackmobi.CustomerContract.CustomerContract;
+
+import java.util.Map;
+
+import cz.msebera.android.httpclient.cookie.Cookie;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button signin_btn;
     private Button signup_btn;
+    private CustomerContract savedCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +25,20 @@ public class MainActivity extends AppCompatActivity {
 
         signin_btn = findViewById(R.id.signinbtn);
         signup_btn = findViewById(R.id.signupbtn);
+
+        savedCustomer = new CustomerContract(this);
+
+        for (Cookie cookie: savedCustomer.getPersistentCookieStore().getCookies()){
+            if (cookie.getName().equals("customerInfomation")){
+                if (!cookie.getValue().isEmpty()){
+                    startActivity(new Intent(MainActivity.this, Homedashboard_user.class));
+                    finish();
+                } else {
+                    return;
+                }
+            }
+
+        }
 
 
         signin_btn.setOnClickListener(new View.OnClickListener() {

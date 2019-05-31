@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.cookie.Cookie;
 
 import static com.example.delipackmobi.CustomerContract.CustomerContract.LOGIN_URL;
 
@@ -50,6 +51,10 @@ public class SigninActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.loginloader);
         progressBar.setVisibility(View.INVISIBLE);
         savedContract = new CustomerContract(this);
+
+
+
+
 
 
         customerSignin.setOnClickListener(new View.OnClickListener() {

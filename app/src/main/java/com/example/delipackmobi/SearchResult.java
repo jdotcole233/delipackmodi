@@ -74,7 +74,7 @@ public class SearchResult extends AppCompatActivity {
             } else if (cookie.getName().equals("searchdata")){
                 try {
                     JSONObject display_price = new JSONObject(cookie.getValue());
-                    Double price_calc = display_price.getDouble("delivery_charge") + display_price.getDouble("commission_charge");
+                    Double price_calc =  display_price.getDouble("delivery_charge") + display_price.getDouble("commission_charge");
                             transactionprice.setText(price_calc.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();

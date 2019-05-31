@@ -112,6 +112,7 @@ public class SearchRiderFragment extends Fragment {
     public static Activity delipackEventloader;
     private AsyncHttpClient getCompanyInformation;
     private float [] distdiff;
+    private String deliveryLocatioName, pickupLocationName;
 
 
 
@@ -184,6 +185,11 @@ public class SearchRiderFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null){
+            pickUpFromLatLng = new LatLng(savedInstanceState.getDouble("pickuplat"), savedInstanceState.getDouble("pickuplong"));
+            deliverToLatLng = new LatLng(savedInstanceState.getDouble("delivertolat"), savedInstanceState.getDouble("delivertolong"));
+        }
+
 
     }
 
@@ -215,6 +221,16 @@ public class SearchRiderFragment extends Fragment {
         welcomeText = getActivity().findViewById(R.id.welcomemessage);
         customerContract = new CustomerContract(getActivity());
         distdiff = new float[1];
+
+
+
+        if (savedInstanceState != null){
+            System.out.println("saved instant state not null");
+            pickUpFromLatLng = new LatLng(savedInstanceState.getDouble("pickuplat"), savedInstanceState.getDouble("pickuplong"));
+            deliverToLatLng = new LatLng(savedInstanceState.getDouble("delivertolat"), savedInstanceState.getDouble("delivertolong"));
+        }
+
+
 
         System.out.println("Customer cookies " + customerContract.getPersistentCookieStore().getCookies());
         for(Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
@@ -339,6 +355,8 @@ public class SearchRiderFragment extends Fragment {
                     place_from.put(place.getId().toString(), place.getName().toString());
                     pickUpFromLatLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
                     pickUpDeliveryModel.setFromInformation("pickup", place.getName().toString());
+
+                    pickupLocationName = place.getName();
                     Log.i("g", "Place: " + place);
                     map.addMarker(new MarkerOptions().position(pickUpFromLatLng).title("Pick up"));
 
@@ -373,9 +391,12 @@ public class SearchRiderFragment extends Fragment {
             public void onPlaceSelected(Place place) {
                 HashMap<String, String> place_delivery = new HashMap<>();
                 if (place != null) {
+
                     deliverToLatLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
                     place_delivery.put(place.getId().toString(), place.getName().toString());
                     pickUpDeliveryModel.setDeliveryInformation("delivery",place.getName().toString());
+                    deliveryLocatioName = place.getName();
+
                     Log.i("g", "Place: " + place);
                     if (pickUpFromLatLng != null && deliverToLatLng != null){
                         PolylineOptions polylineOptions = new PolylineOptions().add(pickUpFromLatLng)
@@ -383,7 +404,7 @@ public class SearchRiderFragment extends Fragment {
                         map.addPolyline(polylineOptions);
                         map.addMarker(new MarkerOptions()
                                 .position(deliverToLatLng)
-                                .title("Deliver to")
+                                .title("Deliver to: " + place.getName())
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
 
                         );
@@ -424,7 +445,7 @@ public class SearchRiderFragment extends Fragment {
                     if(dataSnapshot.exists()){
                         Log.i("delipacksnapshot", dataSnapshot.toString());
 
-                        if (!dataSnapshot.getValue().equals("")){
+                        if (dataSnapshot.getValue().equals("true")){
 //                        loadertext.setVisibility(View.INVISIBLE);
 //                        progressBar.setVisibility(View.INVISIBLE);
 //                        rider_search_btn.setVisibility(View.VISIBLE);
@@ -432,15 +453,22 @@ public class SearchRiderFragment extends Fragment {
 //                        rider_search_btn.setVisibility(View.VISIBLE);
                             searchriderwelcomecard.setVisibility(View.INVISIBLE);
                             searchRiderCardView.setVisibility(View.INVISIBLE);
+
 //                        startActivity(new Intent(getActivity(), SearchResult.class));
 //                        if(!riderID.isEmpty()){
 //                            if (SearchRiderFragment.delipackEventloader.)
+//                            System.out.println("Activity name :" + SearchRiderFragment.delipackEventloader.getParent().getComponentName());
                             SearchRiderFragment.delipackEventloader.finish();
                             readCompanyInformation(riderID);
                             Intent sendRiderID = new Intent(getActivity(), SearchResult.class);
                             sendRiderID.putExtra("riderID", riderID);
                             startActivity(sendRiderID);
 //                        }
+                        } else if (dataSnapshot.getValue().equals("paid")) {
+                            searchriderwelcomecard.setVisibility(View.INVISIBLE);
+                            searchRiderCardView.setVisibility(View.INVISIBLE);
+                            transactionInProgress();
+
                         }
 
                         /*
@@ -464,6 +492,29 @@ public class SearchRiderFragment extends Fragment {
 
 
 
+
+    public void transactionInProgress(){
+        Intent transactInProg = new Intent(getActivity(), PackageInProgress.class);
+        startActivity(transactInProg);
+
+        map.addMarker(new MarkerOptions().position(pickUpFromLatLng).title("Pick up"));
+
+
+
+        PolylineOptions polylineOptions = new PolylineOptions().add(pickUpFromLatLng)
+                .add(deliverToLatLng).color(Color.RED);
+        map.addPolyline(polylineOptions);
+        map.addMarker(new MarkerOptions()
+                .position(deliverToLatLng)
+                .title("Deliver to")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+
+        );
+        map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
+        map.animateCamera(CameraUpdateFactory.zoomTo(11));
+
+
+    }
 
 
 
@@ -506,6 +557,20 @@ public class SearchRiderFragment extends Fragment {
                         DatabaseReference databaserider = database.getReference().child("RiderFoundForCustomer").child(riderID);
                         databaserider.child("customer_id").setValue(customer_id);
                         databaserider.child("assigned").setValue("true");
+
+
+                        Map<String, Object> dellocation = new HashMap<>();
+                        dellocation.put("latitude", Double.toString(deliverToLatLng.latitude));
+                        dellocation.put("longitude", Double.toString(deliverToLatLng.longitude));
+                        dellocation.put("deliverylocationname", deliveryLocatioName);
+                        dellocation.put("pickuplocationname", pickupLocationName);
+                        dellocation.put("customerPhoneNumber", customer_phone_number);
+                        dellocation.put("customerName",  customer_first_name + " " + customer_last_name);
+                        databasecustomer.child("deliverlatlong").updateChildren(dellocation);
+
+
+//                        pickUpDeliveryModel.resetFromInformation();
+//                        pickUpDeliveryModel.resetsetDeliveryInformation();
 
 //                    progressBar.setVisibility(View.INVISIBLE);
 //                    loadertext.setText("Rider should accept");
@@ -592,10 +657,19 @@ public class SearchRiderFragment extends Fragment {
     }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+//        if(pickUpFromLatLng.latitude)
+        if (!pickUpFromLatLng.toString().isEmpty() && !deliverToLatLng.toString().isEmpty()){
+            outState.putDouble("pickuplat", pickUpFromLatLng.latitude);
+            outState.putDouble("pickuplong", pickUpFromLatLng.longitude);
 
+            outState.putDouble("delivertolat", deliverToLatLng.latitude);
+            outState.putDouble("delivertolong", deliverToLatLng.longitude);
+        } else{
+            System.out.println("Saving instant state false called ");
+        }
 
-
-
-
-
+    }
 }

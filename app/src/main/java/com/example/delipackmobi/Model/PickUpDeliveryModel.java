@@ -32,4 +32,12 @@ public class PickUpDeliveryModel {
     public void setDeliveryInformation(String key,String value) {
         this.deliveryInformation.put(key, value);
     }
+
+    public void resetsetDeliveryInformation() {
+        this.deliveryInformation = null;
+    }
+
+    public void resetFromInformation() {
+        this.fromInformation = null;
+    }
 }

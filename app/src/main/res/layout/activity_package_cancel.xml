@@ -46,8 +46,8 @@
                 android:layout_height="wrap_content"
                 android:text="Cancelling this trip may incur"
                 android:textColor="#000"
-                android:textSize="23sp"
-                android:fontFamily="sans-serif"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-light"
                 android:textAlignment="center"
                 />
             <TextView
@@ -55,8 +55,8 @@
                 android:layout_height="wrap_content"
                 android:text="some charges because rider has"
                 android:textColor="#000"
-                android:textSize="23sp"
-                android:fontFamily="sans-serif"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-light"
                 android:textAlignment="center"
                 />
             <TextView
@@ -64,8 +64,8 @@
                 android:layout_height="wrap_content"
                 android:text="already set off"
                 android:textColor="#000"
-                android:textSize="23sp"
-                android:fontFamily="sans-serif"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-light"
                 android:textAlignment="center"
                 />
         </LinearLayout>
@@ -85,7 +85,7 @@
             android:layout_height="30dp"
             android:text="No"
             android:background="@drawable/register_btn_background"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="#FFF"
             />
 
@@ -96,7 +96,7 @@
             android:text="Yes"
             android:layout_marginLeft="10dp"
             android:background="@drawable/confirm_button"
-            android:textSize="23sp"
+            android:textSize="18sp"
             android:textColor="#FFF"
             />
     </LinearLayout>
