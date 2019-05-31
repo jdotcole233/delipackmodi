@@ -1,12 +1,23 @@
 package com.example.delipackmobi;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.delipackmobi.CustomerContract.CustomerContract;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import cz.msebera.android.httpclient.cookie.Cookie;
 
 public class PackageInProgress extends AppCompatActivity {
 
@@ -14,6 +25,9 @@ public class PackageInProgress extends AppCompatActivity {
     private Button cancelbtn;
     private Button callclientbtn;
     public static Activity Homedardboardactivity;
+    private CustomerContract customerContract;
+    private TextView companyname, regnumber, pickuplocation, deliverylocation;
+    private String riderID, customerID, riderPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,13 +36,73 @@ public class PackageInProgress extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        getWindow().setLayout((int)(displayMetrics.widthPixels * 0.95), (int)(displayMetrics.heightPixels * 0.3));
+        getWindow().setLayout((int)(displayMetrics.widthPixels * 0.95), (int)(displayMetrics.heightPixels * 0.4));
 
 
         showlessormorebtn = findViewById(R.id.minimizeprogress);
         cancelbtn = findViewById(R.id.canceltripinaction);
         callclientbtn = findViewById(R.id.callcustomer);
         showmorebtn = PackageInProgress.Homedardboardactivity.findViewById(R.id.showmoretripinprogress);
+        customerContract = new CustomerContract(this);
+        companyname = findViewById(R.id.inprogresscompanyname);
+        regnumber = findViewById(R.id.inprogressbikeregnumber);
+        pickuplocation = findViewById(R.id.inprogresspickup);
+        deliverylocation = findViewById(R.id.inprogressdelivery);
+
+        for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
+            if(cookie.getName().equals("searchdata")){
+                try {
+                    JSONObject riderInprogress = new JSONObject(cookie.getValue());
+                    pickuplocation.setText("Pick up:" + riderInprogress.getString("pickup"));
+                    deliverylocation.setText("Deliver:" + riderInprogress.getString("delivery"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else if (cookie.getName().equals("company_details")){
+                try {
+                    JSONObject riderInprogressInfor = new JSONObject(cookie.getValue());
+                    regnumber.setText("Bike No: " + riderInprogressInfor.getString("registered_number"));
+                    companyname.setText("Company: " + riderInprogressInfor.getString("company_name"));
+                    riderID = riderInprogressInfor.getString("company_rider_id");
+                    riderPhoneNumber = riderInprogressInfor.getString("work_phone");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else if (cookie.getName().equals("customerInfomation")){
+                try {
+                    JSONObject cancelInprogress = new JSONObject(cookie.getValue());
+                    customerID = cancelInprogress.getString("customer_id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+        }
+
+
+        cancelbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cancelIntent = new Intent(PackageInProgress.this, PackageCancel.class);
+                cancelIntent.putExtra("customerID", customerID);
+                cancelIntent.putExtra("riderID", riderID);
+                startActivity(cancelIntent);
+
+
+            }
+        });
+
+        callclientbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callClientButton = new Intent(Intent.ACTION_DIAL);
+                callClientButton.setData(Uri.parse("tel:"+riderPhoneNumber));
+                startActivity(callClientButton);
+            }
+        });
 
 
         showlessormorebtn.setOnClickListener(new View.OnClickListener() {

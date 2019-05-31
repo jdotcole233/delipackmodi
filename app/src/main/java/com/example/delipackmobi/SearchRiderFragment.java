@@ -1,10 +1,12 @@
 package com.example.delipackmobi;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -61,6 +63,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
 
@@ -69,8 +75,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.cookie.Cookie;
+
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.FINGERPRINT_SERVICE;
+import static com.example.delipackmobi.CustomerContract.CustomerContract.GETCOMPANYDATA_URL;
 
 
 public class SearchRiderFragment extends Fragment {
@@ -91,12 +101,78 @@ public class SearchRiderFragment extends Fragment {
     private LatLng deliverToLatLng;
     private ProgressBar progressBar;
     private TextView loadertext;
-    private CardView searchRiderCardView;
+    private CardView searchRiderCardView, searchriderwelcomecard;
     private TextView welcomeText;
     private CustomerContract customerContract;
-    private String customer_first_name;
-    private String customer_last_name;
-    private String customer_phone_number;
+    private String customer_first_name, customer_last_name, customer_phone_number, customer_id;
+    public static String  picklat, picklong;
+    public static  Double proximity = 0.1;
+    Boolean riderFound = false;
+    String riderID;
+    public static Activity delipackEventloader;
+    private AsyncHttpClient getCompanyInformation;
+    private float [] distdiff;
+
+
+
+    public void readCompanyInformation(String riderID){
+        AsyncHttpClient getCompanyInformation = new AsyncHttpClient();
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("rider_id", riderID);
+
+        System.out.println("read company information entered");
+
+        getCompanyInformation.post(GETCOMPANYDATA_URL, requestParams, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                String responsefromserver = response.toString();
+
+
+                if(!responsefromserver.isEmpty()){
+                    new CustomerContract(getActivity())
+                            .setBasicCookies("company_details", response.toString(),2, "/");
+                } else {
+                    return;
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                System.out.println(errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                System.out.println(throwable.getMessage());
+            }
+        });
+
+    }
+
+    public Double[] getPriceAndCommission(Double distance,Double baseprice, Double basedistance){
+         Double [] pricelist = new Double[2];
+        Double distancediff = 0.0;
+        Double initialprice = 0.0;
+        Double commissionprice = 0.0;
+
+//         if(!distance){
+             if (distance >= basedistance){
+                 distancediff = distance/basedistance;
+             } else {
+                 distancediff = basedistance/distance;
+             }
+             initialprice = distancediff * baseprice;
+             commissionprice = initialprice * 0.5;
+//         }
+         pricelist[0] = initialprice;
+         pricelist[1] = commissionprice;
+
+        return pricelist;
+    }
+
 
 
     public SearchRiderFragment() {
@@ -126,6 +202,7 @@ public class SearchRiderFragment extends Fragment {
         animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide);
         animationout = AnimationUtils.loadAnimation(getContext(), R.anim.slideout);
         animationmove = AnimationUtils.loadAnimation(getContext(), R.anim.move);
+        DeliPackEventLoader.searchRiderActivity = getActivity();
 
 
         rider_search_btn = getActivity().findViewById(R.id.rider_search);
@@ -134,17 +211,28 @@ public class SearchRiderFragment extends Fragment {
         progressBar = getActivity().findViewById(R.id.searchloader);
         loadertext = getActivity().findViewById(R.id.loadingtext);
         searchRiderCardView = getActivity().findViewById(R.id.searchridercardview);
+        searchriderwelcomecard = getActivity().findViewById(R.id.cardsearchwelcome);
         welcomeText = getActivity().findViewById(R.id.welcomemessage);
         customerContract = new CustomerContract(getActivity());
+        distdiff = new float[1];
 
-        System.out.println("Customer cookies " + customerContract.getPersistentCookieStore().getCookies().get(0).getValue());
-        try{
-            JSONObject customerJSON = new JSONObject(customerContract.getPersistentCookieStore().getCookies().get(0).getValue());
-            welcomeText.setText("Nice to see you! " + customerJSON.getString("first_name"));
+        System.out.println("Customer cookies " + customerContract.getPersistentCookieStore().getCookies());
+        for(Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
+              if(cookie.getName().equals("customerInfomation")){
+                  try{
+                      JSONObject customerJSON = new JSONObject(cookie.getValue());
+                      customer_first_name = customerJSON.getString("first_name");
+                      customer_last_name = customerJSON.getString("last_name");
+                      customer_phone_number = customerJSON.getString("phone_number");
+                      customer_id = customerJSON.getString("customer_id");
+                      welcomeText.setText("Nice to see you! " + customerJSON.getString("first_name"));
 
-        }catch (Exception e){
-            System.out.println(e.getMessage());
+                  }catch (Exception e){
+                      System.out.println(e.getMessage());
+                  }
+              }
         }
+
 
         mapView = getActivity().findViewById(R.id.customermap);
 
@@ -183,19 +271,32 @@ public class SearchRiderFragment extends Fragment {
                         new DeliPackAlert(getActivity(), "Location Fields", "Delivery information cannot be empty").showDeliPackAlert();
                         return;
                     } else {
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest");
-                        GeoFire geoFire = new GeoFire(databaseReference);
-                        geoFire.setLocation("1", new GeoLocation(pickUpFromLatLng.latitude,pickUpFromLatLng.longitude), new GeoFire.CompletionListener() {
-                            @Override
-                            public void onComplete(String key, DatabaseError error) {
+//                        System.out.println("Delivery model " + pickUpDeliveryModel.getFromInformation().toString());
+//                        Double [] pricerange = new Double[2];
+//                                getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0);
+                        Location.distanceBetween(pickUpFromLatLng.latitude,pickUpFromLatLng.longitude, deliverToLatLng.latitude,deliverToLatLng.longitude, distdiff);
+                        getSearchDetails(pickUpDeliveryModel.getFromInformation().get("pickup"), pickUpDeliveryModel.getDeliveryInformation().get("delivery"), getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[0], getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[1]);
+                        //insert actual distance and base price
 
-                            }
-                        });
-                        rider_search_btn.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.VISIBLE);
-                        loadertext.setVisibility(View.VISIBLE);
-                        findClosestBiker();
+                        System.out.println("distance difference " + Math.round(distdiff[0]/1000));
+                        proximity = 0.1;
+                        if(proximity <= 10){
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest");
+                            GeoFire geoFire = new GeoFire(databaseReference);
+                            geoFire.setLocation(customer_id, new GeoLocation(pickUpFromLatLng.latitude,pickUpFromLatLng.longitude), new GeoFire.CompletionListener() {
+                                @Override
+                                public void onComplete(String key, DatabaseError error) {
 
+                                }
+                            });
+//                        rider_search_btn.setVisibility(View.INVISIBLE);
+//                        progressBar.setVisibility(View.VISIBLE);
+//                        loadertext.setVisibility(View.VISIBLE);
+                            startActivity(new Intent(getActivity(), DeliPackEventLoader.class));
+                            findClosestBiker();
+                        } else {
+                            return;
+                        }
                     }
 
 
@@ -233,10 +334,12 @@ public class SearchRiderFragment extends Fragment {
                 HashMap<String, String> place_from = new HashMap<>();
 
                 if (place != null) {
+                    map.clear();
+                    autocompleteFragment1.setHint("Delivery location");
                     place_from.put(place.getId().toString(), place.getName().toString());
                     pickUpFromLatLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
-                    pickUpDeliveryModel.setFromInformation(place_from);
-                    Log.i("g", "Place: " + place.getLatLng());
+                    pickUpDeliveryModel.setFromInformation("pickup", place.getName().toString());
+                    Log.i("g", "Place: " + place);
                     map.addMarker(new MarkerOptions().position(pickUpFromLatLng).title("Pick up"));
 
 
@@ -272,7 +375,7 @@ public class SearchRiderFragment extends Fragment {
                 if (place != null) {
                     deliverToLatLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
                     place_delivery.put(place.getId().toString(), place.getName().toString());
-                    pickUpDeliveryModel.setDeliveryInformation(place_delivery);
+                    pickUpDeliveryModel.setDeliveryInformation("delivery",place.getName().toString());
                     Log.i("g", "Place: " + place);
                     if (pickUpFromLatLng != null && deliverToLatLng != null){
                         PolylineOptions polylineOptions = new PolylineOptions().add(pickUpFromLatLng)
@@ -313,44 +416,50 @@ public class SearchRiderFragment extends Fragment {
      */
 
     public void getRiderResponse(){
-        DatabaseReference riderresponse = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest").child("1").child("rideraccepted");
-        riderresponse.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Log.i("delipacksnapshot", dataSnapshot.toString());
+        if (!customer_id.isEmpty()){
+            DatabaseReference riderresponse = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest").child(customer_id).child("rideraccepted");
+            riderresponse.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        Log.i("delipacksnapshot", dataSnapshot.toString());
 
-                    if (!dataSnapshot.getValue().equals("")){
-                        loadertext.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.INVISIBLE);
-                        rider_search_btn.setVisibility(View.VISIBLE);
-                        searchRiderCardView.setVisibility(View.INVISIBLE);
-                        rider_search_btn.setVisibility(View.VISIBLE);
-                        searchRiderCardView.setVisibility(View.INVISIBLE);
+                        if (!dataSnapshot.getValue().equals("")){
+//                        loadertext.setVisibility(View.INVISIBLE);
+//                        progressBar.setVisibility(View.INVISIBLE);
+//                        rider_search_btn.setVisibility(View.VISIBLE);
+//                        searchRiderCardView.setVisibility(View.INVISIBLE);
+//                        rider_search_btn.setVisibility(View.VISIBLE);
+                            searchriderwelcomecard.setVisibility(View.INVISIBLE);
+                            searchRiderCardView.setVisibility(View.INVISIBLE);
 //                        startActivity(new Intent(getActivity(), SearchResult.class));
 //                        if(!riderID.isEmpty()){
+//                            if (SearchRiderFragment.delipackEventloader.)
+                            SearchRiderFragment.delipackEventloader.finish();
+                            readCompanyInformation(riderID);
                             Intent sendRiderID = new Intent(getActivity(), SearchResult.class);
                             sendRiderID.putExtra("riderID", riderID);
                             startActivity(sendRiderID);
 //                        }
+                        }
+
+                        /*
+                         * Proceed to payment for service from here
+                         * Rider id has been sent to the payment activity
+                         * Using putExtra
+                         */
+
+                    } else {
+                        System.out.println("Data changed else part " + dataSnapshot);
                     }
-
-                    /*
-                    * Proceed to payment for service from here
-                    * Rider id has been sent to the payment activity
-                    * Using putExtra
-                     */
-
-                } else {
-                    System.out.println("Data changed else part " + dataSnapshot);
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
 
@@ -359,9 +468,7 @@ public class SearchRiderFragment extends Fragment {
 
 
 
-    Double proximity = 0.1;
-    Boolean riderFound = false;
-    String riderID;
+
     /*
      * System search for near by  driver using GeoFire
      * If driver is not found within 0.2 km radius, the system
@@ -373,29 +480,35 @@ public class SearchRiderFragment extends Fragment {
 
     public void findClosestBiker(){
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("RiderLocationAvailable");
-        System.out.println("iInd driver" + databaseReference);
+        System.out.println("Find driver" + databaseReference);
         GeoFire geoFire = new GeoFire(databaseReference);
-        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(pickUpFromLatLng.latitude, pickUpFromLatLng.longitude), proximity);
-        geoQuery.removeAllListeners();
-        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-            @Override
-            public void onKeyEntered(String key, GeoLocation location) {
-                if (!riderFound){
-                    riderFound = true;
-                    riderID = key;
 
-                    // Create a structure for driver found for customer
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference databasecustomer = database.getReference().child("CustomerRiderRequest").child("1"); //set first child value to customer id
-                    databasecustomer.child("rideraccepted").setValue("");
-                    System.out.println("found rider");
+        picklat = Double.toString(pickUpFromLatLng.latitude);
+        picklong = Double.toString(pickUpFromLatLng.longitude);
 
-                    DatabaseReference databaserider = database.getReference().child("RiderFoundForCustomer").child(riderID);
-                    databaserider.child("customer_id").setValue("1");
-                    databaserider.child("assigned").setValue("true");
+        if(!picklat.isEmpty() && !picklong.isEmpty()){
+
+            GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(pickUpFromLatLng.latitude, pickUpFromLatLng.longitude), proximity);
+            geoQuery.removeAllListeners();
+            geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                @Override
+                public void onKeyEntered(String key, GeoLocation location) {
+                    if (!riderFound){
+                        riderFound = true;
+                        riderID = key;
+
+                        // Create a structure for driver found for customer
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference databasecustomer = database.getReference().child("CustomerRiderRequest").child(customer_id); //set first child value to customer id
+                        databasecustomer.child("rideraccepted").setValue("");
+                        System.out.println("found rider");
+
+                        DatabaseReference databaserider = database.getReference().child("RiderFoundForCustomer").child(riderID);
+                        databaserider.child("customer_id").setValue(customer_id);
+                        databaserider.child("assigned").setValue("true");
 
 //                    progressBar.setVisibility(View.INVISIBLE);
-                    loadertext.setText("Rider should accept");
+//                    loadertext.setText("Rider should accept");
 //                    rider_search_btn.setVisibility(View.VISIBLE);
 //                    searchRiderCardView.setVisibility(View.INVISIBLE);
 
@@ -404,43 +517,62 @@ public class SearchRiderFragment extends Fragment {
 
 
 
+                    }
                 }
-            }
 
-            @Override
-            public void onKeyExited(String key) {
-
-            }
-
-            @Override
-            public void onKeyMoved(String key, GeoLocation location) {
-
-            }
-
-            @Override
-            public void onGeoQueryReady() {
-                if(!riderFound){
-                    proximity += 0.1;
-                    System.out.println("searching " + proximity );
-//                    if (proximity >= 5){
-//                        System.out.println("Done searching");
-//                        return;
-//                    }
-                    findClosestBiker();
+                @Override
+                public void onKeyExited(String key) {
 
                 }
-            }
 
-            @Override
-            public void onGeoQueryError(DatabaseError error) {
+                @Override
+                public void onKeyMoved(String key, GeoLocation location) {
 
-            }
-        });
+                }
 
+                @Override
+                public void onGeoQueryReady() {
+                    if(!riderFound){
+                        proximity += 0.1;
+                        System.out.println("searching " + proximity );
+                        if (proximity >= 10){
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest").child(customer_id);
+                            databaseReference.removeValue();
+                            String message = "Rider not found\nYou can try again later";
+                            SearchRiderFragment.delipackEventloader.finish();
+                            new DeliPackAlert(getActivity(), "Search complete", message).showDeliPackAlert();
+                            return;
+                        }
+                        findClosestBiker();
+
+                    }
+                }
+
+                @Override
+                public void onGeoQueryError(DatabaseError error) {
+
+                }
+            });
+        } else {
+            System.out.println("Trip cancelled");
+            return;
+        }
     }
 
 
 
+    public void getSearchDetails(String pickuplocation, String deliverylocation, Double charges, Double commission){
+        if (!pickuplocation.isEmpty() && !deliverylocation.isEmpty()){
+            Gson searchConvert = new Gson();
+            HashMap<String, String> search = new HashMap<>();
+            search.put("pickup", pickuplocation);
+            search.put("delivery", deliverylocation);
+            search.put("delivery_charge", Double.toString(charges));
+            search.put("commission_charge", Double.toString(commission));
+            String convertedJSON = searchConvert.toJson(search);
+            customerContract.setBasicCookies("searchdata", convertedJSON, 3, "/");
+        }
+    }
 
 
 

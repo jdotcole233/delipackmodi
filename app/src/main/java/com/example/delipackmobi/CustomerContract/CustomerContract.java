@@ -10,7 +10,9 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.impl.cookie.BasicClientCookie;
 
 public class CustomerContract {
-    public static final String LOGIN_URL = "http://172.20.10.3:8000/customer_login";
+    public static final String LOGIN_URL = "http://192.168.100.2:8000/customer_login";
+    public static final String GETCOMPANYDATA_URL = "http://192.168.100.2:8000/companydata";
+    public static final String UPDATEDTRANSACTION_URL = "http://192.168.100.2:8000/updateTransaction";
     private PersistentCookieStore persistentCookieStore;
 
     public CustomerContract(Context context){

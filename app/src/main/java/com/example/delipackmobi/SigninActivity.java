@@ -85,6 +85,7 @@ public class SigninActivity extends AppCompatActivity {
                                 if (response_validate.contains("Success")){
 //                                    new DeliPackAlert(SigninActivity.this, "Success", "Successful").showDeliPackAlert();
                                     savedContract.setBasicCookies("customerInfomation", response.toString(),1,"/");
+                                    System.out.println("check cookie status " +  savedContract.getPersistentCookieStore().getCookies());
                                     startActivity(new Intent(SigninActivity.this, Homedashboard_user.class));
                                     finish();
 

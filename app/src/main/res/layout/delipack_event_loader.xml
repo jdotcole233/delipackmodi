@@ -13,4 +13,31 @@
         android:layout_height="100dp"
         android:layout_centerInParent="true"
         />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/progressBar"
+        android:layout_marginBottom="-53dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="Finding rider ...."
+        android:textSize="25sp"
+        android:textColor="@color/quantum_white_100"
+        />
+
+    <Button
+        android:id="@+id/endridersearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressBar"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/register_btn_background"
+        android:elevation="20dp"
+        android:fontFamily="sans-serif-light"
+        android:text="End Search"
+        android:textColor="#FFF"
+        android:textSize="18sp" />
 </RelativeLayout>

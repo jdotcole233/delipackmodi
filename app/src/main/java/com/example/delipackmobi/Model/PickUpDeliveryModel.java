@@ -7,6 +7,8 @@ public class PickUpDeliveryModel {
     private HashMap<String, String>  deliveryInformation;
 
     public PickUpDeliveryModel(){
+        fromInformation = new HashMap<>();
+        deliveryInformation = new HashMap<>();
 
     }
 
@@ -19,15 +21,15 @@ public class PickUpDeliveryModel {
         return fromInformation;
     }
 
-    public void setFromInformation(HashMap<String, String> fromInformation) {
-        this.fromInformation = fromInformation;
+    public void setFromInformation(String pickupkey, String pickupvalue) {
+        this.fromInformation.put(pickupkey, pickupvalue);
     }
 
     public HashMap<String, String> getDeliveryInformation() {
         return deliveryInformation;
     }
 
-    public void setDeliveryInformation(HashMap<String, String> deliveryInformation) {
-        this.deliveryInformation = deliveryInformation;
+    public void setDeliveryInformation(String key,String value) {
+        this.deliveryInformation.put(key, value);
     }
 }

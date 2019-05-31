@@ -48,7 +48,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Found {number} riders near you"
+                    android:text="Found a rider near you"
                     android:textColor="@color/colorAccent"
                     android:padding="10dp"
                     android:textSize="18sp"
@@ -78,6 +78,7 @@
                     >
 
                     <TextView
+                        android:id="@+id/companyname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Company Name"
@@ -88,6 +89,7 @@
                         />
 
                     <TextView
+                        android:id="@+id/riderbikeregistration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Number: GS-234"
@@ -98,6 +100,7 @@
                         />
 
                     <TextView
+                        android:id="@+id/companyridername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Rider: Kwasi Amoako"
@@ -139,6 +142,7 @@
                         android:fontFamily="sans-serif-light"
                         />
                     <TextView
+                        android:id="@+id/transactionprice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=" 15.0"
@@ -230,7 +234,7 @@
                             android:layout_marginTop="110dp"
                             android:layout_marginRight="10dp"
                             android:background="@drawable/confirm_button_bg"
-                            android:text="Confirm pick up"
+                            android:text="Confirm payment"
                             android:textColor="#FFF"
                             android:textSize="20sp"
                             android:fontFamily="@font/amiko_semibold"
