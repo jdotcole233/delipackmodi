@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -82,8 +83,24 @@ public class CashOptionSelected extends AppCompatActivity {
                 if (cashoptionselected.equals("Pay at pick up")){
                     updatePaymentValueForRider(riderIDFound, CashOptionSelected.this, PackageInProgress.class);
                     DatabaseReference updateAccepted = FirebaseDatabase.getInstance().getReference()
-                            .child("CustomerRiderRequest").child(customerID).child("rideraccepted");
-                    updateAccepted.setValue("paid");
+                            .child("CustomerRiderRequest").child(customerID);
+                    updateAccepted.child("rideraccepted").setValue("paid");
+
+                    for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
+                        if(cookie.getName().equals("paymentType")){
+                            try {
+                                JSONObject jsonObject = new JSONObject(cookie.getValue());
+                                updateAccepted.child("deliverlatlong").child("paymentType").setValue(jsonObject.getString("paymentType"));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        } else {
+                            Log.i("DeliPackMessage", "Something went wrong ");
+                        }
+                    }
+
 
                 } else if (cashoptionselected.equals("Pay on delivery")){
                     updatePaymentValueForRider(riderIDFound, CashOptionSelected.this, PackageInProgress.class);
@@ -156,6 +173,14 @@ public class CashOptionSelected extends AppCompatActivity {
                 }
 
 
+            } else if (cookie.getName().equals("paymentType")){
+                try {
+                    JSONObject transactionSearch = new JSONObject(cookie.getValue());
+                    transactionParameters.put("payment_type", transactionSearch.getString("paymentType"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
         }

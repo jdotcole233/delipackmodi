@@ -36,7 +36,7 @@ public class PackageInProgress extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        getWindow().setLayout((int)(displayMetrics.widthPixels * 0.95), (int)(displayMetrics.heightPixels * 0.4));
+        getWindow().setLayout((int)(displayMetrics.widthPixels * 0.95), (int)(displayMetrics.heightPixels * 0.38));
 
 
         showlessormorebtn = findViewById(R.id.minimizeprogress);

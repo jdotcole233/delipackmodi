@@ -4,11 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -70,6 +72,7 @@ import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +88,7 @@ import static com.example.delipackmobi.CustomerContract.CustomerContract.GETCOMP
 
 public class SearchRiderFragment extends Fragment {
 
-
+    private final String LOG_MSG = "DeliPackMessage";
     AutocompleteSupportFragment autocompleteFragment;
     AutocompleteSupportFragment autocompleteFragment1;
     private Button rider_search_btn, confirm_button, confirm_payment, make_payment;
@@ -113,7 +116,8 @@ public class SearchRiderFragment extends Fragment {
     private AsyncHttpClient getCompanyInformation;
     private float [] distdiff;
     private String deliveryLocatioName, pickupLocationName;
-
+    private Boolean isDismissed;
+    private List<String> searchingString;
 
 
     public void readCompanyInformation(String riderID){
@@ -178,6 +182,8 @@ public class SearchRiderFragment extends Fragment {
 
     public SearchRiderFragment() {
         // Required empty public constructor
+        if(mapView != null){ mapView.onResume();}
+
     }
 
 
@@ -185,9 +191,17 @@ public class SearchRiderFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if(mapView != null){ mapView.onResume();}
+
+
         if (savedInstanceState != null){
-            pickUpFromLatLng = new LatLng(savedInstanceState.getDouble("pickuplat"), savedInstanceState.getDouble("pickuplong"));
-            deliverToLatLng = new LatLng(savedInstanceState.getDouble("delivertolat"), savedInstanceState.getDouble("delivertolong"));
+//            pickUpFromLatLng = new LatLng(savedInstanceState.getDouble("pickuplat"), savedInstanceState.getDouble("pickuplong"));
+//            deliverToLatLng = new LatLng(savedInstanceState.getDouble("delivertolat"), savedInstanceState.getDouble("delivertolong"));
+            System.out.println("Map in Check back");
+            Log.i(LOG_MSG, "Map in check back");
+        }else {
+            Log.i(LOG_MSG, " Else part of on create called");
+//            System.out.println("Else part on on Create ");
         }
 
 
@@ -195,7 +209,19 @@ public class SearchRiderFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (savedInstanceState != null){
+//            pickUpFromLatLng = new LatLng(savedInstanceState.getDouble("pickuplat"), savedInstanceState.getDouble("pickuplong"));
+//            deliverToLatLng = new LatLng(savedInstanceState.getDouble("delivertolat"), savedInstanceState.getDouble("delivertolong"));
+            System.out.println("Map in Check back");
+            Log.i(LOG_MSG, "Map in Check back in on create view");
+        } else {
+            Log.i(LOG_MSG, "Else part of on Create View called");
+            System.out.println("Else part on on Create View");
+        }
+        if(mapView != null){ mapView.onResume();}
+
         return inflater.inflate(R.layout.fragment_search_rider, container, false);
+
 
 
     }
@@ -203,6 +229,8 @@ public class SearchRiderFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        if(mapView != null){ mapView.onResume();}
 
 
         animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide);
@@ -221,14 +249,48 @@ public class SearchRiderFragment extends Fragment {
         welcomeText = getActivity().findViewById(R.id.welcomemessage);
         customerContract = new CustomerContract(getActivity());
         distdiff = new float[1];
-
-
+        isDismissed = false;
 
         if (savedInstanceState != null){
-            System.out.println("saved instant state not null");
-            pickUpFromLatLng = new LatLng(savedInstanceState.getDouble("pickuplat"), savedInstanceState.getDouble("pickuplong"));
-            deliverToLatLng = new LatLng(savedInstanceState.getDouble("delivertolat"), savedInstanceState.getDouble("delivertolong"));
+            Log.i(LOG_MSG, "Map in Check on activity created " + savedInstanceState);
+            System.out.println("Map in Check back on activity created" + savedInstanceState);
+        }else {
+            Log.i(LOG_MSG, "Else part of on Activity create "+ savedInstanceState);
+            System.out.println("Else part on on Activity Create " + savedInstanceState);
         }
+
+
+
+        final SharedPreferences preferences = getActivity().getSharedPreferences("searchingdata", Context.MODE_PRIVATE);
+        searchingString = new ArrayList<>();
+        if(preferences.contains("pickuplat")){
+            searchingString.add(preferences.getString("pickuplat", null));
+            searchingString.add(preferences.getString("pickuplong", null));
+            searchingString.add(preferences.getString("delivertolat", null));
+            searchingString.add(preferences.getString("delivertolong", null));
+            searchingString.add(preferences.getString("pickupname", null));
+            searchingString.add(preferences.getString("deliveryname", null));
+        }
+
+
+
+
+
+
+
+
+
+
+//
+//        if (savedInstanceState != null){
+//            System.out.println("saved instant state not null");
+//            pickUpFromLatLng = new LatLng(savedInstanceState.getDouble("pickuplat"), savedInstanceState.getDouble("pickuplong"));
+//            deliverToLatLng = new LatLng(savedInstanceState.getDouble("delivertolat"), savedInstanceState.getDouble("delivertolong"));
+//            riderID = savedInstanceState.getString("riderID");
+//            System.out.println("In Saved state instance");
+//        } else {
+//            System.out.println("In Saved instant state out");
+//        }
 
 
 
@@ -256,13 +318,19 @@ public class SearchRiderFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
-                if (pickUpFromLatLng != null && deliverToLatLng != null){
+
+                if ( !searchingString.isEmpty()){
+                    System.out.println("preference back " + searchingString.get(0));
+                    plotLocationsOnMap(new LatLng(Double.parseDouble(searchingString.get(0)), Double.parseDouble(searchingString.get(1))), new LatLng(Double.parseDouble(searchingString.get(2)), Double.parseDouble(searchingString.get(3))), "", "");
+
+                } else if (pickUpFromLatLng != null && deliverToLatLng != null){
                     PolylineOptions polylineOptions = new PolylineOptions().add(pickUpFromLatLng)
                             .add(deliverToLatLng).color(Color.RED);
                     googleMap.addPolyline(polylineOptions);
                     googleMap.addMarker(new MarkerOptions().position(deliverToLatLng).title("YOU"));
                     googleMap.moveCamera(CameraUpdateFactory.zoomTo(11));
                 }
+
 
 
             }
@@ -279,7 +347,6 @@ public class SearchRiderFragment extends Fragment {
 
 
                 if (pickUpDeliveryModel != null) {
-
                     if (pickUpDeliveryModel.getFromInformation() == null) {
                         new DeliPackAlert(getActivity(), "Location Fields", "Fill out pick up locations").showDeliPackAlert();
                         return;
@@ -290,27 +357,53 @@ public class SearchRiderFragment extends Fragment {
 //                        System.out.println("Delivery model " + pickUpDeliveryModel.getFromInformation().toString());
 //                        Double [] pricerange = new Double[2];
 //                                getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0);
-                        Location.distanceBetween(pickUpFromLatLng.latitude,pickUpFromLatLng.longitude, deliverToLatLng.latitude,deliverToLatLng.longitude, distdiff);
-                        getSearchDetails(pickUpDeliveryModel.getFromInformation().get("pickup"), pickUpDeliveryModel.getDeliveryInformation().get("delivery"), getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[0], getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[1]);
+                        if (!searchingString.isEmpty()){
+                            autocompleteFragment.setText(searchingString.get(4));
+                            autocompleteFragment1.setText(searchingString.get(5));
+                            Location.distanceBetween(Double.parseDouble(searchingString.get(0)),Double.parseDouble(searchingString.get(1)), Double.parseDouble(searchingString.get(2)),Double.parseDouble(searchingString.get(3)), distdiff);
+                            getSearchDetails(searchingString.get(4), searchingString.get(5), getPriceAndCommission((double)Math.round(distdiff[0]/1000), 5.0,4.0)[0],
+                                    getPriceAndCommission((double)Math.round(distdiff[0]/1000), 5.0, 4.0)[1]);
+
+                        } else {
+                            Location.distanceBetween(pickUpFromLatLng.latitude,pickUpFromLatLng.longitude, deliverToLatLng.latitude,deliverToLatLng.longitude, distdiff);
+                            getSearchDetails(pickUpDeliveryModel.getFromInformation().get("pickup"), pickUpDeliveryModel.getDeliveryInformation().get("delivery"), getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[0], getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[1]);
+                        }
+//                        Location.distanceBetween(pickUpFromLatLng.latitude,pickUpFromLatLng.longitude, deliverToLatLng.latitude,deliverToLatLng.longitude, distdiff);
+//                        getSearchDetails(pickUpDeliveryModel.getFromInformation().get("pickup"), pickUpDeliveryModel.getDeliveryInformation().get("delivery"), getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[0], getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[1]);
                         //insert actual distance and base price
 
                         System.out.println("distance difference " + Math.round(distdiff[0]/1000));
-                        proximity = 0.1;
-                        if(proximity <= 10){
+//                        proximity = 0.1;
+                        if(proximity <= 10 && searchingString.isEmpty()){
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest");
                             GeoFire geoFire = new GeoFire(databaseReference);
                             geoFire.setLocation(customer_id, new GeoLocation(pickUpFromLatLng.latitude,pickUpFromLatLng.longitude), new GeoFire.CompletionListener() {
                                 @Override
                                 public void onComplete(String key, DatabaseError error) {
-
+                                    startActivity(new Intent(getActivity(), DeliPackEventLoader.class));
+                                    findClosestBiker();
                                 }
                             });
 //                        rider_search_btn.setVisibility(View.INVISIBLE);
 //                        progressBar.setVisibility(View.VISIBLE);
 //                        loadertext.setVisibility(View.VISIBLE);
-                            startActivity(new Intent(getActivity(), DeliPackEventLoader.class));
-                            findClosestBiker();
-                        } else {
+
+                        } else if (proximity <= 10 && !searchingString.isEmpty()){
+                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest");
+                                GeoFire geoFire = new GeoFire(databaseReference);
+                                geoFire.setLocation(customer_id, new GeoLocation(Double.parseDouble(searchingString.get(0)),Double.parseDouble(searchingString.get(1))), new GeoFire.CompletionListener() {
+                                    @Override
+                                    public void onComplete(String key, DatabaseError error) {
+                                        startActivity(new Intent(getActivity(), DeliPackEventLoader.class));
+                                        findClosestBiker();
+                                    }
+                                });
+    //                        rider_search_btn.setVisibility(View.INVISIBLE);
+    //                        progressBar.setVisibility(View.VISIBLE);
+    //                        loadertext.setVisibility(View.VISIBLE);
+
+                        }
+                        else {
                             return;
                         }
                     }
@@ -358,7 +451,7 @@ public class SearchRiderFragment extends Fragment {
 
                     pickupLocationName = place.getName();
                     Log.i("g", "Place: " + place);
-                    map.addMarker(new MarkerOptions().position(pickUpFromLatLng).title("Pick up"));
+                    map.addMarker(new MarkerOptions().position(pickUpFromLatLng).title("Pick up").icon(BitmapDescriptorFactory.fromResource(R.drawable.fromdot)));
 
 
                 } else {
@@ -400,12 +493,12 @@ public class SearchRiderFragment extends Fragment {
                     Log.i("g", "Place: " + place);
                     if (pickUpFromLatLng != null && deliverToLatLng != null){
                         PolylineOptions polylineOptions = new PolylineOptions().add(pickUpFromLatLng)
-                                .add(deliverToLatLng).color(Color.RED);
+                                .add(deliverToLatLng).color(R.drawable.distance_color_display);
                         map.addPolyline(polylineOptions);
                         map.addMarker(new MarkerOptions()
                                 .position(deliverToLatLng)
                                 .title("Deliver to: " + place.getName())
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.todot))
 
                         );
                         map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
@@ -423,9 +516,34 @@ public class SearchRiderFragment extends Fragment {
                 Log.i("g", "An error occurred: " + status);
             }
         });
+
+
+
         getRiderResponse();
     }
 
+
+    public void plotLocationsOnMap(LatLng pickupLocation, LatLng deliveryLocation, String pickUpLabel, String deliveryLabel){
+
+        if(pickupLocation != null && deliveryLocation != null){
+            map.addMarker(new MarkerOptions()
+                    .position(pickupLocation)
+                    .title(pickUpLabel)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.fromdot)));
+
+            PolylineOptions polylineOptions = new PolylineOptions().add(pickupLocation)
+                    .add(deliveryLocation).color(R.drawable.action_item_background_selector);
+            map.addPolyline(polylineOptions);
+            map.addMarker(new MarkerOptions()
+                    .position(deliveryLocation)
+                    .title(deliveryLabel)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.todot)));
+
+            map.moveCamera(CameraUpdateFactory.newLatLng(deliveryLocation));
+            map.animateCamera(CameraUpdateFactory.zoomTo(11));
+        }
+
+    }
 
 
 
@@ -458,7 +576,10 @@ public class SearchRiderFragment extends Fragment {
 //                        if(!riderID.isEmpty()){
 //                            if (SearchRiderFragment.delipackEventloader.)
 //                            System.out.println("Activity name :" + SearchRiderFragment.delipackEventloader.getParent().getComponentName());
-                            SearchRiderFragment.delipackEventloader.finish();
+                            if(isDismissed == true){
+                                SearchRiderFragment.delipackEventloader.finish();
+                                isDismissed = false;
+                            }
                             readCompanyInformation(riderID);
                             Intent sendRiderID = new Intent(getActivity(), SearchResult.class);
                             sendRiderID.putExtra("riderID", riderID);
@@ -497,21 +618,21 @@ public class SearchRiderFragment extends Fragment {
         Intent transactInProg = new Intent(getActivity(), PackageInProgress.class);
         startActivity(transactInProg);
 
-        map.addMarker(new MarkerOptions().position(pickUpFromLatLng).title("Pick up"));
-
-
-
-        PolylineOptions polylineOptions = new PolylineOptions().add(pickUpFromLatLng)
-                .add(deliverToLatLng).color(Color.RED);
-        map.addPolyline(polylineOptions);
-        map.addMarker(new MarkerOptions()
-                .position(deliverToLatLng)
-                .title("Deliver to")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-
-        );
-        map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
-        map.animateCamera(CameraUpdateFactory.zoomTo(11));
+//        map.addMarker(new MarkerOptions().position(pickUpFromLatLng).title("Pick up"));
+//
+//
+//
+//        PolylineOptions polylineOptions = new PolylineOptions().add(pickUpFromLatLng)
+//                .add(deliverToLatLng).color(Color.RED);
+//        map.addPolyline(polylineOptions);
+//        map.addMarker(new MarkerOptions()
+//                .position(deliverToLatLng)
+//                .title("Deliver to")
+//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+//
+//        );
+//        map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
+//        map.animateCamera(CameraUpdateFactory.zoomTo(11));
 
 
     }
@@ -531,15 +652,20 @@ public class SearchRiderFragment extends Fragment {
 
     public void findClosestBiker(){
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("RiderLocationAvailable");
-        System.out.println("Find driver" + databaseReference);
         GeoFire geoFire = new GeoFire(databaseReference);
 
-        picklat = Double.toString(pickUpFromLatLng.latitude);
-        picklong = Double.toString(pickUpFromLatLng.longitude);
+        if(searchingString.isEmpty()){
+            picklat = Double.toString(pickUpFromLatLng.latitude);
+            picklong = Double.toString(pickUpFromLatLng.longitude);
+        } else {
+            picklat = searchingString.get(0);
+            picklong = searchingString.get(1);
+        }
+
 
         if(!picklat.isEmpty() && !picklong.isEmpty()){
 
-            GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(pickUpFromLatLng.latitude, pickUpFromLatLng.longitude), proximity);
+            GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(Double.parseDouble(picklat), Double.parseDouble(picklong)), proximity);
             geoQuery.removeAllListeners();
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
@@ -560,14 +686,15 @@ public class SearchRiderFragment extends Fragment {
 
 
                         Map<String, Object> dellocation = new HashMap<>();
-                        dellocation.put("latitude", Double.toString(deliverToLatLng.latitude));
-                        dellocation.put("longitude", Double.toString(deliverToLatLng.longitude));
+                        dellocation.put("latitude", searchingString.get(2));
+                        dellocation.put("longitude", searchingString.get(3));
                         dellocation.put("deliverylocationname", deliveryLocatioName);
                         dellocation.put("pickuplocationname", pickupLocationName);
                         dellocation.put("customerPhoneNumber", customer_phone_number);
                         dellocation.put("customerName",  customer_first_name + " " + customer_last_name);
                         databasecustomer.child("deliverlatlong").updateChildren(dellocation);
-
+                        isDismissed = true;
+                        System.out.println("key has entered searching for rider");
 
 //                        pickUpDeliveryModel.resetFromInformation();
 //                        pickUpDeliveryModel.resetsetDeliveryInformation();
@@ -587,12 +714,12 @@ public class SearchRiderFragment extends Fragment {
 
                 @Override
                 public void onKeyExited(String key) {
-
+                    System.out.println("On key existed while searching for rider");
                 }
 
                 @Override
                 public void onKeyMoved(String key, GeoLocation location) {
-
+                    System.out.println("On key moved while searching for rider");
                 }
 
                 @Override
@@ -600,10 +727,12 @@ public class SearchRiderFragment extends Fragment {
                     if(!riderFound){
                         proximity += 0.1;
                         System.out.println("searching " + proximity );
-                        if (proximity >= 10){
+                        if (proximity >= 20){
+                            proximity = 0.1;
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest").child(customer_id);
                             databaseReference.removeValue();
                             String message = "Rider not found\nYou can try again later";
+
                             SearchRiderFragment.delipackEventloader.finish();
                             new DeliPackAlert(getActivity(), "Search complete", message).showDeliPackAlert();
                             return;
@@ -615,7 +744,7 @@ public class SearchRiderFragment extends Fragment {
 
                 @Override
                 public void onGeoQueryError(DatabaseError error) {
-
+                    System.out.println("Some went wrong while searching for rider");
                 }
             });
         } else {
@@ -640,15 +769,12 @@ public class SearchRiderFragment extends Fragment {
     }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapView.onResume();
 
-
-
-
-
-
-
-
-
+    }
 
     @Override
     public void onResume() {
@@ -660,16 +786,49 @@ public class SearchRiderFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-//        if(pickUpFromLatLng.latitude)
-        if (!pickUpFromLatLng.toString().isEmpty() && !deliverToLatLng.toString().isEmpty()){
-            outState.putDouble("pickuplat", pickUpFromLatLng.latitude);
-            outState.putDouble("pickuplong", pickUpFromLatLng.longitude);
 
-            outState.putDouble("delivertolat", deliverToLatLng.latitude);
-            outState.putDouble("delivertolong", deliverToLatLng.longitude);
-        } else{
-            System.out.println("Saving instant state false called ");
+        Log.i(LOG_MSG, "On saved instant state called ");
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(mapView != null){ mapView.onResume();}
+        Log.i(LOG_MSG, "On Attach Called");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onResume();
+        Log.i(LOG_MSG, "On pause called");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        System.out.println("On destroyed called");
+        Log.i(LOG_MSG, "On destroyed called");
+        if(pickUpFromLatLng != null && deliverToLatLng != null){
+            SharedPreferences.Editor saveSearchData = getActivity().getSharedPreferences("searchingdata", Context.MODE_PRIVATE).edit();
+            saveSearchData.putString("pickuplat", Double.toString(pickUpFromLatLng.latitude));
+            saveSearchData.putString("pickuplong", Double.toString(pickUpFromLatLng.longitude));
+            saveSearchData.putString("delivertolat", Double.toString(deliverToLatLng.latitude));
+            saveSearchData.putString("delivertolong", Double.toString(deliverToLatLng.longitude));
+            saveSearchData.putString("pickupname", pickupLocationName);
+            saveSearchData.putString("deliveryname", deliveryLocatioName);
+            saveSearchData.apply();
         }
 
+
+    }
+
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i(LOG_MSG, "On detached called");
     }
 }

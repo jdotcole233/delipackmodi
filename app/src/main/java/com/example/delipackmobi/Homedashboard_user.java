@@ -43,6 +43,7 @@ public class Homedashboard_user extends AppCompatActivity {
     ProfileFragment profileFragment;
     HistoryFragment historyFragment;
     private ImageButton showmorebtn;
+    Fragment mContent;
 
 
 
@@ -50,6 +51,7 @@ public class Homedashboard_user extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homedashboard_user);
+
 
         if(!Places.isInitialized()){
             Places.initialize(this, "AIzaSyDKBYaQubmWi0ockGK4hmMAPG_RcKcZ7mk");
@@ -73,10 +75,12 @@ public class Homedashboard_user extends AppCompatActivity {
             }
         });
 
+        Log.i("DelicPackMessage", "Parent create called");
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         switchFragments(searchRiderFragment);
+//        getSupportFragmentManager().beginTransaction().replace()
 
     }
 
@@ -102,7 +106,7 @@ public class Homedashboard_user extends AppCompatActivity {
                     Toast.makeText(Homedashboard_user.this, "You logged out", Toast.LENGTH_SHORT).show();
                     return true;
             }
-            return false;
+            return true;
         }
     };
 
@@ -115,6 +119,14 @@ public class Homedashboard_user extends AppCompatActivity {
         fragmentTransaction.replace(R.id.fragmentFrame, fragment);
         fragmentTransaction.commit();
         System.out.println("In fragement " + fragment);
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+//        getSupportFragmentManager().putFragment(outState, SearchRiderFragment.class.getName(), searchRiderFragment);
+//        getSupportFragmentManager().putFragment(outState, SearchRiderFragment.class.getName(), mContent);
     }
 
 }
