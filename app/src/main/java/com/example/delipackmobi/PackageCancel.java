@@ -18,7 +18,7 @@ public class PackageCancel extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        getWindow().setLayout((int)(displayMetrics.widthPixels * 0.95), (int)(displayMetrics.heightPixels * 0.4));
+        getWindow().setLayout((int)(displayMetrics.widthPixels * 0.9), (int)(displayMetrics.heightPixels * 0.4));
         canceltransaction = findViewById(R.id.yescanceltransaction);
         abortcancelingtransaction = findViewById(R.id.abortcancel);
 

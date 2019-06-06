@@ -6,6 +6,10 @@ public class CustomerHistoryModel {
     private String delivery_location;
     private String price;
 
+    public CustomerHistoryModel(){
+
+    }
+
     public CustomerHistoryModel(String company_name, String pickup_location, String delivery_location, String price) {
         this.company_name = company_name;
         this.pickup_location = pickup_location;

@@ -1,13 +1,135 @@
 package com.example.delipackmobi;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RatingBar;
+
+import com.example.delipackmobi.CustomerContract.CustomerContract;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.cookie.Cookie;
+
+import static com.example.delipackmobi.CustomerContract.CustomerContract.RATING_URL;
 
 public class RateCompanyRider extends AppCompatActivity {
+
+    private Button rateNextButton;
+    private RatingBar riderRated;
+    private float ratevalue;
+    private CustomerContract customerContract;
+    private String customerID, companyID, companyRiderID;
+    private AsyncHttpClient asyncHttpClient;
+    private RequestParams requestParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate_company_rider);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        getWindow().setLayout((int)(displayMetrics.widthPixels * 0.9), (int)(displayMetrics.heightPixels * 0.3));
+        asyncHttpClient = new AsyncHttpClient();
+        requestParams = new RequestParams();
+        customerContract = new CustomerContract(this);
+
+
+        rateNextButton = findViewById(R.id.ratingnextButton);
+        riderRated = findViewById(R.id.raterider);
+        ratevalue = 0.0f;
+
+        for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
+            if (cookie.getName().equals("customerInfomation")){
+                try {
+                    JSONObject ratingcustomer = new JSONObject(cookie.getValue());
+                    customerID = ratingcustomer.getString("customer_id");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else if (cookie.getName().equals("company_details")){
+                try {
+                    JSONObject companyrating = new JSONObject(cookie.getValue());
+                    companyID = companyrating.getString("companies_id");
+                    companyRiderID = companyrating.getString("company_rider_id");
+                    System.out.println("company id " + companyID + " company rider id " + companyRiderID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        riderRated.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                ratevalue = ratingBar.getRating();
+                Log.i("DeliPackMessage", ratingBar.getRating() + " " + rating + " from user " + fromUser);
+            }
+        });
+
+
+
+        rateNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestParams.put("rate_value", Float.toString(ratevalue));
+                requestParams.put("company_riderscompany_rider_id", companyRiderID);
+                requestParams.put("customerscustomer_id", customerID);
+                requestParams.put("company_id", companyID);
+                Log.i("DeliPackMessage", customerID);
+
+                asyncHttpClient.post(RATING_URL, requestParams, new JsonHttpResponseHandler(){
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+
+                        String ratingresponsestring = response.toString();
+
+                        if (!ratingresponsestring.isEmpty()){
+                            clearCustomerRequest(customerID);
+                            Intent thankyouIntent = new Intent(RateCompanyRider.this, TripCompletedRatingMessage.class);
+                            startActivity(thankyouIntent);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        Log.i("DeliPackMessage", errorResponse.toString());
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        Log.i("DeliPackMessage", responseString);
+                    }
+                });
+            }
+        });
     }
+
+
+    public void clearCustomerRequest(String customerID){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest")
+                .child(customerID);
+        databaseReference.removeValue();
+    }
+
 }

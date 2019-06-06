@@ -4,12 +4,14 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#FFF">
+    android:background="@drawable/rounded_input_signin"
+
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@drawable/splashscreen_background"
+        android:layout_height="70dp"
+        android:background="@drawable/popup_messages_background"
         android:orientation="horizontal"
         android:padding="10dp"
         >
@@ -37,18 +39,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Thank you for rating!!"
-                android:textColor="#000"
-                android:textSize="25sp"
                 android:fontFamily="@font/amiko_bold"
+                android:text="Thank you for rating!!"
                 android:textAlignment="center"
-                />
+                android:textColor="#000"
+                android:textSize="20sp" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Your feedback is appreciated"
                 android:textColor="#000"
-                android:textSize="23sp"
+                android:textSize="17sp"
                 android:fontFamily="sans-serif"
                 android:textAlignment="center"
                 />
@@ -57,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:text="You just encouraged a better service"
                 android:textColor="#000"
-                android:textSize="23sp"
+                android:textSize="17sp"
                 android:fontFamily="sans-serif"
                 android:textAlignment="center"
                 />
@@ -66,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:text="for yourself and other loyal"
                 android:textColor="#000"
-                android:textSize="23sp"
+                android:textSize="17sp"
                 android:fontFamily="sans-serif"
                 android:textAlignment="center"
                 />
@@ -75,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:text="customers"
                 android:textColor="#000"
-                android:textSize="23sp"
+                android:textSize="17sp"
                 android:fontFamily="sans-serif"
                 android:textAlignment="center"
                 />
@@ -92,13 +93,16 @@
         >
 
         <Button
+            android:id="@+id/ratingdone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Done"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:background="@drawable/confirm_button"
+            android:textColor="#FFF"
+
             />
     </LinearLayout>
 </LinearLayout>

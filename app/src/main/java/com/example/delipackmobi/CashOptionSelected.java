@@ -81,41 +81,14 @@ public class CashOptionSelected extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (cashoptionselected.equals("Pay at pick up")){
-                    updatePaymentValueForRider(riderIDFound, CashOptionSelected.this, PackageInProgress.class);
-                    DatabaseReference updateAccepted = FirebaseDatabase.getInstance().getReference()
-                            .child("CustomerRiderRequest").child(customerID);
-                    updateAccepted.child("rideraccepted").setValue("paid");
-
-                    for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
-                        if(cookie.getName().equals("paymentType")){
-                            try {
-                                JSONObject jsonObject = new JSONObject(cookie.getValue());
-                                updateAccepted.child("deliverlatlong").child("paymentType").setValue(jsonObject.getString("paymentType"));
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        } else {
-                            Log.i("DeliPackMessage", "Something went wrong ");
-                        }
-                    }
-
-
+                    updatePaymentValueForRider(riderIDFound, customerID,CashOptionSelected.this, PackageInProgress.class);
                 } else if (cashoptionselected.equals("Pay on delivery")){
-                    updatePaymentValueForRider(riderIDFound, CashOptionSelected.this, PackageInProgress.class);
-                    DatabaseReference updateAccepted = FirebaseDatabase.getInstance().getReference()
-                            .child("CustomerRiderRequest").child(customerID).child("rideraccepted");
-                    updateAccepted.setValue("paid");
-
+//                    updatePaymentValueForRider(riderIDFound, customerID,CashOptionSelected.this, PackageInProgress.class);
                 }else {
                     return;
                 }
-//                new DeliPackAlert(CashOptionSelected.this, "Selection", cashoptionselected).showDeliPackAlert();
             }
         });
-
-
 
         cancelcashbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,16 +96,20 @@ public class CashOptionSelected extends AppCompatActivity {
                 finish();
             }
         });
-
-
     }
 
-    public void updatePaymentValueForRider(String riderID, final Context context, final Class switchto){
+    public void updatePaymentValueForRider(String riderID, String customerIdent,final Context context, final Class switchto){
         DatabaseReference confirmpayment = FirebaseDatabase.getInstance().getReference()
                 .child("RiderFoundForCustomer")
                 .child(riderID)
                 .child("paymentapproved");
         confirmpayment.setValue("true");
+
+        DatabaseReference updateAccepted = FirebaseDatabase.getInstance().getReference()
+                .child("CustomerRiderRequest").child(customerIdent);
+        updateAccepted.child("rideraccepted").setValue("paid");
+        updateAccepted.child("deliverlatlong").child("paymentType").setValue(cashoptionselected);
+
 
         AsyncHttpClient updateTrasaction = new AsyncHttpClient();
         RequestParams transactionParameters = new RequestParams();
@@ -167,6 +144,8 @@ public class CashOptionSelected extends AppCompatActivity {
                     transactionParameters.put("delivery_charge",  transactionSearch.getDouble("delivery_charge"));
                     transactionParameters.put("commission_charge", transactionSearch.getDouble("commission_charge"));
 //                    transactionParameters.put("ETA","22:33");
+                    updateAccepted.child("deliverlatlong")
+                            .child("pickuplocationname").setValue(transactionSearch.getString("pickup"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -174,13 +153,7 @@ public class CashOptionSelected extends AppCompatActivity {
 
 
             } else if (cookie.getName().equals("paymentType")){
-                try {
-                    JSONObject transactionSearch = new JSONObject(cookie.getValue());
-                    transactionParameters.put("payment_type", transactionSearch.getString("paymentType"));
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    transactionParameters.put("payment_type", cashoptionselected);
             }
 
         }

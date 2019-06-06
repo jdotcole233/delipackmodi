@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF"
+    android:background="@drawable/rounded_input_signin"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@drawable/splashscreen_background"
+        android:layout_height="40dp"
+        android:background="@drawable/popup_messages_background"
         android:orientation="horizontal">
 
-        <ImageView
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/deli_s" />
+            android:fontFamily="@font/open_sans_bold"
+            android:padding="2dp"
+            android:text="RATE DELIVERY"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+
     </LinearLayout>
 
     <LinearLayout
@@ -30,12 +41,17 @@
             android:orientation="vertical"
             android:padding="7dp">
 
+
             <RatingBar
-                android:layout_width="match_parent"
+                android:id="@+id/raterider"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"
                 android:stepSize="1"
-                android:theme="@style/RatingBar" />
+                android:theme="@style/RatingBar"
+                android:layout_gravity="center"
+
+                />
         </LinearLayout>
     </LinearLayout>
 
@@ -48,11 +64,14 @@
         android:padding="5dp">
 
         <Button
+            android:id="@+id/ratingnextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/confirm_button"
-            android:text="Next" />
+            android:text="Next"
+            android:textColor="#FFF"
+            />
     </LinearLayout>
 </LinearLayout>

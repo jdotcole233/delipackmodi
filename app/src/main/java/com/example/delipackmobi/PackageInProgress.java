@@ -3,6 +3,7 @@ package com.example.delipackmobi;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -12,6 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.delipackmobi.CustomerContract.CustomerContract;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +42,7 @@ public class PackageInProgress extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        getWindow().setLayout((int)(displayMetrics.widthPixels * 0.95), (int)(displayMetrics.heightPixels * 0.38));
+        getWindow().setLayout((int)(displayMetrics.widthPixels * 0.9), (int)(displayMetrics.heightPixels * 0.38));
 
 
         showlessormorebtn = findViewById(R.id.minimizeprogress);
@@ -81,6 +87,27 @@ public class PackageInProgress extends AppCompatActivity {
             }
 
         }
+
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("CustomerRiderRequest")
+                .child(customerID).child("delivered");
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    if (dataSnapshot.getValue().equals("true")){
+                       finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
         cancelbtn.setOnClickListener(new View.OnClickListener() {

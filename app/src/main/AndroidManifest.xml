@@ -15,8 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:replace="android:theme">
-        <activity android:name=".TripCompletedRatingMessage"></activity>
-        <activity android:name=".RateCompanyRider" />
+        <activity android:name=".TripCompletedRatingMessage"
+            android:theme="@style/AppTheme.TransparentTheme"
+            ></activity>
+        <activity android:name=".RateCompanyRider"
+             android:theme="@style/AppTheme.TransparentTheme"
+            />
         <activity android:name=".PackageCancel" android:theme="@style/AppTheme.TransparentTheme" />
         <activity android:name=".PackageInProgress"  android:theme="@style/AppTheme.TransparentTheme"/>
         <activity android:name=".RiderPickedUpInformation" />

@@ -236,7 +236,7 @@
                             android:background="@drawable/confirm_button_bg"
                             android:text="Confirm payment"
                             android:textColor="#FFF"
-                            android:textSize="20sp"
+                            android:textSize="15sp"
                             android:fontFamily="@font/amiko_semibold"
                             />
                     </LinearLayout>

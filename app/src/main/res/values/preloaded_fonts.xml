@@ -8,5 +8,7 @@
         <item>@font/amiko_bold</item>
         <item>@font/amiko_semibold</item>
         <item>@font/caesar_dressing</item>
+        <item>@font/open_sans_bold</item>
+        <item>@font/open_sans_light</item>
     </array>
 </resources>

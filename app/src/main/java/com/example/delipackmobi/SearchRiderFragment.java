@@ -109,8 +109,8 @@ public class SearchRiderFragment extends Fragment {
     private CustomerContract customerContract;
     private String customer_first_name, customer_last_name, customer_phone_number, customer_id;
     public static String  picklat, picklong;
-    public static  Double proximity = 0.1;
-    Boolean riderFound = false;
+    public static  Double proximity;
+    Boolean riderFound;
     String riderID;
     public static Activity delipackEventloader;
     private AsyncHttpClient getCompanyInformation;
@@ -133,11 +133,13 @@ public class SearchRiderFragment extends Fragment {
                 super.onSuccess(statusCode, headers, response);
                 String responsefromserver = response.toString();
 
-
-                if(!responsefromserver.isEmpty()){
+                Log.i("DeliPackMessage", "Before if statement" + response.toString());
+                if(response.length() != 0){
+                    Log.i("DeliPackMessage", "In if statement ");
                     new CustomerContract(getActivity())
                             .setBasicCookies("company_details", response.toString(),2, "/");
                 } else {
+                    Log.i("DeliPackMessage", response.toString());
                     return;
                 }
             }
@@ -237,6 +239,10 @@ public class SearchRiderFragment extends Fragment {
         animationout = AnimationUtils.loadAnimation(getContext(), R.anim.slideout);
         animationmove = AnimationUtils.loadAnimation(getContext(), R.anim.move);
         DeliPackEventLoader.searchRiderActivity = getActivity();
+        TripCompletedRatingMessage.tripCompletedSearchActivity = getActivity();
+
+        riderFound = false;
+        proximity = 0.1;
 
 
         rider_search_btn = getActivity().findViewById(R.id.rider_search);
@@ -347,17 +353,17 @@ public class SearchRiderFragment extends Fragment {
 
 
                 if (pickUpDeliveryModel != null) {
-                    if (pickUpDeliveryModel.getFromInformation() == null) {
+                    if (pickUpDeliveryModel.getFromInformation().size() == 0) {
                         new DeliPackAlert(getActivity(), "Location Fields", "Fill out pick up locations").showDeliPackAlert();
                         return;
-                    } else if (pickUpDeliveryModel.getDeliveryInformation() == null) {
+                    } else if (pickUpDeliveryModel.getDeliveryInformation().size() == 0) {
                         new DeliPackAlert(getActivity(), "Location Fields", "Delivery information cannot be empty").showDeliPackAlert();
                         return;
                     } else {
 //                        System.out.println("Delivery model " + pickUpDeliveryModel.getFromInformation().toString());
 //                        Double [] pricerange = new Double[2];
 //                                getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0);
-                        if (!searchingString.isEmpty()){
+                        if (customerContract.getPersistentCookieStore().getCookies().contains("searchdata")){
                             autocompleteFragment.setText(searchingString.get(4));
                             autocompleteFragment1.setText(searchingString.get(5));
                             Location.distanceBetween(Double.parseDouble(searchingString.get(0)),Double.parseDouble(searchingString.get(1)), Double.parseDouble(searchingString.get(2)),Double.parseDouble(searchingString.get(3)), distdiff);
@@ -365,16 +371,17 @@ public class SearchRiderFragment extends Fragment {
                                     getPriceAndCommission((double)Math.round(distdiff[0]/1000), 5.0, 4.0)[1]);
 
                         } else {
+                            System.out.println(pickUpDeliveryModel.getFromInformation().size());
                             Location.distanceBetween(pickUpFromLatLng.latitude,pickUpFromLatLng.longitude, deliverToLatLng.latitude,deliverToLatLng.longitude, distdiff);
                             getSearchDetails(pickUpDeliveryModel.getFromInformation().get("pickup"), pickUpDeliveryModel.getDeliveryInformation().get("delivery"), getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[0], getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[1]);
                         }
 //                        Location.distanceBetween(pickUpFromLatLng.latitude,pickUpFromLatLng.longitude, deliverToLatLng.latitude,deliverToLatLng.longitude, distdiff);
 //                        getSearchDetails(pickUpDeliveryModel.getFromInformation().get("pickup"), pickUpDeliveryModel.getDeliveryInformation().get("delivery"), getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[0], getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[1]);
                         //insert actual distance and base price
-
+                        proximity = 0.1;
                         System.out.println("distance difference " + Math.round(distdiff[0]/1000));
-//                        proximity = 0.1;
-                        if(proximity <= 10 && searchingString.isEmpty()){
+                        if(proximity <= 10 && searchingString.size() == 0){
+                            System.out.println("In if statement when size == 0");
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest");
                             GeoFire geoFire = new GeoFire(databaseReference);
                             geoFire.setLocation(customer_id, new GeoLocation(pickUpFromLatLng.latitude,pickUpFromLatLng.longitude), new GeoFire.CompletionListener() {
@@ -388,12 +395,15 @@ public class SearchRiderFragment extends Fragment {
 //                        progressBar.setVisibility(View.VISIBLE);
 //                        loadertext.setVisibility(View.VISIBLE);
 
-                        } else if (proximity <= 10 && !searchingString.isEmpty()){
-                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest");
+                        } else if (proximity <= 10 && searchingString.size() != 0){
+                            System.out.println("In if statement when size != 0 " + "searching string " + searchingString.toString());
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest");
                                 GeoFire geoFire = new GeoFire(databaseReference);
-                                geoFire.setLocation(customer_id, new GeoLocation(Double.parseDouble(searchingString.get(0)),Double.parseDouble(searchingString.get(1))), new GeoFire.CompletionListener() {
+                                LatLng searchLatLng = new LatLng(Double.parseDouble(searchingString.get(0)), Double.parseDouble(searchingString.get(1)));
+                                geoFire.setLocation(customer_id, new GeoLocation(searchLatLng.latitude, searchLatLng.longitude), new GeoFire.CompletionListener() {
                                     @Override
                                     public void onComplete(String key, DatabaseError error) {
+                                        System.out.println("Error from searching " + error);
                                         startActivity(new Intent(getActivity(), DeliPackEventLoader.class));
                                         findClosestBiker();
                                     }
@@ -404,16 +414,17 @@ public class SearchRiderFragment extends Fragment {
 
                         }
                         else {
+                            System.out.println("Size of proximity " + proximity + " " + "Searching string " + searchingString.size());
                             return;
                         }
                     }
 
 
-                    for (String a : pickUpDeliveryModel.getDeliveryInformation().values())
-                        Log.i("delipack", a.toString());
-
-                    for (String a : pickUpDeliveryModel.getFromInformation().values())
-                        Log.i("delipack", a.toString());
+//                    for (String a : pickUpDeliveryModel.getDeliveryInformation().values())
+//                        Log.i("delipack", a.toString());
+//
+//                    for (String a : pickUpDeliveryModel.getFromInformation().values())
+//                        Log.i("delipack", a.toString());
 
                 } else {
                     new DeliPackAlert(getActivity(), "Location Fields", "Fill out both forms to find rider").showDeliPackAlert();
@@ -520,6 +531,28 @@ public class SearchRiderFragment extends Fragment {
 
 
         getRiderResponse();
+
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("CustomerRiderRequest")
+                .child(customer_id).child("delivered");
+
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                if (dataSnapshot.getValue().equals("true")){
+                                    Intent rateIntent = new Intent(getActivity(), RateCompanyRider.class);
+                                    startActivity(rateIntent);
+                                }
+                            }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
 
@@ -654,7 +687,7 @@ public class SearchRiderFragment extends Fragment {
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("RiderLocationAvailable");
         GeoFire geoFire = new GeoFire(databaseReference);
 
-        if(searchingString.isEmpty()){
+        if(searchingString.size() == 0){
             picklat = Double.toString(pickUpFromLatLng.latitude);
             picklong = Double.toString(pickUpFromLatLng.longitude);
         } else {
@@ -683,18 +716,35 @@ public class SearchRiderFragment extends Fragment {
                         DatabaseReference databaserider = database.getReference().child("RiderFoundForCustomer").child(riderID);
                         databaserider.child("customer_id").setValue(customer_id);
                         databaserider.child("assigned").setValue("true");
-
-
                         Map<String, Object> dellocation = new HashMap<>();
-                        dellocation.put("latitude", searchingString.get(2));
-                        dellocation.put("longitude", searchingString.get(3));
-                        dellocation.put("deliverylocationname", deliveryLocatioName);
-                        dellocation.put("pickuplocationname", pickupLocationName);
-                        dellocation.put("customerPhoneNumber", customer_phone_number);
-                        dellocation.put("customerName",  customer_first_name + " " + customer_last_name);
-                        databasecustomer.child("deliverlatlong").updateChildren(dellocation);
+
+
+                        if (customerContract.getPersistentCookieStore().getCookies().contains("searchdata")){
+                            dellocation.put("latitude", searchingString.get(2));
+                            dellocation.put("longitude", searchingString.get(3));
+                            dellocation.put("deliverylocationname", deliveryLocatioName);
+                            dellocation.put("pickuplocationname", pickupLocationName);
+                            dellocation.put("customerPhoneNumber", customer_phone_number);
+                            dellocation.put("customerName",  customer_first_name + " " + customer_last_name);
+                            databasecustomer.child("deliverlatlong").updateChildren(dellocation);
+
+                        } else {
+                            dellocation.put("latitude", deliverToLatLng.latitude);
+                            dellocation.put("longitude", deliverToLatLng.longitude);
+                            dellocation.put("deliverylocationname", deliveryLocatioName);
+                            dellocation.put("pickuplocationname", pickupLocationName);
+                            dellocation.put("customerPhoneNumber", customer_phone_number);
+                            dellocation.put("customerName",  customer_first_name + " " + customer_last_name);
+                            databasecustomer.child("deliverlatlong").updateChildren(dellocation);
+                        }
+
+
+
+
+
                         isDismissed = true;
                         System.out.println("key has entered searching for rider");
+                        proximity = 0.1;
 
 //                        pickUpDeliveryModel.resetFromInformation();
 //                        pickUpDeliveryModel.resetsetDeliveryInformation();
@@ -705,9 +755,6 @@ public class SearchRiderFragment extends Fragment {
 //                    searchRiderCardView.setVisibility(View.INVISIBLE);
 
 //                    startActivity(new Intent(getActivity(), SearchResult.class));
-
-
-
 
                     }
                 }
@@ -728,11 +775,9 @@ public class SearchRiderFragment extends Fragment {
                         proximity += 0.1;
                         System.out.println("searching " + proximity );
                         if (proximity >= 20){
-                            proximity = 0.1;
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest").child(customer_id);
                             databaseReference.removeValue();
                             String message = "Rider not found\nYou can try again later";
-
                             SearchRiderFragment.delipackEventloader.finish();
                             new DeliPackAlert(getActivity(), "Search complete", message).showDeliPackAlert();
                             return;

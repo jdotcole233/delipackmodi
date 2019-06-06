@@ -4,16 +4,18 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#FFF">
+    android:background="@drawable/rounded_input_signin"
+
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/splashscreen_background"
+        android:background="@drawable/popup_messages_background"
         android:orientation="horizontal"
         >
         <ImageView
-            android:layout_width="350dp"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:src="@drawable/deli_s" />
 
@@ -107,7 +109,7 @@
         <Button
             android:id="@+id/canceltripinaction"
             android:layout_width="170dp"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
             android:text="Cancel"
             android:background="@drawable/register_btn_background"
             android:textColor="#FFF"
@@ -116,7 +118,7 @@
         <Button
             android:id="@+id/callcustomer"
             android:layout_width="170dp"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
             android:text="Call"
             android:layout_marginLeft="10dp"
             android:background="@drawable/confirm_button"
