@@ -30,6 +30,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@drawable/deli_s"
+                android:layout_gravity="center"
                 />
             <LinearLayout
                 android:layout_width="match_parent"
@@ -44,8 +45,9 @@
                     android:layout_height="wrap_content"
                     android:text="Company Name"
                     android:textColor="@color/colorAccent"
-                    android:textSize="17sp"
-                    android:fontFamily="@font/amiko_semibold"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-light"
+                    android:padding="3dp"
                     />
                 <TextView
                     android:id="@+id/pick_up_from"
@@ -53,9 +55,9 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
                     android:text="Pick up from :"
-                    android:textSize="17sp"
-                    android:fontFamily="@font/amiko_semibold"
-
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-light"
+                    android:padding="3dp"
                     />
 
 
@@ -65,8 +67,9 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
                     android:text="Delivery to:"
-                    android:textSize="17sp"
-                    android:fontFamily="@font/amiko_semibold"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-light"
+                    android:padding="3dp"
                     />
 
                 <Button
@@ -75,8 +78,8 @@
                     android:layout_height="30dp"
                     android:text="Details"
                     android:background="@drawable/confirm_button"
-                    android:fontFamily="@font/amiko_semibold"
-                    android:layout_marginTop="5dp"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginTop="10dp"
                     />
             </LinearLayout>
 
