@@ -14,6 +14,7 @@
         android:layout_marginRight="20dp"
         >
         <ImageView
+            android:id="@+id/profile_edit_button"
             android:layout_width="30dp"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_edit_black_24dp"
@@ -198,9 +199,10 @@
         >
 
         <Button
+            android:id="@+id/tell_friend_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tell Your friend"
+            android:text="Tell a friend"
             android:drawableLeft="@drawable/ic_people_black_24dp"
             android:drawablePadding="10dp"
             android:textAlignment="textStart"
@@ -208,12 +210,16 @@
             android:layout_gravity="start"
             android:background="#FFF"
             android:paddingLeft="10dp"
+            android:fontFamily="sans-serif-light"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+
 
             />
         <Button
+            android:id="@+id/promotions_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="promotions"
+            android:text="Promotions"
             android:drawableLeft="@drawable/ic_cake_black_24dp"
             android:textAlignment="textStart"
             android:layout_gravity="start"
@@ -221,9 +227,13 @@
             android:drawablePadding="10dp"
             android:background="#FFF"
             android:paddingLeft="10dp"
+            android:fontFamily="sans-serif-light"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+
 
             />
         <Button
+            android:id="@+id/support_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Support"
@@ -234,7 +244,25 @@
             android:textColor="#636B94"
             android:drawablePadding="10dp"
             android:paddingLeft="10dp"
+            android:fontFamily="sans-serif-light"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+
             />
+
+        <Button
+            android:id="@+id/reportproblem_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:background="#FFF"
+            android:drawableLeft="@drawable/ic_live_help_black_24dp"
+            android:drawablePadding="10dp"
+            android:fontFamily="sans-serif-light"
+            android:paddingLeft="10dp"
+            android:text="Report a problem"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#636B94" />
 
 
     </LinearLayout>

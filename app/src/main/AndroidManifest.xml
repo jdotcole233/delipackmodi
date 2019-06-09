@@ -15,16 +15,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:replace="android:theme">
-        <activity android:name=".TripCompletedRatingMessage"
-            android:theme="@style/AppTheme.TransparentTheme"
-            ></activity>
-        <activity android:name=".RateCompanyRider"
-             android:theme="@style/AppTheme.TransparentTheme"
-            />
-        <activity android:name=".PackageCancel" android:theme="@style/AppTheme.TransparentTheme" />
-        <activity android:name=".PackageInProgress"  android:theme="@style/AppTheme.TransparentTheme"/>
+        <activity android:name=".CustomerSupportView"></activity>
+        <activity
+            android:name=".PromotionsView"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".TripCompletedRatingMessage"
+            android:theme="@style/AppTheme.TransparentTheme" />
+        <activity
+            android:name=".RateCompanyRider"
+            android:theme="@style/AppTheme.TransparentTheme" />
+        <activity
+            android:name=".PackageCancel"
+            android:theme="@style/AppTheme.TransparentTheme" />
+        <activity
+            android:name=".PackageInProgress"
+            android:theme="@style/AppTheme.TransparentTheme" />
         <activity android:name=".RiderPickedUpInformation" />
         <activity android:name=".CashOptionSelected" />
+        <activity android:name=".EditCustomerProfile" />
         <activity
             android:name=".Homedashboard_user"
             android:label="@string/title_activity_homedashboard_user" />
