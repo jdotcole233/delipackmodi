@@ -48,8 +48,8 @@ public class CashOptionSelected extends AppCompatActivity {
         customerContract = new CustomerContract(this);
 
 
-        ArrayAdapter<CharSequence> cashspinner = ArrayAdapter.createFromResource(getApplicationContext(), R.array.cash_payment_option, android.R.layout.simple_spinner_item);
-        cashspinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> cashspinner = ArrayAdapter.createFromResource(getApplicationContext(), R.array.cash_payment_option, R.layout.dropdown_selection_color);
+        cashspinner.setDropDownViewResource(R.layout.selection_check_color);
         cashpaymentoption.setAdapter(cashspinner);
 
         for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){

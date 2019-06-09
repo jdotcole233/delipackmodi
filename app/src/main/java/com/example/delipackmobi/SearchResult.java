@@ -54,8 +54,8 @@ public class SearchResult extends AppCompatActivity {
         bikername = findViewById(R.id.companyridername);
         transactionprice = findViewById(R.id.transactionprice);
 
-        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.payment_option, android.R.layout.simple_spinner_item);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.payment_option, R.layout.dropdown_selection_color);
+        arrayAdapter.setDropDownViewResource(R.layout.selection_check_color);
         paymentMethod.setAdapter(arrayAdapter);
 
         Intent riderIDretrieve = getIntent();

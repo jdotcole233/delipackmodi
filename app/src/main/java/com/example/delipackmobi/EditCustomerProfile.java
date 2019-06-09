@@ -1,14 +1,17 @@
 package com.example.delipackmobi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 public class EditCustomerProfile extends AppCompatActivity {
 
     private ImageView close_profile;
+    private EditText customerfirstname, customerlastname, customeremail, customerphonnumber;
 
 
     @Override
@@ -17,6 +20,18 @@ public class EditCustomerProfile extends AppCompatActivity {
         setContentView(R.layout.edit_profile);
 
         close_profile = findViewById(R.id.editprofile_close);
+        customerfirstname = findViewById(R.id.customerfirstname);
+        customerlastname = findViewById(R.id.customerlastname);
+        customeremail = findViewById(R.id.customeremail);
+        customerphonnumber = findViewById(R.id.customerphonenumber);
+
+        Intent customerinformationintent = getIntent();
+
+        customerfirstname.setText(customerinformationintent.getStringExtra("first_name"));
+        customerlastname.setText(customerinformationintent.getStringExtra("last_name"));
+        customeremail.setText(customerinformationintent.getStringExtra("email"));
+        customerphonnumber.setText(customerinformationintent.getStringExtra("phone_number"));
+        customerphonnumber.setFocusable(false);
 
         close_profile.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -18,6 +18,13 @@
         <item>Mobile Money</item>
     </string-array>
 
+
+    <string-array name="report_problem">
+        <item>Select report class</item>
+        <item>Something isn\'t working</item>
+        <item>General Feedback</item>
+    </string-array>
+
     <string-array name="cash_payment_option">
         <item>Pay at pick up</item>
         <item>Pay on delivery</item>

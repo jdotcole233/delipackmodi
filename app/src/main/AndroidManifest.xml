@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:replace="android:theme">
-        <activity android:name=".CustomerSupportView"></activity>
+        <activity android:name=".ReportProblemView"></activity>
+        <activity android:name=".CustomerSupportView" />
         <activity
             android:name=".PromotionsView"
             android:windowSoftInputMode="stateVisible" />

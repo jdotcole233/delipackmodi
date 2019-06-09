@@ -11,17 +11,32 @@
         android:background="@drawable/splashscreen_background"
         >
 
-
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/activity_vertical_margin"
-            android:fontFamily="@font/amiko_semibold"
-            android:gravity="center"
-            android:text="Search Result"
-            android:textColor="#FFF"
-            android:textSize="15sp" />
+            android:orientation="horizontal"
+            >
+
+            <ImageButton
+                android:id="@+id/cancelsearchresult"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                app:srcCompat="@drawable/ic_arrow_back_black_24dp"
+                android:background="@drawable/history_header_background"
+                />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="@dimen/activity_vertical_margin"
+                android:fontFamily="@font/amiko_semibold"
+                android:gravity="center"
+                android:text="Search Result"
+                android:textColor="#FFF"
+                android:textSize="15sp" />
+
+        </LinearLayout>
     </FrameLayout>
 
 
@@ -212,28 +227,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="13dp"
+                        android:padding="5dp"
                         >
-                        <ImageButton
-                            android:id="@+id/cancelsearchresult"
-                            android:layout_width="70dp"
-                            android:layout_height="50dp"
-                            android:layout_marginTop="110dp"
-                            app:srcCompat="@drawable/ic_close_black_24dp"
-                            android:padding="10dp"
-                            android:background="@drawable/confirm_button"
-                            android:layout_marginLeft="1dp"
 
-
-                            />
                         <Button
                             android:id="@+id/make_payment"
-                            android:layout_width="310dp"
+                            android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="110dp"
-                            android:layout_marginRight="10dp"
-                            android:background="@drawable/confirm_button_bg"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/history_header_background"
                             android:text="Confirm payment"
                             android:textColor="#FFF"
                             android:textSize="15sp"

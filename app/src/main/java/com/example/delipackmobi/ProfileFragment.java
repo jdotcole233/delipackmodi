@@ -11,12 +11,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.delipackmobi.CustomerContract.CustomerContract;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.cookie.Cookie;
 
 
 public class ProfileFragment extends Fragment {
 
     private ImageView editButton;
-    private Button tellfriendbtn, promotionsbtn, supportbtn;
+    private Button tellfriendbtn, promotionsbtn, supportbtn,reportproblem_btn;
+    private TextView customerBigName, customerBigEmail, customerSmallNumber, customerSmallEmail;
+    private CustomerContract customerContract;
+    private String customerfirstname, customerlastname, customeremail, customerphonenumber = "";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -43,11 +54,55 @@ public class ProfileFragment extends Fragment {
         tellfriendbtn = getActivity().findViewById(R.id.tell_friend_btn);
         promotionsbtn = getActivity().findViewById(R.id.promotions_btn);
         supportbtn = getActivity().findViewById(R.id.support_btn);
+        reportproblem_btn = getActivity().findViewById(R.id.reportproblem_btn);
+
+        customerBigName  = getActivity().findViewById(R.id.customerbigname);
+        customerBigEmail = getActivity().findViewById(R.id.customerbigemail);
+        customerSmallNumber = getActivity().findViewById(R.id.customersmallnumber);
+        customerSmallEmail = getActivity().findViewById(R.id.customersmallemail);
+
+        customerContract = new CustomerContract(getActivity());
+
+        for (Cookie cookie : customerContract.getPersistentCookieStore().getCookies()){
+            if (cookie.getName().equals("customerInfomation")){
+                try {
+                    JSONObject jsonObject = new JSONObject(cookie.getValue());
+
+
+                    customerfirstname =  jsonObject.getString("first_name");
+                    customerlastname = jsonObject.getString("last_name");
+                    customerphonenumber = jsonObject.getString("phone_number");
+                    customeremail = jsonObject.getString("email");
+
+//
+//                    if (jsonObject.getString("email").isEmpty()){
+//                        customerBigEmail.setText("N/A");
+//                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        if (customeremail == null){
+            customeremail = "N/A";
+        }
+
+        customerBigName.setText(customerfirstname + " " + customerlastname);
+        customerSmallNumber.setText(customerphonenumber);
+        customerSmallEmail.setText(customeremail);
+        customerBigEmail.setText(customeremail);
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent editprofileintent = new Intent(getActivity(), EditCustomerProfile.class);
+                editprofileintent.putExtra("first_name", customerfirstname);
+                editprofileintent.putExtra("last_name", customerlastname);
+                editprofileintent.putExtra("email", customeremail);
+                editprofileintent.putExtra("phone_number", customerphonenumber);
                 startActivity(editprofileintent);
             }
         });
@@ -80,6 +135,14 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Intent supportIntent = new Intent(getActivity(), CustomerSupportView.class);
                 startActivity(supportIntent);
+            }
+        });
+
+        reportproblem_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent reportIntent = new Intent(getActivity(), ReportProblemView.class);
+                startActivity(reportIntent);
             }
         });
     }

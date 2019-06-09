@@ -53,6 +53,7 @@
             android:padding="15dp"
             >
             <TextView
+                android:id="@+id/customerbigname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="25dp"
@@ -62,10 +63,11 @@
                 />
 
             <TextView
+                android:id="@+id/customerbigemail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="13dp"
-                android:text="emma@gmail.com"
+                android:text="N/A"
                 android:textColor="#989CAF"
                 android:fontFamily="sans-serif"
                 android:textStyle="bold"
@@ -90,6 +92,7 @@
 
             />
          <TextView
+             android:id="@+id/customersmallnumber"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="(233) 243 788 9827"
@@ -115,9 +118,10 @@
 
             />
         <TextView
+            android:id="@+id/customersmallemail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="emma@gmail.com"
+            android:text="N/A"
             android:textColor="#989CAF"
             android:fontFamily="sans-serif-light"
             android:paddingLeft="15dp"
@@ -142,6 +146,7 @@
 
             >
             <TextView
+                android:id="@+id/customertotaldelivery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="234"

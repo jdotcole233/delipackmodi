@@ -18,7 +18,7 @@
 
             >
             <ImageButton
-                android:id="@+id/editprofile_close"
+                android:id="@+id/report_close"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/ic_arrow_back_black_24dp"
@@ -31,7 +31,7 @@
                 android:layout_marginVertical="@dimen/activity_vertical_margin"
                 android:fontFamily="@font/amiko_semibold"
                 android:gravity="center"
-                android:text="Edit profile details"
+                android:text="Report a problem"
                 android:textColor="#FFF"
                 android:textSize="15sp"
                 android:layout_gravity="center"
@@ -50,83 +50,60 @@
         android:background="#f2f2f2"
         >
 
-        <EditText
-            android:id="@+id/customerfirstname"
+        <Spinner
+            android:id="@+id/report_choice"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="First name"
-            android:textColorHint="#000"
-            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/input_actual_roundedbackground"
-            android:paddingLeft="10dp"
-            android:drawableLeft="@drawable/ic_person_outline_black_24dp"
-            android:drawablePadding="5dp"
-            android:textColor="#000"
+            android:popupTheme="@drawable/input_actual_roundedbackground"
+            android:padding="10dp"
             android:elevation="1dp"
+            >
+        </Spinner>
 
-            />
-
-        <EditText
-            android:id="@+id/customerlastname"
+        <TextView
+            android:id="@+id/problemdesc"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Last name"
-            android:textColorHint="#000"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/input_actual_roundedbackground"
-            android:paddingLeft="10dp"
-            android:drawableLeft="@drawable/ic_person_outline_black_24dp"
-            android:drawablePadding="5dp"
-            android:textColor="#000"
+            android:fontFamily="sans-serif-light"
+            android:textStyle="bold"
+            android:textColor="#a6a6a6"
+            android:background="#f2f2f2"
+            android:textSize="14sp"
             android:elevation="1dp"
-
-
+            android:padding="10dp"
+            android:text="Hello DeliPack"
             />
-
         <EditText
-            android:id="@+id/customeremail"
+            android:id="@+id/reportmessage"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Email"
-            android:textColorHint="#000"
-            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:ems="40"
+            android:inputType="textMultiLine"
+            android:hint="Enter your message"
+            android:textColorHint="#a6a6a6"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/input_actual_roundedbackground"
-            android:paddingLeft="5dp"
-            android:drawableLeft="@drawable/ic_email_black_24dp"
-            android:drawablePadding="5dp"
+            android:layout_marginLeft="10dp"
             android:textColor="#000"
+            android:padding="20dp"
+            android:background="@drawable/input_actual_roundedbackground"
             android:elevation="1dp"
 
 
-            />
-
-        <EditText
-            android:id="@+id/customerphonenumber"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Phone number"
-            android:textColorHint="#000"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/input_actual_roundedbackground"
-            android:paddingLeft="10dp"
-            android:drawableLeft="@drawable/ic_call_black_24dp"
-            android:drawablePadding="5dp"
-            android:textColor="#000"
-            android:elevation="1dp"
             />
 
         <Button
+            android:id="@+id/sendcustomerreport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Update"
+            android:text="Send report"
             android:background="@drawable/history_header_background"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
