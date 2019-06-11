@@ -15,6 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:replace="android:theme">
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <activity android:name=".ReportProblemView"></activity>
         <activity android:name=".CustomerSupportView" />
         <activity
@@ -22,18 +27,29 @@
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".TripCompletedRatingMessage"
-            android:theme="@style/AppTheme.TransparentTheme" />
+            android:theme="@style/AppTheme.TransparentTheme"
+            android:launchMode="singleTask"
+            />
         <activity
             android:name=".RateCompanyRider"
-            android:theme="@style/AppTheme.TransparentTheme" />
+            android:theme="@style/AppTheme.TransparentTheme"
+            android:launchMode="singleTask"
+            />
         <activity
             android:name=".PackageCancel"
-            android:theme="@style/AppTheme.TransparentTheme" />
+            android:theme="@style/AppTheme.TransparentTheme"
+            android:launchMode="singleTask"
+            />
         <activity
             android:name=".PackageInProgress"
-            android:theme="@style/AppTheme.TransparentTheme" />
+            android:theme="@style/AppTheme.TransparentTheme"
+            android:launchMode="singleTask"
+            />
+
         <activity android:name=".RiderPickedUpInformation" />
-        <activity android:name=".CashOptionSelected" />
+        <activity android:name=".CashOptionSelected"
+            android:launchMode="singleTask"
+            />
         <activity android:name=".EditCustomerProfile" />
         <activity
             android:name=".Homedashboard_user"
@@ -56,7 +72,9 @@
             android:theme="@style/AppTheme.HistoryCustomTheme" />
         <activity
             android:name=".SearchResult"
-            android:theme="@style/AppTheme.HistoryCustomTheme" />
+            android:theme="@style/AppTheme.HistoryCustomTheme"
+            android:launchMode="singleTask"
+            />
         <activity
             android:name=".DeliPackEventLoader"
             android:theme="@style/AppTheme.TransparentTheme" />

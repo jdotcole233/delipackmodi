@@ -1,9 +1,13 @@
 package com.example.delipackmobi;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.delipackmobi.CustomerContract.CustomerContract;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -24,21 +31,31 @@ import java.util.HashMap;
 
 import cz.msebera.android.httpclient.cookie.Cookie;
 
+import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+
 public class SearchResult extends AppCompatActivity {
 
     private Button confirmButton;
     private ImageButton cancelButton;
     private Spinner paymentMethod;
     private String payment_selection;
-    private String riderID;
+    private String riderID, customerID;
     private CustomerContract customerContract;
     private TextView companyname, bikeregistration, bikername, transactionprice;
+    private DatabaseReference updateriderdata;
+    public  static Activity sc;
+    public static int countDownTime;
+    private CountDownTimer paymentCountDown;
+    private DatabaseReference customerRequest, riderfoundforcustomer;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rider_search_result);
+
+
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
@@ -48,6 +65,8 @@ public class SearchResult extends AppCompatActivity {
         cancelButton = findViewById(R.id.cancelsearchresult);
         paymentMethod = findViewById(R.id.payment_choice);
         customerContract = new CustomerContract(this);
+        sc = this;
+        countDownTime = 90000;
 
         companyname = findViewById(R.id.companyname);
         bikeregistration = findViewById(R.id.riderbikeregistration);
@@ -58,13 +77,16 @@ public class SearchResult extends AppCompatActivity {
         arrayAdapter.setDropDownViewResource(R.layout.selection_check_color);
         paymentMethod.setAdapter(arrayAdapter);
 
-        Intent riderIDretrieve = getIntent();
-        riderID = riderIDretrieve.getStringExtra("riderID");
+//        Intent riderIDretrieve = getIntent();
+//        riderID = riderIDretrieve.getStringExtra("riderID");
 
         for(Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
             if(cookie.getName().equals("company_details")){
                 try {
                     JSONObject displayCompanyData = new JSONObject(cookie.getValue());
+
+                    riderID = displayCompanyData.getString("company_rider_id");
+
                     companyname.setText("Company: " + displayCompanyData.getString("company_name"));
                     bikeregistration.setText("Reg number:" + displayCompanyData.getString("registered_number"));
                     bikername.setText("Rider name: " + displayCompanyData.getString("first_name") + " " + displayCompanyData.getString("last_name"));
@@ -80,6 +102,13 @@ public class SearchResult extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+            } else if (cookie.getName().equals("customerInfomation")){
+                try {
+                    JSONObject jsonObject = new JSONObject(cookie.getValue());
+                    customerID = jsonObject.getString("customer_id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
@@ -104,15 +133,23 @@ public class SearchResult extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent searchResultIntent = new Intent(getApplicationContext(),PackageCancel.class);
+                startActivity(searchResultIntent);
                 finish();
+
             }
         });
+
+
 
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!payment_selection.isEmpty()){
+                    paymentCountDown.cancel();
+                    confirmButton.setText("Confirm payment");
+
                     if(payment_selection.equals("Mobile Money")){
 //                        startActivity(new Intent(SearchResult.this, MobileMoneyPayment.class));
 //                        confirmcardview.setVisibility(View.INVISIBLE);
@@ -125,7 +162,6 @@ public class SearchResult extends AppCompatActivity {
                         sendRiderID.putExtra("bikerID", riderID);
                         getPaymentType(payment_selection);
                         startActivity(sendRiderID);
-                        finish();
 
                     } else if (payment_selection.equals("Select payment option")){
                         new DeliPackAlert(SearchResult.this, "Payment option", "Select a payment option").showDeliPackAlert();
@@ -140,6 +176,25 @@ public class SearchResult extends AppCompatActivity {
                 }
             }
         });
+
+        paymentCountDown =  new CountDownTimer(60000, 1000){
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                confirmButton.setText("Confirm payment in " + millisUntilFinished/1000);
+            }
+
+            @Override
+            public void onFinish() {
+                finish();
+                customerRequest = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest");
+                customerRequest.child(customerID).removeValue();
+                riderfoundforcustomer = FirebaseDatabase.getInstance().getReference().child("RiderFoundForCustomer");
+                riderfoundforcustomer.child(riderID).child("assigned").setValue("not assigned");
+
+            }
+        };
+        paymentCountDown.start();
 
 
     }
@@ -158,5 +213,34 @@ public class SearchResult extends AppCompatActivity {
             String convertedJSON = searchConvert.toJson(search);
             customerContract.setBasicCookies("paymentType", convertedJSON, 4, "/");
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("On stop in search result called");
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println("On resume in search result called");
+
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        System.out.println("On start in search result called");
+        paymentCountDown.start();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("On destroy in search result called");
     }
 }

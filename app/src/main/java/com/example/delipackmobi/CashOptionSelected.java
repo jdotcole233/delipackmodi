@@ -2,6 +2,7 @@ package com.example.delipackmobi;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,8 @@ public class CashOptionSelected extends AppCompatActivity {
     private String cashoptionselected;
     private String riderIDFound, customerID;
     private CustomerContract customerContract;
+    private CountDownTimer countDownTimer;
+    private DatabaseReference customerRequest, riderfoundforcustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +63,17 @@ public class CashOptionSelected extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            } else if (cookie.getName().equals("company_details")){
+                try {
+                    JSONObject riderJSONinfo = new JSONObject(cookie.getValue());
+                    riderIDFound = riderJSONinfo.getString("company_rider_id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
+
 
 
         cashpaymentoption.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -80,10 +92,14 @@ public class CashOptionSelected extends AppCompatActivity {
         cash_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                countDownTimer.cancel();
+                cash_btn.setText("Confirm pick up");
                 if (cashoptionselected.equals("Pay at pick up")){
+                    SearchResult.sc.finish();
                     updatePaymentValueForRider(riderIDFound, customerID,CashOptionSelected.this, PackageInProgress.class);
                 } else if (cashoptionselected.equals("Pay on delivery")){
-//                    updatePaymentValueForRider(riderIDFound, customerID,CashOptionSelected.this, PackageInProgress.class);
+                    SearchResult.sc.finish();
+                    updatePaymentValueForRider(riderIDFound, customerID,CashOptionSelected.this, PackageInProgress.class);
                 }else {
                     return;
                 }
@@ -94,8 +110,30 @@ public class CashOptionSelected extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+
             }
         });
+
+
+        countDownTimer = new CountDownTimer(30000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                cash_btn.setText("Confirm pick up in " + millisUntilFinished/1000);
+            }
+
+            @Override
+            public void onFinish() {
+                SearchResult.sc.finish();
+                finish();
+                customerRequest = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest");
+                customerRequest.child(customerID).removeValue();
+                riderfoundforcustomer = FirebaseDatabase.getInstance().getReference().child("RiderFoundForCustomer");
+                riderfoundforcustomer.child(riderIDFound).child("assigned").setValue("not assigned");
+
+            }
+        };
+
+        countDownTimer.start();
     }
 
     public void updatePaymentValueForRider(String riderID, String customerIdent,final Context context, final Class switchto){
@@ -121,6 +159,7 @@ public class CashOptionSelected extends AppCompatActivity {
                     transactionParameters.put("company_riderscompany_rider_id",transaction.getString("company_rider_id"));
                     transactionParameters.put("companiescompanies_id",transaction.getString("companies_id"));
                     transactionParameters.put("motor_bikesbike_id",transaction.getString("bike_id"));
+                    transactionParameters.put("company_riderscompany_rider_id", riderID);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -143,6 +182,7 @@ public class CashOptionSelected extends AppCompatActivity {
                     transactionParameters.put("source",transactionSearch.getString("pickup"));
                     transactionParameters.put("delivery_charge",  transactionSearch.getDouble("delivery_charge"));
                     transactionParameters.put("commission_charge", transactionSearch.getDouble("commission_charge"));
+                    transactionParameters.put("payment_type", transactionSearch.getString("pickup"));
 //                    transactionParameters.put("ETA","22:33");
                     updateAccepted.child("deliverlatlong")
                             .child("pickuplocationname").setValue(transactionSearch.getString("pickup"));
@@ -150,20 +190,17 @@ public class CashOptionSelected extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-            } else if (cookie.getName().equals("paymentType")){
-                    transactionParameters.put("payment_type", cashoptionselected);
             }
 
         }
+
 
         updateTrasaction.post(UPDATEDTRANSACTION_URL, transactionParameters, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                String transactionResponse = response.toString();
-                if (!transactionResponse.isEmpty()){
+
+                if (response.length() != 0){
                     try {
                         if (response.getString("success").equals("Done")){
                             Intent changeActivitiies = new Intent(context, switchto);
@@ -188,5 +225,21 @@ public class CashOptionSelected extends AppCompatActivity {
                 System.out.println(responseString);
             }
         });
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("On stop cash option in  called");
+        countDownTimer.cancel();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("On destroy cash option in  called");
+
     }
 }

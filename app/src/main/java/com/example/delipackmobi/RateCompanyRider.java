@@ -1,12 +1,16 @@
 package com.example.delipackmobi;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 
 import com.example.delipackmobi.CustomerContract.CustomerContract;
@@ -27,12 +31,15 @@ import static com.example.delipackmobi.CustomerContract.CustomerContract.RATING_
 public class RateCompanyRider extends AppCompatActivity {
 
     private Button rateNextButton;
+    private ImageView closerating;
     private RatingBar riderRated;
     private float ratevalue;
     private CustomerContract customerContract;
     private String customerID, companyID, companyRiderID;
     private AsyncHttpClient asyncHttpClient;
     private RequestParams requestParams;
+    public static Activity searchriderfragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,7 @@ public class RateCompanyRider extends AppCompatActivity {
 
         rateNextButton = findViewById(R.id.ratingnextButton);
         riderRated = findViewById(R.id.raterider);
+        closerating = findViewById(R.id.cancelrating);
         ratevalue = 0.0f;
 
         for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
@@ -85,6 +93,30 @@ public class RateCompanyRider extends AppCompatActivity {
 
 
 
+        closerating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (Cookie cookie : customerContract.getPersistentCookieStore().getCookies()){
+                    if (cookie.getName().equals("company_details")){
+
+                        CardView cardView = searchriderfragment.findViewById(R.id.searchridercardview);
+                        CardView welcomecardview = searchriderfragment.findViewById(R.id.cardsearchwelcome);
+                        ImageButton imageButton = Homedashboard_user.homeactivity.findViewById(R.id.showmoretripinprogress);
+
+                        imageButton.setVisibility(View.INVISIBLE);
+                        welcomecardview.setVisibility(View.VISIBLE);
+                        cardView.setVisibility(View.VISIBLE);
+
+                        customerContract.deleteCookie(cookie);
+                        finish();
+                    } else if (cookie.getName().equals("search_data")){
+                        customerContract.deleteCookie(cookie);
+                    }
+                }
+            }
+        });
+
+
         rateNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,17 +124,14 @@ public class RateCompanyRider extends AppCompatActivity {
                 requestParams.put("company_riderscompany_rider_id", companyRiderID);
                 requestParams.put("customerscustomer_id", customerID);
                 requestParams.put("company_id", companyID);
-                Log.i("DeliPackMessage", customerID);
 
                 asyncHttpClient.post(RATING_URL, requestParams, new JsonHttpResponseHandler(){
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
 
-                        String ratingresponsestring = response.toString();
 
-                        if (!ratingresponsestring.isEmpty()){
-                            clearCustomerRequest(customerID);
+                        if (response.length() != 0){
                             Intent thankyouIntent = new Intent(RateCompanyRider.this, TripCompletedRatingMessage.class);
                             startActivity(thankyouIntent);
                             finish();

@@ -1,6 +1,9 @@
 package com.example.delipackmobi;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -43,7 +46,9 @@ public class Homedashboard_user extends AppCompatActivity {
     ProfileFragment profileFragment;
     HistoryFragment historyFragment;
     private ImageButton showmorebtn;
+    private BottomNavigationView  navigation;
     Fragment mContent;
+    public static Activity homeactivity;
 
 
 
@@ -64,6 +69,7 @@ public class Homedashboard_user extends AppCompatActivity {
         historyFragment = new HistoryFragment();
         showmorebtn = findViewById(R.id.showmoretripinprogress);
         showmorebtn.setVisibility(View.INVISIBLE);
+        homeactivity = this;
 
         showmorebtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +83,7 @@ public class Homedashboard_user extends AppCompatActivity {
 
         Log.i("DelicPackMessage", "Parent create called");
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         switchFragments(searchRiderFragment);
 //        getSupportFragmentManager().beginTransaction().replace()
@@ -94,6 +100,7 @@ public class Homedashboard_user extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_history:
+
                     switchFragments(historyFragment);
                     return true;
                 case R.id.navigation_search:
@@ -112,6 +119,29 @@ public class Homedashboard_user extends AppCompatActivity {
 
 
     public void switchFragments(Fragment fragment){
+//        navigation.setItemTextColor(new ColorStateList(new int[] []{
+//                new int[] { android.R.attr.state_enabled}, // enabled
+//                new int[] {android.R.attr.state_enabled}, // disabled
+//                new int[] {android.R.attr.state_checked}, // unchecked
+//                new int[] { android.R.attr.state_pressed}
+//        }, new int[]{
+//                Color.parseColor("#ffad33"),
+//                Color.GREEN,
+//                Color.BLUE
+//        }));
+//
+//        navigation.setItemIconTintList(new ColorStateList(new int[] []{
+//                new int[] { android.R.attr.state_enabled}, // enabled
+//                new int[] {android.R.attr.state_enabled}, // disabled
+//                new int[] {android.R.attr.state_checked}, // unchecked
+//                new int[] { android.R.attr.state_pressed}
+//        }, new int[]{
+//                Color.parseColor("#ffad33"),
+//                Color.GREEN,
+//                Color.BLUE
+//        }));
+        navigation.setActivated(true);
+
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //        fragmentTransaction.remove(R.id.fragmentFrame);
 //        fragmentTransaction.remove(searchRiderFragment);
@@ -129,4 +159,9 @@ public class Homedashboard_user extends AppCompatActivity {
 //        getSupportFragmentManager().putFragment(outState, SearchRiderFragment.class.getName(), mContent);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("Main on destroy");
+    }
 }

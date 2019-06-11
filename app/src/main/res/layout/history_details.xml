@@ -22,7 +22,7 @@
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/ic_arrow_back_black_24dp"
-                android:background="@drawable/close_background"
+                android:background="@drawable/history_header_background"
                 />
 
             <TextView
@@ -40,460 +40,476 @@
 
     </FrameLayout>
 
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="490dp"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center"
-            android:background="#f2f2f2"
-
             >
 
-            <TableLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:padding="3dp"
-                >
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                android:layout_height="490dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="#f2f2f2"
 
-                    >
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Pick up"
-                        android:padding="10dp"
-                        android:fontFamily="@font/amiko_semibold"
-                        />
-
-                    <TextView
-                        android:id="@+id/history_pickup"
-                        android:layout_width="260dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:padding="10dp"
-                        android:text="Ashonmang-Abokobi Road"
-                        android:fontFamily="sans-serif-light"
-
-                        />
-
-
-                </TableRow>
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Deliver to"
-                        android:padding="10dp"
-                        android:fontFamily="@font/amiko_semibold"
-                        />
-
-                    <TextView
-                        android:id="@+id/history_deliver"
-                        android:layout_width="260dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Wisconsin-Abokobi Road"
-                        android:padding="10dp"
-                        android:fontFamily="sans-serif-light"
-
-                        />
-                </TableRow>
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Company"
-                        android:padding="10dp"
-                        android:fontFamily="@font/amiko_semibold"
-                        />
-
-                    <TextView
-                        android:id="@+id/history_company_name"
-                        android:layout_width="260dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="VickaVelli delivery"
-                        android:padding="10dp"
-                        android:fontFamily="sans-serif-light"
-
-                        />
-                </TableRow>
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Rider"
-                        android:padding="10dp"
-                        android:fontFamily="@font/amiko_semibold"
-                        />
-
-                    <TextView
-                        android:id="@+id/history_rider_name"
-                        android:layout_width="260dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Kwasi Asamoah"
-                        android:padding="10dp"
-                        android:fontFamily="sans-serif-light"
-                        />
-                </TableRow>
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Bike"
-                        android:padding="10dp"
-                        android:fontFamily="@font/amiko_semibold"
-                        />
-
-                    <TextView
-                        android:id="@+id/history_bike_reg"
-                        android:layout_width="260dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="GS-3472"
-                        android:padding="10dp"
-                        android:fontFamily="sans-serif-light"
-
-                        />
-                </TableRow>
-            </TableLayout>
-
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="#FFF" />
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:padding="7dp"
                 >
 
-                <TableRow
+                <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:padding="3dp"
                     >
-                    <TextView
-                        android:layout_width="100dp"
+                    <TableRow
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Date"
-                        android:padding="10dp"
-                        android:fontFamily="@font/amiko_semibold"
-                        />
 
-                    <TextView
-                        android:id="@+id/history_date"
-                        android:layout_width="260dp"
+                        >
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Pick up"
+                            android:padding="10dp"
+                            android:fontFamily="@font/amiko_semibold"
+                            />
+
+                        <TextView
+                            android:id="@+id/history_pickup"
+                            android:layout_width="260dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:padding="10dp"
+                            android:text="Ashonmang-Abokobi Road"
+                            android:fontFamily="sans-serif-light"
+
+                            />
+
+
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Tue Apr 16 2019 17:43:21"
-                        android:padding="10dp"
-                        android:fontFamily="sans-serif-light"
+                        >
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Deliver to"
+                            android:padding="10dp"
+                            android:fontFamily="@font/amiko_semibold"
+                            />
 
-                        />
+                        <TextView
+                            android:id="@+id/history_deliver"
+                            android:layout_width="260dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Wisconsin-Abokobi Road"
+                            android:padding="10dp"
+                            android:fontFamily="sans-serif-light"
 
-                </TableRow>
+                            />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Company"
+                            android:padding="10dp"
+                            android:fontFamily="@font/amiko_semibold"
+                            />
 
-                <TableRow
+                        <TextView
+                            android:id="@+id/history_company_name"
+                            android:layout_width="260dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="VickaVelli delivery"
+                            android:padding="10dp"
+                            android:fontFamily="sans-serif-light"
+
+                            />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Rider"
+                            android:padding="10dp"
+                            android:fontFamily="@font/amiko_semibold"
+                            />
+
+                        <TextView
+                            android:id="@+id/history_rider_name"
+                            android:layout_width="260dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Kwasi Asamoah"
+                            android:padding="10dp"
+                            android:fontFamily="sans-serif-light"
+                            />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Bike"
+                            android:padding="10dp"
+                            android:fontFamily="@font/amiko_semibold"
+                            />
+
+                        <TextView
+                            android:id="@+id/history_bike_reg"
+                            android:layout_width="260dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="GS-3472"
+                            android:padding="10dp"
+                            android:fontFamily="sans-serif-light"
+
+                            />
+                    </TableRow>
+                </TableLayout>
+
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#FFF" />
+
+                <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:padding="7dp"
                     >
-                    <TextView
-                        android:layout_width="100dp"
+
+                    <TableRow
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Trans ID"
-                        android:padding="10dp"
-                        android:fontFamily="@font/amiko_semibold"
-                        />
+                        >
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Date"
+                            android:padding="10dp"
+                            android:fontFamily="@font/amiko_semibold"
+                            />
 
-                    <TextView
-                        android:id="@+id/history_trans_number"
-                        android:layout_width="260dp"
+                        <TextView
+                            android:id="@+id/history_date"
+                            android:layout_width="260dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Tue Apr 16 2019 17:43:21"
+                            android:padding="10dp"
+                            android:fontFamily="sans-serif-light"
+
+                            />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="TG63552635"
-                        android:padding="10dp"
-                        android:fontFamily="sans-serif-light"
+                        >
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Trans ID"
+                            android:padding="10dp"
+                            android:fontFamily="@font/amiko_semibold"
+                            />
 
-                        />
+                        <TextView
+                            android:id="@+id/history_trans_number"
+                            android:layout_width="260dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="TG63552635"
+                            android:padding="10dp"
+                            android:fontFamily="sans-serif-light"
 
-                </TableRow>
-                <TableRow
+                            />
+
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Status"
+                            android:padding="10dp"
+                            android:fontFamily="@font/amiko_semibold"
+                            />
+
+                        <TextView
+                            android:id="@+id/history_status"
+                            android:layout_width="260dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#009624"
+                            android:text="Success"
+                            android:padding="10dp"
+                            android:fontFamily="sans-serif-light"
+
+                            />
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#FFF" />
+
+                <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:padding="7dp"
                     >
-                    <TextView
-                        android:layout_width="100dp"
+                    <TableRow
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Status"
-                        android:padding="10dp"
-                        android:fontFamily="@font/amiko_semibold"
-                        />
+                        >
 
-                    <TextView
-                        android:id="@+id/history_status"
-                        android:layout_width="260dp"
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Payment"
+                            android:padding="10dp"
+                            android:fontFamily="@font/amiko_semibold"
+                            />
+
+                        <TextView
+                            android:id="@+id/history_payment_type"
+                            android:layout_width="260dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Mobile Money"
+                            android:padding="10dp"
+                            android:fontFamily="sans-serif-light"
+
+                            />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#009624"
-                        android:text="Success"
-                        android:padding="10dp"
-                        android:fontFamily="sans-serif-light"
+                        >
 
-                        />
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="Charges"
+                            android:padding="10dp"
+                            android:fontFamily="@font/amiko_semibold"
+                            />
 
-                </TableRow>
+                        <TextView
+                            android:id="@+id/history_total_cost"
+                            android:layout_width="260dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:text="GHS 15.89"
+                            android:padding="10dp"
+                            android:fontFamily="sans-serif-light"
 
-            </TableLayout>
+                            />
+                    </TableRow>
 
-            <View
-                android:id="@+id/divider2"
+
+                </TableLayout>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="#FFF" />
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:padding="7dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="#FFF"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 >
-                <TableRow
-                    android:layout_width="match_parent"
+                <android.support.v7.widget.CardView
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#f2f2f2"
+                    android:elevation="13dp"
+                    app:cardCornerRadius="5dp"
+                    android:layout_marginRight="5dp"
+                    android:padding="10dp"
                     >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        >
 
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Payment"
-                        android:padding="10dp"
-                        android:fontFamily="@font/amiko_semibold"
-                        />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="1,900"
+                            android:textColor="#000"
+                            android:textSize="23dp" />
 
-                    <TextView
-                        android:id="@+id/history_payment_type"
-                        android:layout_width="260dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Mobile Money"
-                        android:padding="10dp"
-                        android:fontFamily="sans-serif-light"
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Deliveries"
+                            android:textColor="#a6a6a6"
+                            android:gravity="center"
+                            android:textSize="15dp"
+                            android:padding="5dp"
+                            />
 
-                        />
-                </TableRow>
-                <TableRow
-                    android:layout_width="match_parent"
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#f2f2f2"
+                    android:elevation="13dp"
+                    app:cardCornerRadius="5dp"
+                    android:layout_marginRight="5dp"
+                    android:padding="10dp"
+
                     >
-
-                    <TextView
-                        android:layout_width="100dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="Charges"
-                        android:padding="10dp"
-                        android:fontFamily="@font/amiko_semibold"
-                        />
+                        android:orientation="vertical"
 
-                    <TextView
-                        android:id="@+id/history_total_cost"
-                        android:layout_width="260dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#000"
-                        android:text="GHS 15.89"
-                        android:padding="10dp"
-                        android:fontFamily="sans-serif-light"
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="4.34"
+                            android:textColor="#000"
+                            android:textSize="23dp"
+                            android:gravity="center"
+                            android:padding="10dp"
 
-                        />
-                </TableRow>
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Rating"
+                            android:textColor="#a6a6a6"
+                            android:gravity="center"
+                            android:textSize="15dp"
+                            android:padding="5dp"
+
+                            />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
 
 
-            </TableLayout>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#f2f2f2"
+                    android:elevation="13dp"
+                    app:cardCornerRadius="5dp"
+                    android:padding="10dp"
+
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="8"
+                            android:textColor="#000"
+                            android:textSize="23dp"
+                            android:gravity="center"
+                            android:padding="10dp"
+
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Months"
+                            android:textColor="#a6a6a6"
+                            android:gravity="center"
+                            android:textSize="15dp"
+                            android:padding="5dp"
+
+                            />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+
+
+            </LinearLayout>
+
+
+
         </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:background="#FFF"
-        android:layout_gravity="center"
-        android:gravity="center"
-        >
-        <android.support.v7.widget.CardView
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="#f2f2f2"
-            android:elevation="13dp"
-            app:cardCornerRadius="5dp"
-            android:layout_marginRight="10dp"
-            android:padding="20dp"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="1,900"
-                    android:textColor="#000"
-                    android:textSize="23dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Deliveries"
-                    android:textColor="#a6a6a6"
-                    android:gravity="center"
-                    android:textSize="15dp"
-                    android:padding="5dp"
-                    />
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
 
 
-
-        <android.support.v7.widget.CardView
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="#f2f2f2"
-            android:elevation="13dp"
-            app:cardCornerRadius="5dp"
-            android:layout_marginRight="10dp"
-            android:padding="10dp"
-
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="4.34"
-                    android:textColor="#000"
-                    android:textSize="23dp"
-                    android:gravity="center"
-                    android:padding="10dp"
-
-                    />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Rating"
-                    android:textColor="#a6a6a6"
-                    android:gravity="center"
-                    android:textSize="15dp"
-                    android:padding="5dp"
-
-                    />
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-
-
-
-        <android.support.v7.widget.CardView
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="#f2f2f2"
-            android:elevation="13dp"
-            app:cardCornerRadius="5dp"
-            android:padding="10dp"
-
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="8"
-                    android:textColor="#000"
-                    android:textSize="23dp"
-                    android:gravity="center"
-                    android:padding="10dp"
-
-                    />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Months"
-                    android:textColor="#a6a6a6"
-                    android:gravity="center"
-                    android:textSize="15dp"
-                    android:padding="5dp"
-
-                    />
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-
-
-    </LinearLayout>
-
-
+    </ScrollView>
 
 </LinearLayout>

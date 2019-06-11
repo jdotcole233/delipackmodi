@@ -43,18 +43,14 @@ public class TripCompletedRatingMessage extends AppCompatActivity {
                 welcomecardview.setVisibility(View.VISIBLE);
                 cardView.setVisibility(View.VISIBLE);
 
-
                 for (Cookie cookie : contract.getPersistentCookieStore().getCookies()){
                        if (cookie.getName().equals("searchdata")){
                            contract.getPersistentCookieStore().getCookies().remove(cookie);
                            contract.deleteCookie(cookie);
-
-                           System.out.println(contract.getPersistentCookieStore().getCookies());
-                           System.out.println(cookie);
-//                           contract.getPersistentCookieStore().deleteCookie(cookie);
+                       } else if (cookie.getName().equals("company_details")){
+                           contract.deleteCookie(cookie);
                        }
                 }
-                System.out.println(contract.getPersistentCookieStore().getCookies());
                 finish();
             }
         });

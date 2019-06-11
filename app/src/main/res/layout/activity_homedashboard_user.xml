@@ -42,7 +42,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:itemTextColor="#000"
+        app:itemTextColor="#FFF"
+        app:itemIconTint="#FFF"
         android:background="@drawable/bottom_navigation_background"
         app:menu="@menu/navigation" />
 
