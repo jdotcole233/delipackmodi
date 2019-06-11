@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/popup_messages_background"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/history_header_background"
+
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/activity_vertical_margin"
+                android:fontFamily="@font/amiko_semibold"
+                android:gravity="center"
+                android:text="Network connection"
+                android:textColor="#FFF"
+                android:textSize="15sp"
+                />
+
+        </LinearLayout>
+
+    </FrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFF"
+        >
+        <ImageView
+            android:id="@+id/disconnectionicon"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@drawable/icons_disconnected_w"
+            android:layout_centerInParent="true"
+            />
+        <TextView
+            android:id="@+id/disconnectionheader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:textAlignment="center"
+            android:textSize="17sp"
+            android:text="No Content Available Offline"
+            android:layout_below="@+id/disconnectionicon"
+            android:padding="10dp"
+            />
+        <TextView
+            android:id="@+id/disconnectionsubhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="#999999"
+            android:textAlignment="center"
+            android:textSize="17sp"
+            android:text="Can't find internet connection"
+            android:layout_below="@+id/disconnectionheader"
+            />
+        <TextView
+            android:id="@+id/disconnectionsubhead1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="#999999"
+            android:textAlignment="center"
+            android:textSize="17sp"
+            android:text="Please check your network settings"
+            android:layout_below="@+id/disconnectionsubhead"
+            />
+        <TextView
+            android:id="@+id/disconnectionsubhead2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="#999999"
+            android:textAlignment="center"
+            android:textSize="17sp"
+            android:text="Thank you!"
+            android:layout_below="@+id/disconnectionsubhead1"
+            />
+
+            <Button
+                android:id="@+id/checkconnectionbutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Try again"
+                android:background="@drawable/history_header_background"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/disconnectionsubhead2"
+                android:elevation="13dp"
+                />
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

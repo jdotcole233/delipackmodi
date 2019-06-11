@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import com.example.delipackmobi.CustomerContract.CustomerContract;
 import com.example.delipackmobi.CustomerContract.HistoryServiceClass;
+import com.example.delipackmobi.CustomerContract.ManageNetworkConnectionClass;
 import com.example.delipackmobi.CustomerContract.UpdateHistory;
 import com.example.delipackmobi.Model.CustomerHistoryAdapter;
 import com.example.delipackmobi.Model.CustomerHistoryModel;
@@ -54,6 +56,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.cookie.Cookie;
 
+
 public class Homedashboard_user extends AppCompatActivity {
 
 
@@ -64,11 +67,12 @@ public class Homedashboard_user extends AppCompatActivity {
     private BottomNavigationView  navigation;
     Fragment mContent;
     public static Activity homeactivity;
-    private Intent historyIntent;
+    private Intent historyIntent, networkIntentService;
     private CustomerContract customerContract;
     private String customerID;
     private List<CustomerHistoryModel> customerHistoryModel;
     UpdateHistory updateHistory, profileCount;
+    ManageNetworkConnectionClass manageNetworkConnectionClass;
 
 
 
@@ -77,10 +81,12 @@ public class Homedashboard_user extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homedashboard_user);
 
-
+        manageNetworkConnectionClass = new ManageNetworkConnectionClass(this);
         if(!Places.isInitialized()){
             Places.initialize(this, "AIzaSyDKBYaQubmWi0ockGK4hmMAPG_RcKcZ7mk");
         }
+
+
 
         PackageInProgress.Homedardboardactivity = this;
 
@@ -103,6 +109,21 @@ public class Homedashboard_user extends AppCompatActivity {
             }
         }
 
+
+        if (manageNetworkConnectionClass.checkConnectivity()){
+           aaa();
+//        getSupportFragmentManager().beginTransaction().replace()
+        } else {
+            Intent nointernet = new Intent(this, NetworkConnectionView.class);
+            startActivity(nointernet);
+        }
+
+    }
+
+
+    public void aaa(){
+
+
         updateHistory = (UpdateHistory) historyFragment;
         profileCount = profileFragment;
 
@@ -110,7 +131,11 @@ public class Homedashboard_user extends AppCompatActivity {
         historyIntent.putExtra("customerID", customerID);
         startService(historyIntent);
 
+
+
         LocalBroadcastManager.getInstance(this).registerReceiver(historyBroadCast, new IntentFilter("historyDataIntent"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(networkBroadCast, new IntentFilter("networkConnectionCheck"));
+
 
 
         showmorebtn.setOnClickListener(new View.OnClickListener() {
@@ -128,10 +153,7 @@ public class Homedashboard_user extends AppCompatActivity {
         navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         switchFragments(searchRiderFragment);
-//        getSupportFragmentManager().beginTransaction().replace()
-
     }
-
 
 
 
@@ -193,6 +215,9 @@ public class Homedashboard_user extends AppCompatActivity {
         System.out.println("In fragement " + fragment);
     }
 
+
+
+
     private BroadcastReceiver historyBroadCast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -201,6 +226,21 @@ public class Homedashboard_user extends AppCompatActivity {
             System.out.println("Broadcast history " + customerHistoryModel.size());
             updateHistory.updateHistoryUI(customerHistoryModel);
             profileCount.updateHistoryUI(customerHistoryModel);
+        }
+    };
+
+
+    private  BroadcastReceiver networkBroadCast = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("Network broadcast received");
+            String networkstatus = intent.getStringExtra("connectionstatus");
+
+            if (networkstatus.equals("connected")){
+                Toast.makeText(Homedashboard_user.this, "Internet connection available", Toast.LENGTH_LONG).show();
+            } else if (networkstatus.equals("not connected")) {
+                Toast.makeText(Homedashboard_user.this, "Internet connection not available", Toast.LENGTH_LONG).show();
+            }
         }
     };
 
@@ -214,9 +254,37 @@ public class Homedashboard_user extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (manageNetworkConnectionClass.checkConnectivity()){
+//            switchFragments(searchRiderFragment);
+            aaa();
+        }else {
+            Intent nointernet = new Intent(this, NetworkConnectionView.class);
+            startActivity(nointernet);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        System.out.println("on pause called in main");
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopService(historyIntent);
+        if (manageNetworkConnectionClass.checkConnectivity()){
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(historyBroadCast);
+            stopService(historyIntent);
+        }
+
         System.out.println("Main on destroy");
     }
 }

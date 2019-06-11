@@ -15,41 +15,39 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:replace="android:theme">
+        <activity android:name=".NetworkConnectionView"
+            android:launchMode="singleTask"
+            ></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".ReportProblemView"></activity>
+        <activity android:name=".ReportProblemView" />
         <activity android:name=".CustomerSupportView" />
         <activity
             android:name=".PromotionsView"
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".TripCompletedRatingMessage"
-            android:theme="@style/AppTheme.TransparentTheme"
             android:launchMode="singleTask"
-            />
+            android:theme="@style/AppTheme.TransparentTheme" />
         <activity
             android:name=".RateCompanyRider"
-            android:theme="@style/AppTheme.TransparentTheme"
             android:launchMode="singleTask"
-            />
+            android:theme="@style/AppTheme.TransparentTheme" />
         <activity
             android:name=".PackageCancel"
-            android:theme="@style/AppTheme.TransparentTheme"
             android:launchMode="singleTask"
-            />
+            android:theme="@style/AppTheme.TransparentTheme" />
         <activity
             android:name=".PackageInProgress"
-            android:theme="@style/AppTheme.TransparentTheme"
             android:launchMode="singleTask"
-            />
-
+            android:theme="@style/AppTheme.TransparentTheme" />
         <activity android:name=".RiderPickedUpInformation" />
-        <activity android:name=".CashOptionSelected"
-            android:launchMode="singleTask"
-            />
+        <activity
+            android:name=".CashOptionSelected"
+            android:launchMode="singleTask" />
         <activity android:name=".EditCustomerProfile" />
         <activity
             android:name=".Homedashboard_user"
@@ -72,9 +70,8 @@
             android:theme="@style/AppTheme.HistoryCustomTheme" />
         <activity
             android:name=".SearchResult"
-            android:theme="@style/AppTheme.HistoryCustomTheme"
             android:launchMode="singleTask"
-            />
+            android:theme="@style/AppTheme.HistoryCustomTheme" />
         <activity
             android:name=".DeliPackEventLoader"
             android:theme="@style/AppTheme.TransparentTheme" />
@@ -89,7 +86,12 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <service android:name=".CustomerContract.HistoryServiceClass" ></service>
+        <service android:name=".CustomerContract.HistoryServiceClass">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
