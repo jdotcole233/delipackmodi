@@ -1,7 +1,10 @@
 package com.example.delipackmobi;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -23,6 +27,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.delipackmobi.CustomerContract.CustomerContract;
+import com.example.delipackmobi.CustomerContract.HistoryServiceClass;
+import com.example.delipackmobi.CustomerContract.UpdateHistory;
+import com.example.delipackmobi.Model.CustomerHistoryAdapter;
+import com.example.delipackmobi.Model.CustomerHistoryModel;
 import com.example.delipackmobi.Model.PickUpDeliveryModel;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -34,10 +43,16 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import cz.msebera.android.httpclient.cookie.Cookie;
 
 public class Homedashboard_user extends AppCompatActivity {
 
@@ -49,6 +64,11 @@ public class Homedashboard_user extends AppCompatActivity {
     private BottomNavigationView  navigation;
     Fragment mContent;
     public static Activity homeactivity;
+    private Intent historyIntent;
+    private CustomerContract customerContract;
+    private String customerID;
+    private List<CustomerHistoryModel> customerHistoryModel;
+    UpdateHistory updateHistory, profileCount;
 
 
 
@@ -70,6 +90,28 @@ public class Homedashboard_user extends AppCompatActivity {
         showmorebtn = findViewById(R.id.showmoretripinprogress);
         showmorebtn.setVisibility(View.INVISIBLE);
         homeactivity = this;
+        customerContract = new CustomerContract(this);
+
+        for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
+            if (cookie.getName().equals("customerInfomation")){
+                try {
+                    JSONObject jsonObject = new JSONObject(cookie.getValue());
+                    customerID = jsonObject.getString("customer_id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        updateHistory = (UpdateHistory) historyFragment;
+        profileCount = profileFragment;
+
+        historyIntent = new Intent(this, HistoryServiceClass.class);
+        historyIntent.putExtra("customerID", customerID);
+        startService(historyIntent);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(historyBroadCast, new IntentFilter("historyDataIntent"));
+
 
         showmorebtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +193,18 @@ public class Homedashboard_user extends AppCompatActivity {
         System.out.println("In fragement " + fragment);
     }
 
+    private BroadcastReceiver historyBroadCast = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("Broadcast recieved in HomedashBoard");
+            customerHistoryModel = (List<CustomerHistoryModel>) intent.getSerializableExtra("historydata");
+            System.out.println("Broadcast history " + customerHistoryModel.size());
+            updateHistory.updateHistoryUI(customerHistoryModel);
+            profileCount.updateHistoryUI(customerHistoryModel);
+        }
+    };
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -162,6 +216,7 @@ public class Homedashboard_user extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopService(historyIntent);
         System.out.println("Main on destroy");
     }
 }

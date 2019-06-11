@@ -1,6 +1,8 @@
 package com.example.delipackmobi.Model;
 
-public class CustomerHistoryModel {
+import java.io.Serializable;
+
+public class CustomerHistoryModel implements Serializable {
     private String company_name;
     private String pickup_location;
     private String delivery_location, transaction_status, payment_type;

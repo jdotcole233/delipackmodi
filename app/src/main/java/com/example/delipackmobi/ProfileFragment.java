@@ -14,20 +14,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.delipackmobi.CustomerContract.CustomerContract;
+import com.example.delipackmobi.CustomerContract.UpdateHistory;
+import com.example.delipackmobi.Model.CustomerHistoryAdapter;
+import com.example.delipackmobi.Model.CustomerHistoryModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.msebera.android.httpclient.cookie.Cookie;
 
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements UpdateHistory {
 
     private ImageView editButton;
     private Button tellfriendbtn, promotionsbtn, supportbtn,reportproblem_btn;
-    private TextView customerBigName, customerBigEmail, customerSmallNumber, customerSmallEmail;
+    private TextView customerBigName, customerBigEmail, customerSmallNumber, customerSmallEmail, customerOrderCount;
     private CustomerContract customerContract;
     private String customerfirstname, customerlastname, customeremail, customerphonenumber = "";
+    private List<CustomerHistoryModel> customerHistoryModel;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -60,6 +67,11 @@ public class ProfileFragment extends Fragment {
         customerBigEmail = getActivity().findViewById(R.id.customerbigemail);
         customerSmallNumber = getActivity().findViewById(R.id.customersmallnumber);
         customerSmallEmail = getActivity().findViewById(R.id.customersmallemail);
+        customerOrderCount = getActivity().findViewById(R.id.customerOrderTotal);
+
+        if (customerHistoryModel.size() != 0){
+            customerOrderCount.setText(customerHistoryModel.size() + " ");
+        }
 
         customerContract = new CustomerContract(getActivity());
 
@@ -145,5 +157,13 @@ public class ProfileFragment extends Fragment {
                 startActivity(reportIntent);
             }
         });
+    }
+
+    @Override
+    public void updateHistoryUI(List<CustomerHistoryModel> customerHistoryModels) {
+        if (customerHistoryModels.size() != 0){
+            customerHistoryModel = new ArrayList<>();
+            customerHistoryModel.addAll(customerHistoryModels);
+        }
     }
 }
