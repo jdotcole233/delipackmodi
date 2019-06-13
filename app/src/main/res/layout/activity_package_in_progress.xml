@@ -16,10 +16,10 @@
         >
         <ImageView
             android:id="@+id/minimizeprogress"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_expand_more_black_24dp"
-            android:background="@drawable/register_btn_background"
+            android:background="@drawable/history_header_background"
             />
         <ImageView
             android:layout_width="match_parent"

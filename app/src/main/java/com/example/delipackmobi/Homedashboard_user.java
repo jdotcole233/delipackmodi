@@ -113,8 +113,14 @@ public class Homedashboard_user extends AppCompatActivity {
         }
 
 
+        navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        switchFragments(searchRiderFragment);
+
+
         if (manageNetworkConnectionClass.checkConnectivity()){
            aaa();
+
 //        getSupportFragmentManager().beginTransaction().replace()
         } else {
             Intent nointernet = new Intent(this, NetworkConnectionView.class);
@@ -153,9 +159,6 @@ public class Homedashboard_user extends AppCompatActivity {
 
         Log.i("DelicPackMessage", "Parent create called");
 
-        navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        switchFragments(searchRiderFragment);
     }
 
 
@@ -176,7 +179,11 @@ public class Homedashboard_user extends AppCompatActivity {
                     switchFragments(profileFragment);
                     return true;
                 case R.id.logout_user:
-                    Toast.makeText(Homedashboard_user.this, "You logged out", Toast.LENGTH_SHORT).show();
+                    customerContract.signoutcookies();
+                    System.out.println("Sign out cookies " + customerContract.getPersistentCookieStore().getCookies().toString());
+                    Intent signout = new Intent(Homedashboard_user.this, MainActivity.class);
+                    startActivity(signout);
+                    finish();
                     return true;
             }
             return true;

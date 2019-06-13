@@ -15,7 +15,9 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:background="@drawable/history_header_background"
+
             >
+
         </LinearLayout>
 
     </FrameLayout>
@@ -26,11 +28,62 @@
         >
         <ImageView
             android:id="@+id/disconnectionicon"
-            android:layout_width="wrap_content"
-            android:layout_height="150dp"
-            android:src="@drawable/deli_s"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:src="@drawable/icons_payment_history"
             android:layout_centerInParent="true"
             />
+
+        <LinearLayout
+            android:id="@+id/tracklines"
+            android:layout_below="@+id/disconnectionicon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/top_line"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/second_line"
+                    android:layout_marginRight="21dp"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/second_middle"
+                    android:layout_marginRight="10dp"
+
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/second_final"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <TextView
             android:id="@+id/disconnectionheader"
             android:layout_width="match_parent"
@@ -40,8 +93,8 @@
             android:textColor="#000"
             android:textAlignment="center"
             android:textSize="17sp"
-            android:text="WELCOME"
-            android:layout_below="@+id/disconnectionicon"
+            android:text="MAKE PAYMENT"
+            android:layout_below="@+id/tracklines"
             android:padding="10dp"
             />
         <TextView
@@ -52,7 +105,7 @@
             android:textColor="#999999"
             android:textAlignment="center"
             android:textSize="17sp"
-            android:text="Search for a rider by choosing "
+            android:text="Pay for your delivery by"
             android:layout_below="@+id/disconnectionheader"
             />
         <TextView
@@ -63,7 +116,7 @@
             android:textColor="#999999"
             android:textAlignment="center"
             android:textSize="17sp"
-            android:text="your pick up location and delivery"
+            android:text="choosing either mobile money or"
             android:layout_below="@+id/disconnectionsubhead"
             />
         <TextView
@@ -74,62 +127,48 @@
             android:textColor="#999999"
             android:textAlignment="center"
             android:textSize="17sp"
-            android:text="location. Then allow us to find the"
+            android:text="cash. You never have to stress"
             android:layout_below="@+id/disconnectionsubhead1"
             />
-        <TextView
-            android:id="@+id/disconnectionsubhead3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:textColor="#999999"
-            android:textAlignment="center"
-            android:textSize="17sp"
-            android:text="closest rider to serve you"
-            android:layout_below="@+id/disconnectionsubhead2"
-            />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_below="@+id/disconnectionsubhead3"
+            android:layout_below="@+id/disconnectionsubhead2"
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_marginTop="10dp"
             >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/dot_two"
+                android:layout_margin="10dp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/dot_two"
+                android:layout_margin="10dp"
+
+                />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/dot_one"
                 android:layout_margin="10dp"
-
                 />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/dot_two"
-                android:layout_margin="10dp"
-                />
-
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/dot_two"
-                android:layout_margin="10dp"
-                />
-
-
 
         </LinearLayout>
 
+
+
         <Button
-            android:id="@+id/welcomebtn"
+            android:id="@+id/welcomestartedbtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Next"
+            android:text="Get Started"
             android:background="@drawable/history_header_background"
             android:layout_alignParentBottom="true"
             android:elevation="13dp"

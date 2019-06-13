@@ -69,9 +69,12 @@ public class ProfileFragment extends Fragment implements UpdateHistory {
         customerSmallEmail = getActivity().findViewById(R.id.customersmallemail);
         customerOrderCount = getActivity().findViewById(R.id.customerOrderTotal);
 
-        if (customerHistoryModel.size() != 0){
-            customerOrderCount.setText(customerHistoryModel.size() + " ");
+        if (customerHistoryModel != null){
+            if (customerHistoryModel.size() != 0){
+                customerOrderCount.setText(customerHistoryModel.size() + " ");
+            }
         }
+
 
         customerContract = new CustomerContract(getActivity());
 

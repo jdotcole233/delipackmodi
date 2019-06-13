@@ -74,12 +74,19 @@ public class HistoryFragment extends Fragment implements UpdateHistory {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         customerHistoryContract = new CustomerContract(getActivity());
 
-        if (customerHistoryModel.size() != 0){
-            customerHistoryAdapter = new CustomerHistoryAdapter(customerHistoryModel, getContext());
-            recyclerView.setAdapter(customerHistoryAdapter);
+        if (customerHistoryModel != null){
+            if (customerHistoryModel.size() != 0){
+                customerHistoryAdapter = new CustomerHistoryAdapter(customerHistoryModel, getContext());
+                recyclerView.setAdapter(customerHistoryAdapter);
+            } else {
+                new DeliPackAlert(getActivity(), "Empty History", "No history recorded at this moment").showDeliPackAlert();
+                System.out.println("Nothing showing in history");
+            }
         } else {
+            new DeliPackAlert(getActivity(), "Empty History", "No history recorded at this moment").showDeliPackAlert();
             System.out.println("Nothing showing in history");
         }
+
 
 
 //        Intent hist = getActivity().getIntent();

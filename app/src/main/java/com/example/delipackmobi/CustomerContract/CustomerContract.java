@@ -42,6 +42,10 @@ public class CustomerContract {
         persistentCookieStore.deleteCookie(cookie);
     }
 
+    public void signoutcookies(){
+        persistentCookieStore.clear();
+    }
+
     public PersistentCookieStore getPersistentCookieStore() {
         return persistentCookieStore;
     }

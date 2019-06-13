@@ -34,6 +34,7 @@ public class SigninActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private RelativeLayout relativeLayout;
     private CustomerContract savedContract;
+    private String customerphone, customerpassword;
 
 
 
@@ -51,6 +52,8 @@ public class SigninActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.loginloader);
         progressBar.setVisibility(View.INVISIBLE);
         savedContract = new CustomerContract(this);
+        customerphone = "";
+        customerpassword = "";
 
 
 
@@ -60,8 +63,8 @@ public class SigninActivity extends AppCompatActivity {
         customerSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String customerphone = customerPhoneNumber.getText().toString();
-                String customerpassword = customerPassword.getText().toString();
+                customerphone = customerPhoneNumber.getText().toString();
+                customerpassword = customerPassword.getText().toString();
 
                 if (customerphone.isEmpty() || customerpassword.isEmpty()){
                     String message = "Ensure all fields are field before clicking the sign in button";

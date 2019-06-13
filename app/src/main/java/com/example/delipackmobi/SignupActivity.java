@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.delipackmobi.CustomerContract.CustomerContract;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -34,8 +35,9 @@ public class SignupActivity extends AppCompatActivity {
     private EditText password;
     private EditText confirmPassword;
     private  Button registerButton;
-    private final static String POSTURL = "http://192.168.100.9:8000/registercutomer";
+    private final static String POSTURL = "http://192.168.100.4:8000/registercutomer";
     private DeliPackAlert deliPackAlert;
+    private CustomerContract customerContract;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class SignupActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         confirmPassword = findViewById(R.id.confirm_password);
         registerButton = findViewById(R.id.registerationbutton);
+        customerContract = new CustomerContract(this);
 
 
 
@@ -108,9 +111,10 @@ public class SignupActivity extends AppCompatActivity {
                                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                             // If the response is JSONObject instead of expected JSONArray
                                             Log.i("delipack", response.toString());
-                                            Intent registerconfirmed = new Intent(SignupActivity.this, Homedashboard_user.class);
-                                            startActivity(registerconfirmed);
+                                            customerContract.setBasicCookies("customerInfomation", response.toString(),1,"/");
                                             finish();
+                                            Intent registerconfirmed = new Intent(SignupActivity.this, RegisteredWelcomeWalkThrough.class);
+                                            startActivity(registerconfirmed);
                                         }
 
                                         @Override
@@ -129,7 +133,7 @@ public class SignupActivity extends AppCompatActivity {
                                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
 //                                            super.onFailure(statusCode, headers, throwable, errorResponse);
                                             new DeliPackAlert(SignupActivity.this, "Network failure", "Something went wrong with the internet, please try again").showDeliPackAlert();
-//                                            Log.i("delipack", errorResponse + "status code in object response");
+                                            Log.i("delipack", errorResponse + "status code in object response");
 
                                         }
 
@@ -137,12 +141,14 @@ public class SignupActivity extends AppCompatActivity {
                                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 //                                            super.onFailure(statusCode, headers, responseString, throwable);
                                             new DeliPackAlert(SignupActivity.this, "Network failure", "Something went wrong with the internet, please try again").showDeliPackAlert();
-//                                            Log.i("delipack", statusCode + "status in throwable");
+                                            Log.i("delipack", statusCode + " status in throwable" + responseString);
 
                                         }
 
                                     });
                                 }
+
+
 
                                 @Override
                                 public void onCancel() {

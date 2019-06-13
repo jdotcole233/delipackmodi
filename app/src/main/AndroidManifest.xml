@@ -15,7 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:replace="android:theme">
-        <activity android:name=".RegisteredWelcomeWalkThrough"></activity>
+        <activity android:name=".RegisterWelcomeFinalWalkthrough"
+            android:launchMode="singleTask"
+            ></activity>
+        <activity android:name=".RegisterWelcomeSecondWalkThrough"
+            android:launchMode="singleTask"
+            />
+        <activity android:name=".RegisteredWelcomeWalkThrough"
+            android:launchMode="singleTask"
+            />
         <activity
             android:name=".NetworkConnectionView"
             android:launchMode="singleTask" />
