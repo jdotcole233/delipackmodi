@@ -241,6 +241,7 @@ public class SearchResult extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        paymentCountDown.cancel();
         System.out.println("On destroy in search result called");
     }
 }

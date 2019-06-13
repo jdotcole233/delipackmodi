@@ -1,19 +1,13 @@
 package com.example.delipackmobi;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -22,44 +16,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.delipackmobi.CustomerContract.CustomerContract;
+import com.example.delipackmobi.CustomerContract.ManageNetworkConnectionClass;
+import com.example.delipackmobi.CustomerContract.NetworkAllowanceCheck;
 import com.example.delipackmobi.Model.PickUpDeliveryModel;
+import com.example.delipackmobi.Model.ReadRiderInformationBackAsynTask;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -68,8 +51,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -81,152 +65,62 @@ import java.util.Map;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.cookie.Cookie;
 
-import static android.app.Activity.RESULT_OK;
-import static android.content.Context.FINGERPRINT_SERVICE;
-import static com.example.delipackmobi.CustomerContract.CustomerContract.GETCOMPANYDATA_URL;
-
 
 public class SearchRiderFragment extends Fragment {
 
     private final String LOG_MSG = "DeliPackMessage";
-    AutocompleteSupportFragment autocompleteFragment;
-    AutocompleteSupportFragment autocompleteFragment1;
+    private  AutocompleteSupportFragment autocompleteFragment, autocompleteFragment1;
     private Button rider_search_btn, confirm_button, confirm_payment, make_payment;
     private PickUpDeliveryModel pickUpDeliveryModel;
-    private CardView resultcard, confirmcardview;
-    private Animation animation, animationout, animationmove;
-    private TextView confirm_textview;
+    private CardView resultcard, confirmcardview, searchRiderCardView, searchriderwelcomecard;
+    private TextView confirm_textview, loadertext, welcomeText;
     private Spinner paymentSpinner;
-    private String payment_selection;
     private MapView mapView;
     private GoogleMap map;
-    private LatLng pickUpFromLatLng;
-    private LatLng deliverToLatLng;
+    private LatLng pickUpFromLatLng, deliverToLatLng;
     private ProgressBar progressBar;
-    private TextView loadertext;
-    private CardView searchRiderCardView, searchriderwelcomecard;
-    private TextView welcomeText;
     private CustomerContract customerContract;
-    private String customer_first_name, customer_last_name, customer_phone_number, customer_id;
-    public static String  picklat, picklong;
+    private String customer_first_name, customer_last_name, customer_phone_number, customer_id, payment_selection;
+    public  static String picklat, picklong, riderID;
     public static  Double proximity;
-    Boolean riderFound;
-    String riderID;
+    private String rider_id_found, deliveryLocatioName, pickupLocationName;
     public static Activity delipackEventloader;
     private AsyncHttpClient getCompanyInformation;
     private float [] distdiff;
-    private String deliveryLocatioName, pickupLocationName;
-    private Boolean isDismissed;
+    private Boolean isDismissed, riderFound;
     private List<String> searchingString;
     public static GeoQuery geoQuery;
     Intent sendRiderID;
+    private NetworkAllowanceCheck networkAllowanceCheck;
+    private ManageNetworkConnectionClass manageNetworkConnectionClass;
+    PolylineOptions polylineOptions;
 
 
 
-    public void readCompanyInformation(String riderID){
-        AsyncHttpClient getCompanyInformation = new AsyncHttpClient();
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("rider_id", riderID);
 
-        System.out.println("read company information entered");
 
-        getCompanyInformation.post(GETCOMPANYDATA_URL, requestParams, new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                String responsefromserver = response.toString();
-
-                Log.i("DeliPackMessage", "Before if statement" + response.toString());
-                if(response.length() != 0){
-                    Log.i("DeliPackMessage", "In if statement ");
-                    new CustomerContract(getActivity())
-                            .setBasicCookies("company_details", response.toString(),2, "/");
-                    return;
-                } else {
-                    Log.i("DeliPackMessage", response.toString());
-                    return;
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                System.out.println(errorResponse);
-                return;
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                System.out.println(throwable.getMessage());
-                return;
-            }
-        });
-
-    }
-
-    public Double[] getPriceAndCommission(Double distance,Double baseprice, Double basedistance){
-         Double [] pricelist = new Double[2];
-        Double distancediff = 0.0;
-        Double initialprice = 0.0;
-        Double commissionprice = 0.0;
-
-//         if(!distance){
-             if (distance >= basedistance){
-                 distancediff = distance/basedistance;
-             } else {
-                 distancediff = basedistance/distance;
-             }
-             initialprice = distancediff * baseprice;
-             commissionprice = initialprice * 0.5;
-//         }
-         pricelist[0] = initialprice;
-         pricelist[1] = commissionprice;
-
-        return pricelist;
-    }
 
 
 
     public SearchRiderFragment() {
-        // Required empty public constructor
         if(mapView != null){ mapView.onResume();}
-
     }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if(mapView != null){ mapView.onResume();}
-
-
-        if (savedInstanceState != null){
-//            pickUpFromLatLng = new LatLng(savedInstanceState.getDouble("pickuplat"), savedInstanceState.getDouble("pickuplong"));
-//            deliverToLatLng = new LatLng(savedInstanceState.getDouble("delivertolat"), savedInstanceState.getDouble("delivertolong"));
-            System.out.println("Map in Check back");
-            Log.i(LOG_MSG, "Map in check back");
-        }else {
-            Log.i(LOG_MSG, " Else part of on create called");
-//            System.out.println("Else part on on Create ");
-        }
-
-
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
-
         if(mapView != null){ mapView.onResume();}
-
         return inflater.inflate(R.layout.fragment_search_rider, container, false);
-
-
-
     }
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -234,13 +128,11 @@ public class SearchRiderFragment extends Fragment {
 
         if(mapView != null){ mapView.onResume();}
 
-
-        animation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide);
-        animationout = AnimationUtils.loadAnimation(getContext(), R.anim.slideout);
-        animationmove = AnimationUtils.loadAnimation(getContext(), R.anim.move);
         DeliPackEventLoader.searchRiderActivity = getActivity();
         TripCompletedRatingMessage.tripCompletedSearchActivity = getActivity();
         RateCompanyRider.searchriderfragment = getActivity();
+        networkAllowanceCheck = new NetworkAllowanceCheck(getActivity());
+        manageNetworkConnectionClass = new ManageNetworkConnectionClass(getActivity());
 
         riderFound = false;
         proximity = 0.1;
@@ -258,65 +150,19 @@ public class SearchRiderFragment extends Fragment {
         distdiff = new float[1];
         isDismissed = false;
 
-        if (savedInstanceState != null){
-            Log.i(LOG_MSG, "Map in Check on activity created " + savedInstanceState);
-            System.out.println("Map in Check back on activity created" + savedInstanceState);
-        }else {
-            Log.i(LOG_MSG, "Else part of on Activity create "+ savedInstanceState);
-            System.out.println("Else part on on Activity Create " + savedInstanceState);
+
+        if (pickUpDeliveryModel.getFromInformation().size() == 0 && pickUpDeliveryModel.getDeliveryInformation().size() == 0){
+            rider_search_btn.setEnabled(false);
         }
 
 
-
-        final SharedPreferences preferences = getActivity().getSharedPreferences("searchingdata", Context.MODE_PRIVATE);
-        searchingString = new ArrayList<>();
-        if(preferences.contains("pickuplat")){
-            searchingString.add(preferences.getString("pickuplat", null));
-            searchingString.add(preferences.getString("pickuplong", null));
-            searchingString.add(preferences.getString("delivertolat", null));
-            searchingString.add(preferences.getString("delivertolong", null));
-            searchingString.add(preferences.getString("pickupname", null));
-            searchingString.add(preferences.getString("deliveryname", null));
-        }
+        retrieveSearchInformationLocally();
 
 
 
 
 
-
-
-
-
-
-//
-//        if (savedInstanceState != null){
-//            System.out.println("saved instant state not null");
-//            pickUpFromLatLng = new LatLng(savedInstanceState.getDouble("pickuplat"), savedInstanceState.getDouble("pickuplong"));
-//            deliverToLatLng = new LatLng(savedInstanceState.getDouble("delivertolat"), savedInstanceState.getDouble("delivertolong"));
-//            riderID = savedInstanceState.getString("riderID");
-//            System.out.println("In Saved state instance");
-//        } else {
-//            System.out.println("In Saved instant state out");
-//        }
-
-
-
-        System.out.println("Customer cookies " + customerContract.getPersistentCookieStore().getCookies());
-        for(Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
-              if(cookie.getName().equals("customerInfomation")){
-                  try{
-                      JSONObject customerJSON = new JSONObject(cookie.getValue());
-                      customer_first_name = customerJSON.getString("first_name");
-                      customer_last_name = customerJSON.getString("last_name");
-                      customer_phone_number = customerJSON.getString("phone_number");
-                      customer_id = customerJSON.getString("customer_id");
-                      welcomeText.setText("Nice to see you! " + customerJSON.getString("first_name"));
-
-                  }catch (Exception e){
-                      System.out.println(e.getMessage());
-                  }
-              }
-        }
+        getrideridfromlocaldeviceforplotting();
 
 
         mapView = getActivity().findViewById(R.id.customermap);
@@ -352,6 +198,11 @@ public class SearchRiderFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                if (!manageNetworkConnectionClass.checkConnectivity()){
+                    Intent networkIntent = new Intent(getActivity(), NetworkConnectionView.class);
+                    startActivity(networkIntent);
+                    return;
+                }
 
                 if (pickUpDeliveryModel != null) {
                     if (pickUpDeliveryModel.getFromInformation().size() == 0) {
@@ -368,13 +219,13 @@ public class SearchRiderFragment extends Fragment {
                             autocompleteFragment.setText(searchingString.get(4));
                             autocompleteFragment1.setText(searchingString.get(5));
                             Location.distanceBetween(Double.parseDouble(searchingString.get(0)),Double.parseDouble(searchingString.get(1)), Double.parseDouble(searchingString.get(2)),Double.parseDouble(searchingString.get(3)), distdiff);
-                            getSearchDetails(searchingString.get(4), searchingString.get(5), getPriceAndCommission((double)Math.round(distdiff[0]/1000), 0.05,4.0)[0],
-                                    getPriceAndCommission((double)Math.round(distdiff[0]/1000), 0.05, 4.0)[1]);
+                            getSearchDetails(searchingString.get(4), searchingString.get(5), getPriceAndCommission((double)Math.round(distdiff[0]/1000), 5.0,4.0)[0],
+                                    getPriceAndCommission((double)Math.round(distdiff[0]/1000), 5.0, 4.0)[1]);
 
                         } else {
                             System.out.println(pickUpDeliveryModel.getFromInformation().size());
                             Location.distanceBetween(pickUpFromLatLng.latitude,pickUpFromLatLng.longitude, deliverToLatLng.latitude,deliverToLatLng.longitude, distdiff);
-                            getSearchDetails(pickUpDeliveryModel.getFromInformation().get("pickup"), pickUpDeliveryModel.getDeliveryInformation().get("delivery"), getPriceAndCommission((double)Math.round(distdiff[0]/1000),0.05,4.0)[0], getPriceAndCommission((double)Math.round(distdiff[0]/1000),0.05,4.0)[1]);
+                            getSearchDetails(pickUpDeliveryModel.getFromInformation().get("pickup"), pickUpDeliveryModel.getDeliveryInformation().get("delivery"), getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[0], getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[1]);
                         }
 
 
@@ -473,7 +324,7 @@ public class SearchRiderFragment extends Fragment {
 
                     pickupLocationName = place.getName();
                     Log.i("g", "Place: " + place);
-                    map.addMarker(new MarkerOptions().position(pickUpFromLatLng).title("Pick up").icon(BitmapDescriptorFactory.fromResource(R.drawable.fromdot)));
+                    map.addMarker(new MarkerOptions().position(pickUpFromLatLng).title("Pick up").icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_home_address)));
 
 
                 } else {
@@ -512,17 +363,19 @@ public class SearchRiderFragment extends Fragment {
 
                     Log.i("g", "Place: " + place);
                     if (pickUpFromLatLng != null && deliverToLatLng != null){
-                        PolylineOptions polylineOptions = new PolylineOptions().add(pickUpFromLatLng)
-                                .add(deliverToLatLng).color(R.drawable.distance_color_display);
-                        map.addPolyline(polylineOptions);
-                        map.addMarker(new MarkerOptions()
-                                .position(deliverToLatLng)
-                                .title("Deliver to: " + place.getName())
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.todot))
-
-                        );
-                        map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
-                        map.animateCamera(CameraUpdateFactory.zoomTo(11));
+//                        PolylineOptions polylineOptions = new PolylineOptions().add(pickUpFromLatLng)
+//                                .add(deliverToLatLng).color(R.drawable.distance_color_display);
+//                        map.addPolyline(polylineOptions);
+//                        map.addMarker(new MarkerOptions()
+//                                .position(deliverToLatLng)
+//                                .title("Deliver to: " + place.getName())
+//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_to_map_pin))
+//
+//                        );
+                        makeDirectionRequest(pickUpFromLatLng, deliverToLatLng, R.drawable.icons_home_address, R.drawable.icons_to_map_pin);
+//                        map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
+//                        map.animateCamera(CameraUpdateFactory.zoomTo(11));
+                        rider_search_btn.setEnabled(true);
                     }
 
                 } else {
@@ -540,6 +393,7 @@ public class SearchRiderFragment extends Fragment {
 
 
         getRiderResponse();
+        getRiderCordinatesToPlot(customer_id);
 
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
@@ -565,13 +419,15 @@ public class SearchRiderFragment extends Fragment {
     }
 
 
+
+
     public void plotLocationsOnMap(LatLng pickupLocation, LatLng deliveryLocation, String pickUpLabel, String deliveryLabel){
 
         if(pickupLocation != null && deliveryLocation != null){
             map.addMarker(new MarkerOptions()
                     .position(pickupLocation)
                     .title(pickUpLabel)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.fromdot)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_to_map_pin)));
 
             PolylineOptions polylineOptions = new PolylineOptions().add(pickupLocation)
                     .add(deliveryLocation).color(R.drawable.action_item_background_selector);
@@ -579,7 +435,7 @@ public class SearchRiderFragment extends Fragment {
             map.addMarker(new MarkerOptions()
                     .position(deliveryLocation)
                     .title(deliveryLabel)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.todot)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_home_address)));
 
             map.moveCamera(CameraUpdateFactory.newLatLng(deliveryLocation));
             map.animateCamera(CameraUpdateFactory.zoomTo(11));
@@ -587,6 +443,28 @@ public class SearchRiderFragment extends Fragment {
 
     }
 
+
+    public void plotRiderCustomerLocationsOnMap(LatLng pickupLocation, LatLng deliveryLocation, String pickUpLabel, String deliveryLabel){
+
+        if(pickupLocation != null && deliveryLocation != null){
+            map.addMarker(new MarkerOptions()
+                    .position(pickupLocation)
+                    .title(pickUpLabel)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_scooter)));
+
+            PolylineOptions polylineOptions = new PolylineOptions().add(pickupLocation)
+                    .add(deliveryLocation).color(R.drawable.action_item_background_selector);
+            map.addPolyline(polylineOptions);
+            map.addMarker(new MarkerOptions()
+                    .position(deliveryLocation)
+                    .title(deliveryLabel)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_home_address)));
+
+            map.moveCamera(CameraUpdateFactory.newLatLng(deliveryLocation));
+            map.animateCamera(CameraUpdateFactory.zoomTo(11));
+        }
+
+    }
 
 
 
@@ -601,7 +479,7 @@ public class SearchRiderFragment extends Fragment {
             DatabaseReference riderresponse = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest").child(customer_id).child("rideraccepted");
             riderresponse.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
 
                         if (dataSnapshot.getValue().equals("true")){
@@ -613,10 +491,12 @@ public class SearchRiderFragment extends Fragment {
                                 SearchRiderFragment.delipackEventloader.finish();
                                 isDismissed = false;
                             }
-                            readCompanyInformation(riderID);
-                            sendRiderID = new Intent(getActivity(), SearchResult.class);
-                            sendRiderID.putExtra("riderID", riderID);
-                            startActivity(sendRiderID);
+
+
+                            new ReadRiderInformationBackAsynTask(getActivity()).execute(riderID);
+//                            readCompanyInformation(riderID);
+
+//                            sendRiderID.putExtra("riderID", riderID);
 //                        }
                         } else if (dataSnapshot.getValue().equals("paid")) {
                             searchriderwelcomecard.setVisibility(View.INVISIBLE);
@@ -712,33 +592,15 @@ public class SearchRiderFragment extends Fragment {
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference databasecustomer = database.getReference().child("CustomerRiderRequest").child(customer_id); //set first child value to customer id
                         databasecustomer.child("rideraccepted").setValue("");
+                        databasecustomer.child("riderid").setValue(key);
                         System.out.println("found rider");
 
                         DatabaseReference databaserider = database.getReference().child("RiderFoundForCustomer").child(riderID);
                         databaserider.child("customer_id").setValue(customer_id);
                         databaserider.child("assigned").setValue("true");
-                        Map<String, Object> dellocation = new HashMap<>();
 
 
-                        if (customerContract.getPersistentCookieStore().getCookies().contains("searchdata")){
-                            dellocation.put("latitude", searchingString.get(2));
-                            dellocation.put("longitude", searchingString.get(3));
-                            dellocation.put("deliverylocationname", deliveryLocatioName);
-                            dellocation.put("pickuplocationname", pickupLocationName);
-                            dellocation.put("customerPhoneNumber", customer_phone_number);
-                            dellocation.put("customerName",  customer_first_name + " " + customer_last_name);
-                            databasecustomer.child("deliverlatlong").updateChildren(dellocation);
-
-                        } else {
-                            dellocation.put("latitude", deliverToLatLng.latitude);
-                            dellocation.put("longitude", deliverToLatLng.longitude);
-                            dellocation.put("deliverylocationname", deliveryLocatioName);
-                            dellocation.put("pickuplocationname", pickupLocationName);
-                            dellocation.put("customerPhoneNumber", customer_phone_number);
-                            dellocation.put("customerName",  customer_first_name + " " + customer_last_name);
-                            databasecustomer.child("deliverlatlong").updateChildren(dellocation);
-                        }
-
+                        savedeliveryinformationafterriderisfound(databasecustomer);
 
 
 
@@ -821,14 +683,56 @@ public class SearchRiderFragment extends Fragment {
     public void onStart() {
         super.onStart();
         mapView.onResume();
-
+        retrieveSearchInformationLocally();
+        getrideridfromlocaldeviceforplotting();
+        Log.i(LOG_MSG, "On start called in search fragment " + riderID);
+        getRiderCordinatesToPlot(customer_id);
     }
 
     @Override
     public void onResume() {
-        mapView.onResume();
         super.onResume();
+        mapView.onResume();
+        retrieveSearchInformationLocally();
+        getrideridfromlocaldeviceforplotting();
+        Log.i(LOG_MSG, "On resume called in search fragment " + riderID);
+        getRiderCordinatesToPlot(customer_id);
     }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onResume();
+        Log.i(LOG_MSG, "On pause called in search fragment");
+        savedSearchInformationLocally();
+
+    }
+
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        System.out.println("On destroyed view called");
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        System.out.println("On destroyed called");
+        Log.i(LOG_MSG, "On destroyed called");
+        savedSearchInformationLocally();
+    }
+
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i(LOG_MSG, "On detached called");
+    }
+
 
 
     @Override
@@ -847,22 +751,23 @@ public class SearchRiderFragment extends Fragment {
 
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onResume();
-        Log.i(LOG_MSG, "On pause called");
 
+
+    public void retrieveSearchInformationLocally(){
+        final SharedPreferences preferences = getActivity().getSharedPreferences("searchingdata", Context.MODE_PRIVATE);
+        searchingString = new ArrayList<>();
+        if(preferences.contains("pickuplat")){
+            searchingString.add(preferences.getString("pickuplat", null));
+            searchingString.add(preferences.getString("pickuplong", null));
+            searchingString.add(preferences.getString("delivertolat", null));
+            searchingString.add(preferences.getString("delivertolong", null));
+            searchingString.add(preferences.getString("pickupname", null));
+            searchingString.add(preferences.getString("deliveryname", null));
+        }
+        Log.i("DeliPackMessage", "Retrieveing data from shared preference");
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-
-
-        System.out.println("On destroyed called");
-        Log.i(LOG_MSG, "On destroyed called");
+    public void savedSearchInformationLocally(){
         if(pickUpFromLatLng != null && deliverToLatLng != null){
             SharedPreferences.Editor saveSearchData = getActivity().getSharedPreferences("searchingdata", Context.MODE_PRIVATE).edit();
             saveSearchData.putString("pickuplat", Double.toString(pickUpFromLatLng.latitude));
@@ -872,20 +777,262 @@ public class SearchRiderFragment extends Fragment {
             saveSearchData.putString("pickupname", pickupLocationName);
             saveSearchData.putString("deliveryname", deliveryLocatioName);
             saveSearchData.apply();
+            Log.i("DeliPackMessage", "Saving data to shared preference");
+
+        }
+    }
+
+
+
+    public void savedeliveryinformationafterriderisfound(DatabaseReference databasecustomer){
+        Map<String, Object> dellocation = new HashMap<>();
+        if (customerContract.getPersistentCookieStore().getCookies().contains("searchdata")){
+            dellocation.put("latitude", searchingString.get(2));
+            dellocation.put("longitude", searchingString.get(3));
+            dellocation.put("deliverylocationname", deliveryLocatioName);
+            dellocation.put("pickuplocationname", pickupLocationName);
+            dellocation.put("customerPhoneNumber", customer_phone_number);
+            dellocation.put("customerName",  customer_first_name + " " + customer_last_name);
+            databasecustomer.child("deliverlatlong").updateChildren(dellocation);
+
+        } else {
+            dellocation.put("latitude", deliverToLatLng.latitude);
+            dellocation.put("longitude", deliverToLatLng.longitude);
+            dellocation.put("deliverylocationname", deliveryLocatioName);
+            dellocation.put("pickuplocationname", pickupLocationName);
+            dellocation.put("customerPhoneNumber", customer_phone_number);
+            dellocation.put("customerName",  customer_first_name + " " + customer_last_name);
+            databasecustomer.child("deliverlatlong").updateChildren(dellocation);
         }
 
 
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        System.out.println("On destroyed view called");
+    public Double[] getPriceAndCommission(Double distance,Double baseprice, Double basedistance){
+        Double [] pricelist = new Double[2];
+        Double distancediff = 0.0;
+        Double initialprice = 0.0;
+        Double commissionprice = 0.0;
+
+//         if(!distance){
+        if (distance >= basedistance){
+            distancediff = distance/basedistance;
+        } else {
+            distancediff = basedistance/distance;
+        }
+        initialprice = distancediff * baseprice;
+        commissionprice = initialprice * 0.05;
+//         }
+        pricelist[0] = initialprice;
+        pricelist[1] = commissionprice;
+
+        return pricelist;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.i(LOG_MSG, "On detached called");
+    public void getRiderCordinatesToPlot(String customerID){
+        System.out.println("In rider cordinates " + customerID + " " + riderID);
+        final DatabaseReference riderdatabasereference = FirebaseDatabase.getInstance().getReference().child("RiderFoundForCustomer");
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest").child(customerID);
+        databaseReference.child("PickUpBegin")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            System.out.println("In pick up Data exists");
+                            if (dataSnapshot.getValue().equals("true")){
+                                databaseReference.child("riderid").addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()){
+                                            if (dataSnapshot.getValue() != null){
+                                                riderdatabasereference.child(dataSnapshot.getValue().toString()).addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if(dataSnapshot.exists()){
+                                                            List<Object> cord =  (List<Object>) dataSnapshot.child("available").child(riderID).child("l").getValue();
+                                                            if (cord != null){
+                                                                LatLng riderPosition = new LatLng(Double.parseDouble(cord.get(0).toString()), Double.parseDouble(cord.get(1).toString()));
+                                                                LatLng customerPickupPosition = new LatLng(Double.parseDouble(searchingString.get(0)), Double.parseDouble(searchingString.get(1)));
+                                                                map.clear();
+                                                                makeDirectionRequest(riderPosition, customerPickupPosition, R.drawable.icons_scooter, R.drawable.icons_to_map_pin);
+//                                                plotRiderCustomerLocationsOnMap(riderPosition, customerPickupPosition, "", "");
+                                                                System.out.println("Rider map coordinate " + cord.toString() + " original " + dataSnapshot.child("available").child(riderID).child("l").getValue());
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                            } else if (dataSnapshot.getValue().equals("deliveryBegan")){
+                                riderdatabasereference.child(riderID).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.exists()){
+
+                                            List<Object> cord =  (List<Object>) dataSnapshot.child("available").child(riderID).child("l").getValue();
+                                            if (cord != null){
+                                                LatLng riderPosition = new LatLng(Double.parseDouble(cord.get(0).toString()), Double.parseDouble(cord.get(1).toString()));
+                                                LatLng customerDelivertoPosition = new LatLng(Double.parseDouble(searchingString.get(2)), Double.parseDouble(searchingString.get(3)));
+                                                map.clear();
+                                                makeDirectionRequest(riderPosition, customerDelivertoPosition, R.drawable.icons_scooter, R.drawable.icons_home_address);
+//                                                plotRiderCustomerLocationsOnMap(riderPosition, customerDelivertoPosition, "", "");
+                                                System.out.println("Rider map coordinate " + cord.toString() + " original " + dataSnapshot.child("available").child(riderID).child("l").getValue());
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
+
+
+    private void getrideridfromlocaldeviceforplotting() {
+
+        System.out.println("Customer cookies " + customerContract.getPersistentCookieStore().getCookies());
+        for(Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
+            if(cookie.getName().equals("customerInfomation")){
+                try{
+                    JSONObject customerJSON = new JSONObject(cookie.getValue());
+                    customer_first_name = customerJSON.getString("first_name");
+                    customer_last_name = customerJSON.getString("last_name");
+                    customer_phone_number = customerJSON.getString("phone_number");
+                    customer_id = customerJSON.getString("customer_id");
+                    welcomeText.setText("Nice to see you! " + customerJSON.getString("first_name"));
+
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
+
+    }
+
+
+
+    public String parseDirectionsURL(LatLng pickupDirection, LatLng deliverDirection){
+        String origin = "origin=" + pickupDirection.latitude + "," + pickupDirection.longitude;
+        String destination = "destination=" + deliverDirection.latitude + "," + deliverDirection.longitude;
+        String parameter = origin + "&" + destination;
+        String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameter + "&key=" + getString(R.string.google_maps_key);
+        return url;
+    }
+
+    public void makeDirectionRequest(final LatLng pickupDirection, final LatLng deliverDirection, final int pickupresID, final int deliverresID){
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        String networkURL = parseDirectionsURL(pickupDirection, deliverDirection);
+        Log.i("DeliPackMessage", networkURL);
+        asyncHttpClient.get(networkURL, new JsonHttpResponseHandler(){
+
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                if (response.length() != 0){
+                    Log.i("DeliPackMessage", response.toString());
+                    map.addMarker(new MarkerOptions().position(pickupDirection).icon(BitmapDescriptorFactory.fromResource(pickupresID)));
+                    map.addMarker(new MarkerOptions().position(deliverDirection).icon(BitmapDescriptorFactory.fromResource(deliverresID)));
+
+
+                    try {
+//                         if(response.has("overview_polyline")){
+                               JSONObject object =  new JSONObject(response.getJSONArray("routes").get(0).toString());
+//                               Log.i("DeliPack", "Decoded json object "  + object.getJSONObject("overview_polyline").getString("points"));
+
+                             String points_link = object.getJSONObject("overview_polyline").getString("points");
+                             List<LatLng> latLngs = decodePoly(points_link);
+                             Log.i("DeliPackMessage", "Decoded " + latLngs.toString());
+                             polylineOptions = new PolylineOptions().addAll(latLngs).color(Color.parseColor("#1565c0"));
+                             map.addPolyline(polylineOptions);
+
+//                         }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+//                    map.addPolyline(polylineOptions);
+                    map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
+                    map.animateCamera(CameraUpdateFactory.zoomTo(11));
+                }
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.i("DeliPackMessage", errorResponse.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                Log.i("DeliPackMessage", responseString.toString());
+
+            }
+        });
+    }
+
+    private List<LatLng> decodePoly(String encoded) {
+        List<LatLng> poly = new ArrayList<>();
+        int index = 0, len = encoded.length();
+        int lat = 0, lng = 0;
+
+        while (index < len) {
+            int b, shift = 0, result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += dlat;
+
+            shift = 0;
+            result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lng += dlng;
+
+            LatLng p = new LatLng((((double) lat / 1E5)),
+                    (((double) lng / 1E5)));
+            poly.add(p);
+        }
+
+        return poly;
+    }
+
 }

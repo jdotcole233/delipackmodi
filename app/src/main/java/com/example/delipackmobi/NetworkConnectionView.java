@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.delipackmobi.CustomerContract.NetworkAllowanceCheck;
+
 public class NetworkConnectionView extends AppCompatActivity {
 
     private Button networkConnection;
@@ -37,25 +39,4 @@ public class NetworkConnectionView extends AppCompatActivity {
     }
 
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private class NetworkAllowanceCheck extends ConnectivityManager.NetworkCallback{
-        private NetworkRequest networkRequest;
-        private Activity activity;
-        public NetworkAllowanceCheck(Activity activity){
-            this.activity = activity;
-            networkRequest = new NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR).addTransportType(NetworkCapabilities.TRANSPORT_WIFI).build();
-        }
-
-        public void enable(Context context) {
-            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            connectivityManager.registerNetworkCallback(networkRequest , this);
-        }
-
-        @Override
-        public void onAvailable(Network network) {
-            super.onAvailable(network);
-            activity.finish();
-
-        }
-    }
 }

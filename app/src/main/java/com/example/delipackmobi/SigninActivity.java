@@ -67,7 +67,7 @@ public class SigninActivity extends AppCompatActivity {
                     String message = "Ensure all fields are field before clicking the sign in button";
                     new DeliPackAlert(SigninActivity.this, "Mandatory login fields", message).showDeliPackAlert();
                     return;
-                } else if (customerphone.length() < 10){
+                } else if (customerphone.length() < 10 || customerphone.length() > 10){
                     String message = "Invalid phone number detected. Make sure your phone number is 10 digits";
                     new DeliPackAlert(SigninActivity.this, "Wrong phone number", message).showDeliPackAlert();
                     return;

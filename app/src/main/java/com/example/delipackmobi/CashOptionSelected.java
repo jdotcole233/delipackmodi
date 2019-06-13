@@ -203,9 +203,9 @@ public class CashOptionSelected extends AppCompatActivity {
                 if (response.length() != 0){
                     try {
                         if (response.getString("success").equals("Done")){
+                            finish();
                             Intent changeActivitiies = new Intent(context, switchto);
                             startActivity(changeActivitiies);
-                            finish();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

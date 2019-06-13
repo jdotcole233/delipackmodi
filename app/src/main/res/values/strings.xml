@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">delipackmobi</string>
+    <string name="app_name">DeliPack</string>
     <string name="sign_in_btn">Sign in</string>
     <string name="sign_up_btn">Register</string>
     <string name="homecompname">DeliPack</string>

@@ -8,8 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.delipackmobi.CustomerContract.CustomerContract;
+import com.example.delipackmobi.CustomerContract.UpdateDownloadText;
+import com.example.delipackmobi.CustomerContract.UpdateHistory;
+import com.example.delipackmobi.Model.CustomerHistoryModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,15 +21,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.util.List;
 
 import cz.msebera.android.httpclient.cookie.Cookie;
 
-public class DeliPackEventLoader extends AppCompatActivity {
+public class DeliPackEventLoader extends AppCompatActivity implements UpdateDownloadText {
 
     private Button endridersearch;
     private CustomerContract customerContract;
     public static Activity searchRiderActivity;
     private String customerID;
+    private TextView downloadtext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +45,7 @@ public class DeliPackEventLoader extends AppCompatActivity {
         getWindow().setLayout(displayMetrics.widthPixels,displayMetrics.heightPixels);
 
         endridersearch = findViewById(R.id.endridersearch);
+        downloadtext = findViewById(R.id.downloadtext);
         customerContract = new CustomerContract(this);
         SearchRiderFragment.delipackEventloader = this;
         for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
@@ -116,5 +125,11 @@ public class DeliPackEventLoader extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         System.out.println("On destrouyeeed called");
+    }
+
+
+    @Override
+    public void UpdateSearchText(String message) {
+        downloadtext.setText(message);
     }
 }

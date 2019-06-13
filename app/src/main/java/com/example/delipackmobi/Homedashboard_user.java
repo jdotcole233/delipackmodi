@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.example.delipackmobi.CustomerContract.CustomerContract;
 import com.example.delipackmobi.CustomerContract.HistoryServiceClass;
 import com.example.delipackmobi.CustomerContract.ManageNetworkConnectionClass;
+import com.example.delipackmobi.CustomerContract.NetworkAllowanceCheck;
 import com.example.delipackmobi.CustomerContract.UpdateHistory;
 import com.example.delipackmobi.Model.CustomerHistoryAdapter;
 import com.example.delipackmobi.Model.CustomerHistoryModel;
@@ -73,6 +74,7 @@ public class Homedashboard_user extends AppCompatActivity {
     private List<CustomerHistoryModel> customerHistoryModel;
     UpdateHistory updateHistory, profileCount;
     ManageNetworkConnectionClass manageNetworkConnectionClass;
+    NetworkAllowanceCheck networkAllowanceCheck;
 
 
 
@@ -93,6 +95,7 @@ public class Homedashboard_user extends AppCompatActivity {
         searchRiderFragment = new SearchRiderFragment();
         profileFragment = new ProfileFragment();
         historyFragment = new HistoryFragment();
+        networkAllowanceCheck = new NetworkAllowanceCheck(this);
         showmorebtn = findViewById(R.id.showmoretripinprogress);
         showmorebtn.setVisibility(View.INVISIBLE);
         homeactivity = this;
@@ -164,7 +167,6 @@ public class Homedashboard_user extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_history:
-
                     switchFragments(historyFragment);
                     return true;
                 case R.id.navigation_search:
@@ -183,33 +185,12 @@ public class Homedashboard_user extends AppCompatActivity {
 
 
     public void switchFragments(Fragment fragment){
-//        navigation.setItemTextColor(new ColorStateList(new int[] []{
-//                new int[] { android.R.attr.state_enabled}, // enabled
-//                new int[] {android.R.attr.state_enabled}, // disabled
-//                new int[] {android.R.attr.state_checked}, // unchecked
-//                new int[] { android.R.attr.state_pressed}
-//        }, new int[]{
-//                Color.parseColor("#ffad33"),
-//                Color.GREEN,
-//                Color.BLUE
-//        }));
-//
-//        navigation.setItemIconTintList(new ColorStateList(new int[] []{
-//                new int[] { android.R.attr.state_enabled}, // enabled
-//                new int[] {android.R.attr.state_enabled}, // disabled
-//                new int[] {android.R.attr.state_checked}, // unchecked
-//                new int[] { android.R.attr.state_pressed}
-//        }, new int[]{
-//                Color.parseColor("#ffad33"),
-//                Color.GREEN,
-//                Color.BLUE
-//        }));
-        navigation.setActivated(true);
-
+        if (!manageNetworkConnectionClass.checkConnectivity()){
+            Intent networkConnection = new Intent(Homedashboard_user.this, NetworkConnectionView.class);
+            startActivity(networkConnection);
+            return;
+        }
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.remove(R.id.fragmentFrame);
-//        fragmentTransaction.remove(searchRiderFragment);
-//        fragmentTransaction.detach(searchRiderFragment);
         fragmentTransaction.replace(R.id.fragmentFrame, fragment);
         fragmentTransaction.commit();
         System.out.println("In fragement " + fragment);
@@ -257,11 +238,12 @@ public class Homedashboard_user extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (manageNetworkConnectionClass.checkConnectivity()){
-//            switchFragments(searchRiderFragment);
             aaa();
         }else {
             Intent nointernet = new Intent(this, NetworkConnectionView.class);
             startActivity(nointernet);
+            networkAllowanceCheck.enable(this);
+
         }
     }
 
