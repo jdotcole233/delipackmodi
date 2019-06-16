@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 
 import com.example.delipackmobi.CustomerContract.CustomerContract;
+import com.example.delipackmobi.Model.CustomerLocalPushNotification;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
@@ -39,6 +40,7 @@ public class RateCompanyRider extends AppCompatActivity {
     private AsyncHttpClient asyncHttpClient;
     private RequestParams requestParams;
     public static Activity searchriderfragment;
+    private CustomerLocalPushNotification customerLocalPushNotification;
 
 
     @Override
@@ -53,6 +55,8 @@ public class RateCompanyRider extends AppCompatActivity {
         asyncHttpClient = new AsyncHttpClient();
         requestParams = new RequestParams();
         customerContract = new CustomerContract(this);
+        customerLocalPushNotification = new CustomerLocalPushNotification(this);
+        customerLocalPushNotification.publishNotification("Delivered", "Your errand has been completed!!!");
 
 
         rateNextButton = findViewById(R.id.ratingnextButton);

@@ -96,10 +96,14 @@ public class CashOptionSelected extends AppCompatActivity {
                 cash_btn.setText("Confirm pick up");
                 if (cashoptionselected.equals("Pay at pick up")){
                     SearchResult.sc.finish();
-                    updatePaymentValueForRider(riderIDFound, customerID,CashOptionSelected.this, PackageInProgress.class);
+                    if(riderIDFound != null){
+                        updatePaymentValueForRider(riderIDFound, customerID,CashOptionSelected.this, PackageInProgress.class);
+                    }
                 } else if (cashoptionselected.equals("Pay on delivery")){
                     SearchResult.sc.finish();
-                    updatePaymentValueForRider(riderIDFound, customerID,CashOptionSelected.this, PackageInProgress.class);
+                    if(riderIDFound != null){
+                        updatePaymentValueForRider(riderIDFound, customerID,CashOptionSelected.this, PackageInProgress.class);
+                    }
                 }else {
                     return;
                 }
@@ -147,6 +151,7 @@ public class CashOptionSelected extends AppCompatActivity {
                 .child("CustomerRiderRequest").child(customerIdent);
         updateAccepted.child("rideraccepted").setValue("paid");
         updateAccepted.child("deliverlatlong").child("paymentType").setValue(cashoptionselected);
+        updateAccepted.child("acceptbuttonvisibility").setValue("false");
 
 
         AsyncHttpClient updateTrasaction = new AsyncHttpClient();

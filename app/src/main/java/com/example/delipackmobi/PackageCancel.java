@@ -84,18 +84,21 @@ public class PackageCancel extends AppCompatActivity {
                 canceltransaction.setFocusable(false);
                 abortcancelingtransaction.setFocusable(false);
 
-                if (!customer_id.isEmpty() && !rider_id.isEmpty()){
-                    customerRequest = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest");
-                    customerRequest.child(customer_id).removeValue();
-                    riderfoundforcustomer = FirebaseDatabase.getInstance().getReference().child("RiderFoundForCustomer");
-                    riderfoundforcustomer.child(rider_id).child("assigned").setValue("not assigned");
-                    cancelprogress.setVisibility(View.INVISIBLE);
-                    canceltransaction.setFocusable(true);
-                    abortcancelingtransaction.setFocusable(true);
+                if(customer_id != null && rider_id != null){
+                    if (!customer_id.isEmpty() && !rider_id.isEmpty()){
+                        customerRequest = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest");
+                        customerRequest.child(customer_id).removeValue();
+                        riderfoundforcustomer = FirebaseDatabase.getInstance().getReference().child("RiderFoundForCustomer");
+                        riderfoundforcustomer.child(rider_id).child("assigned").setValue("not assigned");
+                        cancelprogress.setVisibility(View.INVISIBLE);
+                        canceltransaction.setFocusable(true);
+                        abortcancelingtransaction.setFocusable(true);
 
-                    finish();
+                        finish();
 
+                    }
                 }
+
 
 
             }

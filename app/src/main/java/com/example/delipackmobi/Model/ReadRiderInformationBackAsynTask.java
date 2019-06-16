@@ -34,12 +34,14 @@ public class ReadRiderInformationBackAsynTask extends AsyncTask<String, Void, Bo
     Context context;
     Boolean isRead = false;
     TextView downloaddisp;
+    CustomerContract customerContract;
 
 
     public ReadRiderInformationBackAsynTask(Context context){
         this.context = context;
         getCompanyInformation = new AsyncHttpClient();
         requestParams = new RequestParams();
+        customerContract = new CustomerContract(context);
 //        downloaddisp =  DeliPackEventLoader.searchRiderActivity.findViewById(R.id.downloadtext);
     }
 
@@ -50,6 +52,11 @@ public class ReadRiderInformationBackAsynTask extends AsyncTask<String, Void, Bo
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+
+                if (isCancelled()){
+                    return;
+                }
+
                 requestParams.add("rider_id", strings[0]);
 
                 getCompanyInformation.post(GETCOMPANYDATA_URL, requestParams, new JsonHttpResponseHandler(){
@@ -61,8 +68,7 @@ public class ReadRiderInformationBackAsynTask extends AsyncTask<String, Void, Bo
                         Log.i("DeliPackMessage", "Before if statement" + response.toString());
 //                        if(response.length() != 0){
                             Log.i("DeliPackMessage", "In if statement ");
-                            new CustomerContract(context)
-                                    .setBasicCookies("company_details", response.toString(),2, "/");
+                        customerContract.setBasicCookies("company_details", response.toString(),2, "/");
                         Intent sendRiderID = new Intent(context, SearchResult.class);
                         context.startActivity(sendRiderID);
                             isRead = true;

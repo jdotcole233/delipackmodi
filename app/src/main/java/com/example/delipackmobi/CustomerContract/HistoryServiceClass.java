@@ -17,9 +17,12 @@ public class HistoryServiceClass extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Thread historyThread = new Thread(new ManageHistoryClass(context, intent.getStringExtra("customerID")));
+        if (intent != null){
+            Thread historyThread = new Thread(new ManageHistoryClass(context, intent.getStringExtra("customerID")));
+            historyThread.start();
+
+        }
 //        Thread networkThread = new Thread(new ManageNetworkConnectionClass(context));
-        historyThread.start();
 //        networkThread.start();
         System.out.println("running");
 //        return super.onStartCommand(intent, flags, startId);

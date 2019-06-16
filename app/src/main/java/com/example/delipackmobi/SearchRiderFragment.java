@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -51,6 +52,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,6 +66,8 @@ import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.cookie.Cookie;
+
+import static com.example.delipackmobi.CustomerContract.CustomerContract.GETCOMPANYDATA_URL;
 
 
 public class SearchRiderFragment extends Fragment {
@@ -94,6 +98,12 @@ public class SearchRiderFragment extends Fragment {
     private NetworkAllowanceCheck networkAllowanceCheck;
     private ManageNetworkConnectionClass manageNetworkConnectionClass;
     PolylineOptions polylineOptions;
+    ReadRiderInformationBackAsynTask readRiderInformationBackAsynTask;
+    Intent transactInProg;
+    Boolean isComing = false;
+
+
+
 
 
 
@@ -147,8 +157,10 @@ public class SearchRiderFragment extends Fragment {
         searchriderwelcomecard = getActivity().findViewById(R.id.cardsearchwelcome);
         welcomeText = getActivity().findViewById(R.id.welcomemessage);
         customerContract = new CustomerContract(getActivity());
+        readRiderInformationBackAsynTask = new ReadRiderInformationBackAsynTask(getActivity());
         distdiff = new float[1];
         isDismissed = false;
+        getCompanyInformation = new AsyncHttpClient();
 
 
         if (pickUpDeliveryModel.getFromInformation().size() == 0 && pickUpDeliveryModel.getDeliveryInformation().size() == 0){
@@ -157,7 +169,6 @@ public class SearchRiderFragment extends Fragment {
 
 
         retrieveSearchInformationLocally();
-
 
 
 
@@ -213,7 +224,7 @@ public class SearchRiderFragment extends Fragment {
                         return;
                     } else {
 
-
+                        isComing = false;
 
                         if (customerContract.getPersistentCookieStore().getCookies().contains("searchdata")){
                             autocompleteFragment.setText(searchingString.get(4));
@@ -247,6 +258,7 @@ public class SearchRiderFragment extends Fragment {
 
                         } else if (proximity <= 10 && searchingString.size() != 0){
                             System.out.println("In if statement when size != 0 " + "searching string " + searchingString.toString());
+                            riderFound = false;
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest");
                             GeoFire geoFire = new GeoFire(databaseReference);
                             LatLng searchLatLng = new LatLng(Double.parseDouble(searchingString.get(0)), Double.parseDouble(searchingString.get(1)));
@@ -265,6 +277,7 @@ public class SearchRiderFragment extends Fragment {
                             System.out.println("Size of proximity " + proximity + " " + "Searching string " + searchingString.size());
                             return;
                         }
+                        System.out.println("In something " + isComing);
                     }
 
 
@@ -393,7 +406,12 @@ public class SearchRiderFragment extends Fragment {
 
 
         getRiderResponse();
-        getRiderCordinatesToPlot(customer_id);
+        if (riderID != null){
+            getRiderCordinatesToPlot(customer_id);
+
+        }
+//        openSearchResult();
+
 
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
@@ -405,8 +423,10 @@ public class SearchRiderFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){
                                 if (dataSnapshot.getValue().equals("true")){
-                                    Intent rateIntent = new Intent(getActivity(), RateCompanyRider.class);
-                                    startActivity(rateIntent);
+                                    if (getActivity() != null){
+                                        Intent rateIntent = new Intent(getActivity(), RateCompanyRider.class);
+                                        startActivity(rateIntent);
+                                    }
                                 }
                             }
                     }
@@ -475,7 +495,7 @@ public class SearchRiderFragment extends Fragment {
      */
 
     public void getRiderResponse(){
-        if (!customer_id.isEmpty()){
+        if (customer_id != null){
             DatabaseReference riderresponse = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest").child(customer_id).child("rideraccepted");
             riderresponse.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -492,8 +512,18 @@ public class SearchRiderFragment extends Fragment {
                                 isDismissed = false;
                             }
 
+                            try{
+                                if (readRiderInformationBackAsynTask.getStatus() != AsyncTask.Status.RUNNING){
+                                    readRiderInformationBackAsynTask.cancel(true);
+                                    readRiderInformationBackAsynTask = new ReadRiderInformationBackAsynTask(getActivity());
+                                    readRiderInformationBackAsynTask.execute(riderID);
+                                }
 
-                            new ReadRiderInformationBackAsynTask(getActivity()).execute(riderID);
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
+
+
 //                            readCompanyInformation(riderID);
 
 //                            sendRiderID.putExtra("riderID", riderID);
@@ -501,7 +531,18 @@ public class SearchRiderFragment extends Fragment {
                         } else if (dataSnapshot.getValue().equals("paid")) {
                             searchriderwelcomecard.setVisibility(View.INVISIBLE);
                             searchRiderCardView.setVisibility(View.INVISIBLE);
-                            transactionInProgress();
+                            if (getActivity() != null){
+                                try {
+
+                                    transactInProg = new Intent(getActivity(), PackageInProgress.class);
+                                    startActivity(transactInProg);
+
+                                } catch (Exception e) {
+                                    startActivity(transactInProg);
+                                    e.printStackTrace();
+                                }
+                            }
+
 
                         }
 
@@ -524,6 +565,29 @@ public class SearchRiderFragment extends Fragment {
         }
     }
 
+
+
+    public String openSearchResult(){
+        DatabaseReference riderdatabaseresponse = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest").child(customer_id).child("riderID");
+        riderdatabaseresponse.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.i("DeliPackMessage", "In rider database response");
+
+                if (dataSnapshot.exists()){
+                    rider_id_found  = dataSnapshot.getValue().toString();
+                    Log.i("DeliPackMessage", "In rider database response " + rider_id_found);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return rider_id_found;
+    }
 
 
 
@@ -577,8 +641,12 @@ public class SearchRiderFragment extends Fragment {
         }
 
         System.out.println("lat is " + picklat + " lng is " + picklong);
+        Log.i("DeliPackMessage","lat is " + picklat + " lng is " + picklong + riderFound);
+
 
         if(!picklat.isEmpty() && !picklong.isEmpty()){
+            System.out.println("lat is " + picklat + " lng is " + picklong + " In if statement");
+            Log.i("DeliPackMessage","lat is " + picklat + " lng is " + picklong + " In if statement " + riderFound );
 
             geoQuery = geoFire.queryAtLocation(new GeoLocation(Double.parseDouble(picklat), Double.parseDouble(picklong)), proximity);
             geoQuery.removeAllListeners();
@@ -608,7 +676,6 @@ public class SearchRiderFragment extends Fragment {
                         isDismissed = true;
                         System.out.println("key has entered searching for rider");
                         proximity = 0.1;
-                        return;
 
 //                        pickUpDeliveryModel.resetFromInformation();
 //                        pickUpDeliveryModel.resetsetDeliveryInformation();
@@ -624,11 +691,13 @@ public class SearchRiderFragment extends Fragment {
 
                 @Override
                 public void onKeyExited(String key) {
-                    System.out.println("On key existed while searching for rider");
+                    Log.i("DeliPackMessage","On key existed while searching for rider");
                 }
 
                 @Override
                 public void onKeyMoved(String key, GeoLocation location) {
+                    Log.i("DeliPackMessage","On key moved while searching for rider");
+
                     System.out.println("On key moved while searching for rider");
                 }
 
@@ -638,6 +707,7 @@ public class SearchRiderFragment extends Fragment {
                         proximity += 0.1;
                         System.out.println("searching " + proximity );
                         if (proximity >= 20){
+                            geoQuery.removeAllListeners();
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest").child(customer_id);
                             databaseReference.removeValue();
                             String message = "Rider not found\nYou can try again later";
@@ -686,7 +756,11 @@ public class SearchRiderFragment extends Fragment {
         retrieveSearchInformationLocally();
         getrideridfromlocaldeviceforplotting();
         Log.i(LOG_MSG, "On start called in search fragment " + riderID);
-        getRiderCordinatesToPlot(customer_id);
+        if (riderID != null){
+            getRiderCordinatesToPlot(customer_id);
+        }
+
+
     }
 
     @Override
@@ -696,7 +770,10 @@ public class SearchRiderFragment extends Fragment {
         retrieveSearchInformationLocally();
         getrideridfromlocaldeviceforplotting();
         Log.i(LOG_MSG, "On resume called in search fragment " + riderID);
-        getRiderCordinatesToPlot(customer_id);
+        if (riderID != null){
+            getRiderCordinatesToPlot(customer_id);
+        }
+
     }
 
 
@@ -706,6 +783,8 @@ public class SearchRiderFragment extends Fragment {
         mapView.onResume();
         Log.i(LOG_MSG, "On pause called in search fragment");
         savedSearchInformationLocally();
+        isComing = false;
+
 
     }
 
@@ -748,6 +827,7 @@ public class SearchRiderFragment extends Fragment {
         super.onAttach(context);
         if(mapView != null){ mapView.onResume();}
         Log.i(LOG_MSG, "On Attach Called");
+//        getRiderResponse();
 
     }
 
@@ -793,7 +873,9 @@ public class SearchRiderFragment extends Fragment {
             dellocation.put("pickuplocationname", pickupLocationName);
             dellocation.put("customerPhoneNumber", customer_phone_number);
             dellocation.put("customerName",  customer_first_name + " " + customer_last_name);
+            dellocation.put("ridercookieid", riderID);
             databasecustomer.child("deliverlatlong").updateChildren(dellocation);
+
 
         } else {
             dellocation.put("latitude", deliverToLatLng.latitude);
@@ -802,6 +884,7 @@ public class SearchRiderFragment extends Fragment {
             dellocation.put("pickuplocationname", pickupLocationName);
             dellocation.put("customerPhoneNumber", customer_phone_number);
             dellocation.put("customerName",  customer_first_name + " " + customer_last_name);
+            dellocation.put("ridercookieid", riderID);
             databasecustomer.child("deliverlatlong").updateChildren(dellocation);
         }
 
@@ -829,6 +912,7 @@ public class SearchRiderFragment extends Fragment {
         return pricelist;
     }
 
+
     public void getRiderCordinatesToPlot(String customerID){
         System.out.println("In rider cordinates " + customerID + " " + riderID);
         final DatabaseReference riderdatabasereference = FirebaseDatabase.getInstance().getReference().child("RiderFoundForCustomer");
@@ -849,15 +933,27 @@ public class SearchRiderFragment extends Fragment {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                         if(dataSnapshot.exists()){
+
+//                                                            if(riderID == null){
+//                                                               SharedPreferences sharedPreferences = getActivity().getSharedPreferences("searchdata", Context.MODE_PRIVATE);
+//                                                               riderID = sharedPreferences.getString("ridercookieid", null);
+//                                                                System.out.println("rider id is null so cookie is " + riderID);
+//                                                            }
+
                                                             List<Object> cord =  (List<Object>) dataSnapshot.child("available").child(riderID).child("l").getValue();
-                                                            if (cord != null){
-                                                                LatLng riderPosition = new LatLng(Double.parseDouble(cord.get(0).toString()), Double.parseDouble(cord.get(1).toString()));
-                                                                LatLng customerPickupPosition = new LatLng(Double.parseDouble(searchingString.get(0)), Double.parseDouble(searchingString.get(1)));
-                                                                map.clear();
-                                                                makeDirectionRequest(riderPosition, customerPickupPosition, R.drawable.icons_scooter, R.drawable.icons_to_map_pin);
-//                                                plotRiderCustomerLocationsOnMap(riderPosition, customerPickupPosition, "", "");
-                                                                System.out.println("Rider map coordinate " + cord.toString() + " original " + dataSnapshot.child("available").child(riderID).child("l").getValue());
+                                                            if (cord != null && !isComing){
+                                                                if (searchingString.get(0) != null){
+                                                                    LatLng riderPosition = new LatLng(Double.parseDouble(cord.get(0).toString()), Double.parseDouble(cord.get(1).toString()));
+                                                                    LatLng customerPickupPosition = new LatLng(Double.parseDouble(searchingString.get(0)), Double.parseDouble(searchingString.get(1)));
+                                                                    map.clear();
+                                                                    makeDirectionRequest(riderPosition, customerPickupPosition, R.drawable.icons_scooter, R.drawable.icons_to_map_pin);
+                                                                    System.out.println("Rider map coordinate " + cord.toString() + " original " + dataSnapshot.child("available").child(riderID).child("l").getValue());
+                                                                    return;
+                                                                }
+
                                                             }
+                                                            System.out.println("Rider map coordinate " + dataSnapshot.child("available").child(riderID).child("l").getValue());
+
                                                         }
                                                     }
 
@@ -876,20 +972,23 @@ public class SearchRiderFragment extends Fragment {
                                     }
                                 });
                             } else if (dataSnapshot.getValue().equals("deliveryBegan")){
+                                isComing = true;
                                 riderdatabasereference.child(riderID).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         if(dataSnapshot.exists()){
-
                                             List<Object> cord =  (List<Object>) dataSnapshot.child("available").child(riderID).child("l").getValue();
-                                            if (cord != null){
+                                            if (cord != null && isComing){
                                                 LatLng riderPosition = new LatLng(Double.parseDouble(cord.get(0).toString()), Double.parseDouble(cord.get(1).toString()));
                                                 LatLng customerDelivertoPosition = new LatLng(Double.parseDouble(searchingString.get(2)), Double.parseDouble(searchingString.get(3)));
                                                 map.clear();
                                                 makeDirectionRequest(riderPosition, customerDelivertoPosition, R.drawable.icons_scooter, R.drawable.icons_home_address);
 //                                                plotRiderCustomerLocationsOnMap(riderPosition, customerDelivertoPosition, "", "");
                                                 System.out.println("Rider map coordinate " + cord.toString() + " original " + dataSnapshot.child("available").child(riderID).child("l").getValue());
+                                                return;
                                             }
+                                            System.out.println("Rider map coordinate " + dataSnapshot.child("available").child(riderID).child("l").getValue());
+
                                         }
                                     }
 
@@ -943,63 +1042,75 @@ public class SearchRiderFragment extends Fragment {
     }
 
     public void makeDirectionRequest(final LatLng pickupDirection, final LatLng deliverDirection, final int pickupresID, final int deliverresID){
-        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-        String networkURL = parseDirectionsURL(pickupDirection, deliverDirection);
-        Log.i("DeliPackMessage", networkURL);
-        asyncHttpClient.get(networkURL, new JsonHttpResponseHandler(){
+
+        try{
+            AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+            String networkURL = "";
+            if (getActivity() != null){
+                networkURL = parseDirectionsURL(pickupDirection, deliverDirection);
+            }
+
+            Log.i("DeliPackMessage", networkURL);
+            asyncHttpClient.get(networkURL, new JsonHttpResponseHandler(){
 
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                if (response.length() != 0){
-                    Log.i("DeliPackMessage", response.toString());
-                    map.addMarker(new MarkerOptions().position(pickupDirection).icon(BitmapDescriptorFactory.fromResource(pickupresID)));
-                    map.addMarker(new MarkerOptions().position(deliverDirection).icon(BitmapDescriptorFactory.fromResource(deliverresID)));
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    super.onSuccess(statusCode, headers, response);
+                    if (response.length() != 0){
+                        Log.i("DeliPackMessage", response.toString());
+                        map.addMarker(new MarkerOptions().position(pickupDirection).icon(BitmapDescriptorFactory.fromResource(pickupresID)));
+                        map.addMarker(new MarkerOptions().position(deliverDirection).icon(BitmapDescriptorFactory.fromResource(deliverresID)));
 
 
-                    try {
+                        try {
 //                         if(response.has("overview_polyline")){
-                               JSONObject object =  new JSONObject(response.getJSONArray("routes").get(0).toString());
+                            JSONObject object =  new JSONObject(response.getJSONArray("routes").get(0).toString());
 //                               Log.i("DeliPack", "Decoded json object "  + object.getJSONObject("overview_polyline").getString("points"));
 
-                             String points_link = object.getJSONObject("overview_polyline").getString("points");
-                             List<LatLng> latLngs = decodePoly(points_link);
-                             Log.i("DeliPackMessage", "Decoded " + latLngs.toString());
-                             polylineOptions = new PolylineOptions().addAll(latLngs).color(Color.parseColor("#1565c0"));
-                             map.addPolyline(polylineOptions);
+                            String points_link = object.getJSONObject("overview_polyline").getString("points");
+                            List<LatLng> latLngs = decodePoly(points_link);
+                            Log.i("DeliPackMessage", "Decoded " + latLngs.toString());
+                            polylineOptions = new PolylineOptions().addAll(latLngs).color(Color.parseColor("#1565c0"));
+                            map.addPolyline(polylineOptions);
 
 //                         }
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
 //                    map.addPolyline(polylineOptions);
-                    map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
-                    map.animateCamera(CameraUpdateFactory.zoomTo(11));
+                        map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
+                        map.animateCamera(CameraUpdateFactory.zoomTo(11));
+                    }
                 }
-            }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    super.onSuccess(statusCode, headers, response);
 
-            }
+                }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.i("DeliPackMessage", errorResponse.toString());
-            }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    Log.i("DeliPackMessage", errorResponse + "");
+                    return;
+                }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                Log.i("DeliPackMessage", responseString.toString());
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    super.onFailure(statusCode, headers, responseString, throwable);
+                    Log.i("DeliPackMessage", responseString);
+                    return;
 
-            }
-        });
+                }
+            });
+
+        } catch (Exception e){
+            return;
+        }
     }
 
     private List<LatLng> decodePoly(String encoded) {

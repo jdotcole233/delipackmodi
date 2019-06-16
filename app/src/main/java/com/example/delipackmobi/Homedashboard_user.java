@@ -257,6 +257,14 @@ public class Homedashboard_user extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        if (manageNetworkConnectionClass.checkConnectivity()){
+            aaa();
+        }else {
+            Intent nointernet = new Intent(this, NetworkConnectionView.class);
+            startActivity(nointernet);
+            networkAllowanceCheck.enable(this);
+
+        }
     }
 
     @Override
