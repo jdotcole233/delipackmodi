@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -925,6 +926,7 @@ public class SearchRiderFragment extends Fragment {
         pricelist[0] = initialprice;
         pricelist[1] = Double.parseDouble(decimalFormat.format(commissionprice));
         System.out.println("company charges " + pricelist[0] + " delipack commission " + pricelist[1] + " actual commission " + commissionprice);
+
 
         return pricelist;
     }

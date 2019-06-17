@@ -38,13 +38,6 @@ public class CustomerContract {
         return new JSONObject(jsonstring);
     }
 
-    public void deleteCookie(Cookie cookie){
-        persistentCookieStore.deleteCookie(cookie);
-    }
-
-    public void signoutcookies(){
-        persistentCookieStore.clear();
-    }
 
     public PersistentCookieStore getPersistentCookieStore() {
         return persistentCookieStore;
