@@ -36,7 +36,8 @@ public class RateCompanyRider extends AppCompatActivity {
     private RatingBar riderRated;
     private float ratevalue;
     private CustomerContract customerContract;
-    private String customerID, companyID, companyRiderID;
+    private String customerID, companyID, companyRiderID, deliveryMessage, companyName, pickUpLocation, deliveryLocation;
+    private String [] deliveryMessages;
     private AsyncHttpClient asyncHttpClient;
     private RequestParams requestParams;
     public static Activity searchriderfragment;
@@ -56,7 +57,6 @@ public class RateCompanyRider extends AppCompatActivity {
         requestParams = new RequestParams();
         customerContract = new CustomerContract(this);
         customerLocalPushNotification = new CustomerLocalPushNotification(this);
-        customerLocalPushNotification.publishNotification("Delivered", "Your errand has been completed!!!");
 
 
         rateNextButton = findViewById(R.id.ratingnextButton);
@@ -79,12 +79,31 @@ public class RateCompanyRider extends AppCompatActivity {
                     companyID = companyrating.getString("companies_id");
                     companyRiderID = companyrating.getString("company_rider_id");
                     System.out.println("company id " + companyID + " company rider id " + companyRiderID);
-
+                    companyName = companyrating.getString("company_name");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else if(cookie.getName().equals("searchdata")){
+                try {
+                    JSONObject jsonObject = new JSONObject(cookie.getValue());
+                    pickUpLocation = jsonObject.getString("pickup");
+                    deliveryLocation = jsonObject.getString("delivery");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }
+
+        deliveryMessages = new String[5];
+        deliveryMessages[0] = companyName + " has completed your errand";
+        deliveryMessages[1] = "from: " + pickUpLocation;
+        deliveryMessages[2] = "to: " + deliveryLocation;
+        deliveryMessages[3] = "Kindly rate us to better improve our services ";
+        deliveryMessages[4] = "Thank you!";
+
+        deliveryMessage = companyName + " has completed your errand";
+
+        customerLocalPushNotification.publishNotification("Delivered", deliveryMessages, deliveryMessage);
 
 
         riderRated.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {

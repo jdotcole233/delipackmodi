@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.example.delipackmobi.CustomerContract.CustomerContract;
 import com.example.delipackmobi.CustomerContract.ManageNetworkConnectionClass;
 import com.example.delipackmobi.CustomerContract.NetworkAllowanceCheck;
+import com.example.delipackmobi.Model.CustomerLocalPushNotification;
 import com.example.delipackmobi.Model.PickUpDeliveryModel;
 import com.example.delipackmobi.Model.ReadRiderInformationBackAsynTask;
 import com.firebase.geofire.GeoFire;
@@ -58,6 +59,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -101,6 +103,8 @@ public class SearchRiderFragment extends Fragment {
     ReadRiderInformationBackAsynTask readRiderInformationBackAsynTask;
     Intent transactInProg;
     Boolean isComing = false;
+    CustomerLocalPushNotification customerLocalPushNotification;
+    private String pickMessage, deliveryMessage;
 
 
 
@@ -158,10 +162,13 @@ public class SearchRiderFragment extends Fragment {
         welcomeText = getActivity().findViewById(R.id.welcomemessage);
         customerContract = new CustomerContract(getActivity());
         readRiderInformationBackAsynTask = new ReadRiderInformationBackAsynTask(getActivity());
+        customerLocalPushNotification = new CustomerLocalPushNotification(getActivity());
         distdiff = new float[1];
         isDismissed = false;
         getCompanyInformation = new AsyncHttpClient();
 
+        pickMessage = "Errand has began";
+        deliveryMessage = "En route to delivery location";
 
         if (pickUpDeliveryModel.getFromInformation().size() == 0 && pickUpDeliveryModel.getDeliveryInformation().size() == 0){
             rider_search_btn.setEnabled(false);
@@ -316,6 +323,7 @@ public class SearchRiderFragment extends Fragment {
 
         autocompleteFragment.setHint("Pick up location");
         autocompleteFragment.setCountry("GH");
+
 
 
 // Specify the types of place data to return.
@@ -483,6 +491,13 @@ public class SearchRiderFragment extends Fragment {
             map.moveCamera(CameraUpdateFactory.newLatLng(deliveryLocation));
             map.animateCamera(CameraUpdateFactory.zoomTo(11));
         }
+
+
+//        if (isComing){
+//            customerLocalPushNotification.publishNotification("Errand started", null, deliveryMessage);
+//        }
+
+
 
     }
 
@@ -896,6 +911,7 @@ public class SearchRiderFragment extends Fragment {
         Double distancediff = 0.0;
         Double initialprice = 0.0;
         Double commissionprice = 0.0;
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
 
 //         if(!distance){
         if (distance >= basedistance){
@@ -907,7 +923,8 @@ public class SearchRiderFragment extends Fragment {
         commissionprice = initialprice * 0.05;
 //         }
         pricelist[0] = initialprice;
-        pricelist[1] = commissionprice;
+        pricelist[1] = Double.parseDouble(decimalFormat.format(commissionprice));
+        System.out.println("company charges " + pricelist[0] + " delipack commission " + pricelist[1] + " actual commission " + commissionprice);
 
         return pricelist;
     }
@@ -979,6 +996,7 @@ public class SearchRiderFragment extends Fragment {
                                         if(dataSnapshot.exists()){
                                             List<Object> cord =  (List<Object>) dataSnapshot.child("available").child(riderID).child("l").getValue();
                                             if (cord != null && isComing){
+//                                                customerLocalPushNotification.publishNotification("Errand started", null, deliveryMessage);
                                                 LatLng riderPosition = new LatLng(Double.parseDouble(cord.get(0).toString()), Double.parseDouble(cord.get(1).toString()));
                                                 LatLng customerDelivertoPosition = new LatLng(Double.parseDouble(searchingString.get(2)), Double.parseDouble(searchingString.get(3)));
                                                 map.clear();
