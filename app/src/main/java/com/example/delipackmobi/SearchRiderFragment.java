@@ -917,13 +917,14 @@ public class SearchRiderFragment extends Fragment {
 //         if(!distance){
         if (distance >= basedistance){
             distancediff = distance/basedistance;
+            initialprice = distancediff * baseprice;
         } else {
-            distancediff = basedistance/distance;
+            initialprice = baseprice;
         }
-        initialprice = distancediff * baseprice;
+
         commissionprice = initialprice * 0.05;
 //         }
-        pricelist[0] = initialprice;
+        pricelist[0] = Double.parseDouble(decimalFormat.format(initialprice));
         pricelist[1] = Double.parseDouble(decimalFormat.format(commissionprice));
         System.out.println("company charges " + pricelist[0] + " delipack commission " + pricelist[1] + " actual commission " + commissionprice);
 
@@ -1101,8 +1102,18 @@ public class SearchRiderFragment extends Fragment {
                         }
 
 //                    map.addPolyline(polylineOptions);
-                        map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
-                        map.animateCamera(CameraUpdateFactory.zoomTo(11));
+                        if(deliverToLatLng == null){
+                            if(searchingString != null){
+
+                                map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.parseDouble(searchingString.get(2)), Double.parseDouble(searchingString.get(3)))));
+                                map.animateCamera(CameraUpdateFactory.zoomTo(11));
+                            }
+                        } else {
+                            map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
+                            map.animateCamera(CameraUpdateFactory.zoomTo(11));
+
+                        }
+
                     }
                 }
 
