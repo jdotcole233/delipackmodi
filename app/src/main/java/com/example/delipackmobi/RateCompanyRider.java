@@ -36,7 +36,7 @@ public class RateCompanyRider extends AppCompatActivity {
     private RatingBar riderRated;
     private float ratevalue;
     private CustomerContract customerContract;
-    private String customerID, companyID, companyRiderID, deliveryMessage, companyName, pickUpLocation, deliveryLocation;
+    private String customerID, companyID, companyRiderID, transaction_id, deliveryMessage, companyName, pickUpLocation, deliveryLocation;
     private String [] deliveryMessages;
     private AsyncHttpClient asyncHttpClient;
     private RequestParams requestParams;
@@ -54,7 +54,6 @@ public class RateCompanyRider extends AppCompatActivity {
 
         getWindow().setLayout((int)(displayMetrics.widthPixels * 0.9), (int)(displayMetrics.heightPixels * 0.3));
         asyncHttpClient = new AsyncHttpClient();
-        requestParams = new RequestParams();
         customerContract = new CustomerContract(this);
         customerLocalPushNotification = new CustomerLocalPushNotification(this);
 
@@ -63,6 +62,10 @@ public class RateCompanyRider extends AppCompatActivity {
         riderRated = findViewById(R.id.raterider);
         closerating = findViewById(R.id.cancelrating);
         ratevalue = 0.0f;
+
+        System.out.println("Customer cookies " + customerContract.getPersistentCookieStore().getCookies());
+
+        Log.i("DeliPackMessage", customerContract.getPersistentCookieStore().toString());
 
         for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
             if (cookie.getName().equals("customerInfomation")){
@@ -89,6 +92,14 @@ public class RateCompanyRider extends AppCompatActivity {
                     pickUpLocation = jsonObject.getString("pickup");
                     deliveryLocation = jsonObject.getString("delivery");
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else if (cookie.getName().equals("transaction_id")){
+                try{
+                    JSONObject transactionJSON = new JSONObject(cookie.getValue());
+                    transaction_id = transactionJSON.getString("transaction_id");
+                    Log.i("DeliPackT", transaction_id);
+                }catch (JSONException e){
                     e.printStackTrace();
                 }
             }
@@ -143,10 +154,12 @@ public class RateCompanyRider extends AppCompatActivity {
         rateNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                requestParams = new RequestParams();
                 requestParams.put("rate_value", Float.toString(ratevalue));
                 requestParams.put("company_riderscompany_rider_id", companyRiderID);
                 requestParams.put("customerscustomer_id", customerID);
                 requestParams.put("company_id", companyID);
+                requestParams.put("transactions_id", transaction_id);
 
                 asyncHttpClient.post(RATING_URL, requestParams, new JsonHttpResponseHandler(){
                     @Override

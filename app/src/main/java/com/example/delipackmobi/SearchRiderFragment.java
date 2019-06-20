@@ -385,18 +385,7 @@ public class SearchRiderFragment extends Fragment {
 
                     Log.i("g", "Place: " + place);
                     if (pickUpFromLatLng != null && deliverToLatLng != null){
-//                        PolylineOptions polylineOptions = new PolylineOptions().add(pickUpFromLatLng)
-//                                .add(deliverToLatLng).color(R.drawable.distance_color_display);
-//                        map.addPolyline(polylineOptions);
-//                        map.addMarker(new MarkerOptions()
-//                                .position(deliverToLatLng)
-//                                .title("Deliver to: " + place.getName())
-//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons_to_map_pin))
-//
-//                        );
                         makeDirectionRequest(pickUpFromLatLng, deliverToLatLng, R.drawable.icons_home_address, R.drawable.icons_to_map_pin);
-//                        map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
-//                        map.animateCamera(CameraUpdateFactory.zoomTo(11));
                         rider_search_btn.setEnabled(true);
                     }
 
@@ -1104,13 +1093,12 @@ public class SearchRiderFragment extends Fragment {
 //                    map.addPolyline(polylineOptions);
                         if(deliverToLatLng == null){
                             if(searchingString != null){
-
                                 map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.parseDouble(searchingString.get(2)), Double.parseDouble(searchingString.get(3)))));
-                                map.animateCamera(CameraUpdateFactory.zoomTo(11));
+//                                map.animateCamera(CameraUpdateFactory.zoomTo(11));
                             }
                         } else {
                             map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
-                            map.animateCamera(CameraUpdateFactory.zoomTo(11));
+//                            map.animateCamera(CameraUpdateFactory.zoomTo(11));
 
                         }
 

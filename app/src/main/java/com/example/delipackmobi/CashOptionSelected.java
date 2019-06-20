@@ -55,6 +55,9 @@ public class CashOptionSelected extends AppCompatActivity {
         cashspinner.setDropDownViewResource(R.layout.selection_check_color);
         cashpaymentoption.setAdapter(cashspinner);
 
+        System.out.println("Customer cookies " + customerContract.getPersistentCookieStore().getCookies());
+
+
         for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
             if(cookie.getName().equals("customerInfomation")){
                 try {
@@ -208,6 +211,8 @@ public class CashOptionSelected extends AppCompatActivity {
                 if (response.length() != 0){
                     try {
                         if (response.getString("success").equals("Done")){
+                            Log.i("DeliPackMessage", response.toString());
+                            customerContract.setBasicCookies("transaction_id",response.toString(),6,"/");
                             finish();
                             Intent changeActivitiies = new Intent(context, switchto);
                             startActivity(changeActivitiies);
