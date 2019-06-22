@@ -64,7 +64,7 @@ public class ManageHistoryClass implements Runnable {
                         try {
 //                            Log.i("DeliPackMessage",response.getJSONObject(i).toString());
                             JSONObject transactionObject = new JSONObject(response.getJSONObject(i).toString());
-                            customerHistoryModel.add(new CustomerHistoryModel(transactionObject.getString("company_name"),transactionObject.getString("source"),
+                            customerHistoryModel.add(new CustomerHistoryModel(transactionObject.getString("companies_id"), transactionObject.getString("company_name"),transactionObject.getString("source"),
                                     transactionObject.getString("destination"), transactionObject.getString("delivery_status")
                                     , transactionObject.getString("payment_type"), transactionObject.getString("total_charge")
                                     , transactionObject.getString("first_name") + " " + transactionObject.getString("last_name")

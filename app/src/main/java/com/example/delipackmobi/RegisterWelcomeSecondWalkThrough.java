@@ -24,4 +24,9 @@ public class RegisterWelcomeSecondWalkThrough extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        return;
+    }
 }

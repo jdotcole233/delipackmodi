@@ -25,4 +25,9 @@ public class RegisteredWelcomeWalkThrough extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        return;
+    }
 }

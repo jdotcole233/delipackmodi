@@ -244,6 +244,7 @@ public class Homedashboard_user extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("DeliPackMessag", "On resume " + manageNetworkConnectionClass.checkConnectivity());
         if (manageNetworkConnectionClass.checkConnectivity()){
             aaa();
         }else {
@@ -257,6 +258,7 @@ public class Homedashboard_user extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.i("DeliPackMessag", "On start " + manageNetworkConnectionClass.checkConnectivity());
         if (manageNetworkConnectionClass.checkConnectivity()){
             aaa();
         }else {
@@ -277,6 +279,7 @@ public class Homedashboard_user extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.i("DeliPackMessag", "On destroy " + manageNetworkConnectionClass.checkConnectivity());
         if (manageNetworkConnectionClass.checkConnectivity()){
             LocalBroadcastManager.getInstance(this).unregisterReceiver(historyBroadCast);
             stopService(historyIntent);

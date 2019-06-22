@@ -25,4 +25,9 @@ public class RegisterWelcomeFinalWalkthrough extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        return;
+    }
 }

@@ -35,7 +35,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText password;
     private EditText confirmPassword;
     private  Button registerButton;
-    private final static String POSTURL = "http://192.168.100.4:8000/registercutomer";
+    private final static String POSTURL = "http://delipackport.com/api/registercutomer";
     private DeliPackAlert deliPackAlert;
     private CustomerContract customerContract;
 

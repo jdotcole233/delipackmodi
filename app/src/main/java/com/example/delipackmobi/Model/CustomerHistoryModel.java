@@ -3,13 +3,14 @@ package com.example.delipackmobi.Model;
 import java.io.Serializable;
 
 public class CustomerHistoryModel implements Serializable {
-    private String company_name;
+    private String company_name, company_id;
     private String pickup_location;
     private String delivery_location, transaction_status, payment_type;
     private String price, ridername, bike_registration, transaction_date, transaction_id;
 
 
-    public CustomerHistoryModel(String company_name, String pickup_location, String delivery_location, String transaction_status, String payment_type, String price, String ridername, String bike_registration, String transaction_date, String transaction_id) {
+    public CustomerHistoryModel(String company_id, String company_name, String pickup_location, String delivery_location, String transaction_status, String payment_type, String price, String ridername, String bike_registration, String transaction_date, String transaction_id) {
+        this.company_id = company_id;
         this.company_name = company_name;
         this.pickup_location = pickup_location;
         this.delivery_location = delivery_location;
@@ -100,5 +101,9 @@ public class CustomerHistoryModel implements Serializable {
 
     public String getTransaction_id() {
         return transaction_id;
+    }
+
+    public String getCompany_id() {
+        return company_id;
     }
 }

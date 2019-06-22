@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_input_signin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/popup_messages_background"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/deli_s" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <!--Company package transport information-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="7dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Are you sure?"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:fontFamily="@font/amiko_bold"
+                android:textAlignment="center"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancelling this trip may incur"
+                android:textColor="#000"
+                android:textSize="17sp"
+                android:fontFamily="sans-serif-light"
+                android:textAlignment="center"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="some charges because rider has"
+                android:textColor="#000"
+                android:textSize="17sp"
+                android:fontFamily="sans-serif-light"
+                android:textAlignment="center"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="already set off"
+                android:textColor="#000"
+                android:textSize="17sp"
+                android:fontFamily="sans-serif-light"
+                android:textAlignment="center"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        >
+        <Button
+            android:id="@+id/nobtn"
+            android:layout_width="170dp"
+            android:layout_height="30dp"
+            android:text="No"
+            android:background="@drawable/register_btn_background"
+            android:textSize="15sp"
+            android:textColor="#FFF"
+            />
+
+        <Button
+            android:id="@+id/yesbtn"
+            android:layout_width="170dp"
+            android:layout_height="30dp"
+            android:text="Yes"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/confirm_button"
+            android:textSize="15sp"
+            android:textColor="#FFF"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <ProgressBar
+            android:id="@+id/cancelsessionloader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

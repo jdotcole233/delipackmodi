@@ -113,7 +113,7 @@ public class PackageInProgress extends AppCompatActivity {
         cancelbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cancelIntent = new Intent(PackageInProgress.this, PackageCancel.class);
+                Intent cancelIntent = new Intent(PackageInProgress.this, TripInSessionCancel.class);
                 cancelIntent.putExtra("customerID", customerID);
                 cancelIntent.putExtra("riderID", riderID);
                 startActivity(cancelIntent);

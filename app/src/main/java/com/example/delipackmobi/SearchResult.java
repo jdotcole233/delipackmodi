@@ -1,7 +1,10 @@
 package com.example.delipackmobi;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -9,11 +12,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,12 +28,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 
+import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.cookie.Cookie;
 
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
@@ -39,7 +52,7 @@ public class SearchResult extends AppCompatActivity {
     private ImageButton cancelButton;
     private Spinner paymentMethod;
     private String payment_selection;
-    private String riderID, customerID;
+    private String riderID, customerID, company_name, company_ID;
     private CustomerContract customerContract;
     private TextView companyname, bikeregistration, bikername, transactionprice;
     private DatabaseReference updateriderdata;
@@ -47,6 +60,7 @@ public class SearchResult extends AppCompatActivity {
     public static int countDownTime;
     private CountDownTimer paymentCountDown;
     private DatabaseReference customerRequest, riderfoundforcustomer;
+    private ImageView resultCompanyLogo;
 
 
     @Override
@@ -64,6 +78,7 @@ public class SearchResult extends AppCompatActivity {
         confirmButton = findViewById(R.id.make_payment);
         cancelButton = findViewById(R.id.cancelsearchresult);
         paymentMethod = findViewById(R.id.payment_choice);
+        resultCompanyLogo = findViewById(R.id.resultCompanyLogo);
         customerContract = new CustomerContract(this);
         sc = this;
         countDownTime = 90000;
@@ -86,10 +101,22 @@ public class SearchResult extends AppCompatActivity {
                     JSONObject displayCompanyData = new JSONObject(cookie.getValue());
 
                     riderID = displayCompanyData.getString("company_rider_id");
+                    company_name = displayCompanyData.getString("company_name");
+                    company_ID = displayCompanyData.getString("companies_id");
 
                     companyname.setText("Company: " + displayCompanyData.getString("company_name"));
                     bikeregistration.setText("Reg number:" + displayCompanyData.getString("registered_number"));
                     bikername.setText("Rider name: " + displayCompanyData.getString("first_name") + " " + displayCompanyData.getString("last_name"));
+
+                    loadCompanyLogo(this, company_name, company_ID, resultCompanyLogo);
+//                    try {
+//                        String logourl = "http://superuser.delipackport.com/company_logos/"+company_name.toLowerCase()+company_ID;
+//                        URL url = new URL(logourl);
+//                        Bitmap bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+//                        resultCompanyLogo.setImageBitmap(bitmap);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -243,5 +270,34 @@ public class SearchResult extends AppCompatActivity {
         super.onDestroy();
         paymentCountDown.cancel();
         System.out.println("On destroy in search result called");
+    }
+
+
+
+    public void loadCompanyLogo(Context context, String companyName, String companyID, final ImageView view){
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        String logourl = "http://superuser.delipackport.com/company_logos/"+companyName.toLowerCase()+companyID;
+
+        asyncHttpClient.get(logourl, new FileAsyncHttpResponseHandler(context) {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, File file) {
+                try {
+                    FileInputStream fileInputStream = new FileInputStream(file);
+                    Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
+                    view.setImageBitmap(bitmap);
+                    Log.i("DeliPackMessag", "found in company logo");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+
     }
 }

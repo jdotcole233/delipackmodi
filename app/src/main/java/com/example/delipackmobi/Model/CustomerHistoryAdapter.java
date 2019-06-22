@@ -2,19 +2,32 @@ package com.example.delipackmobi.Model;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.delipackmobi.HistoryDetails;
 import com.example.delipackmobi.R;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 public class CustomerHistoryAdapter extends RecyclerView.Adapter<CustomerHistoryAdapter.MyViewHolder> {
 
@@ -41,6 +54,8 @@ public class CustomerHistoryAdapter extends RecyclerView.Adapter<CustomerHistory
             myViewHolder.company_name.setText(customerHistoryList.get(i).getCompany_name());
             myViewHolder.pickup.setText(customerHistoryList.get(i).getPickup_location());
             myViewHolder.delivery.setText(customerHistoryList.get(i).getDelivery_location());
+
+        loadCompanyLogo(context, customerHistoryList.get(i).getCompany_name(), customerHistoryList.get(i).getCompany_id(), myViewHolder.company_history_logo);
 
 //            myViewHolder.price.setText(customerHistoryList.get(i).getPrice());
 
@@ -83,6 +98,7 @@ public class CustomerHistoryAdapter extends RecyclerView.Adapter<CustomerHistory
         private TextView delivery;
         private TextView price;
         private Button detailsBtn;
+        private ImageView company_history_logo;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -91,10 +107,39 @@ public class CustomerHistoryAdapter extends RecyclerView.Adapter<CustomerHistory
             pickup = itemView.findViewById(R.id.pick_up_from);
             delivery = itemView.findViewById(R.id.deliver_to);
             detailsBtn = itemView.findViewById(R.id.detailsbtn);
+            company_history_logo = itemView.findViewById(R.id.company_history_logo);
 //            price = itemView.findViewById(R.id.price);
 
 
         }
+    }
+
+
+    public void loadCompanyLogo(Context context, String companyName, String companyID, final ImageView view){
+        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        String logourl = "http://superuser.delipackport.com/company_logos/"+companyName.toLowerCase()+companyID;
+
+        asyncHttpClient.get(logourl, new FileAsyncHttpResponseHandler(context) {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, File file) {
+                try {
+                    FileInputStream fileInputStream = new FileInputStream(file);
+                    Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
+                    view.setImageBitmap(bitmap);
+                    Log.i("DeliPackMessag", "found in company logo");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+
     }
 
 
