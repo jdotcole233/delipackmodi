@@ -39,6 +39,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 import cz.msebera.android.httpclient.Header;
@@ -124,7 +125,7 @@ public class SearchResult extends AppCompatActivity {
                 try {
                     JSONObject display_price = new JSONObject(cookie.getValue());
                     Double price_calc =  display_price.getDouble("delivery_charge") + display_price.getDouble("commission_charge");
-                            transactionprice.setText(price_calc.toString());
+                            transactionprice.setText(new DecimalFormat("#.#").format(price_calc));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

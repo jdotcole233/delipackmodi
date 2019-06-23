@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -91,12 +92,13 @@ public class SearchRiderFragment extends Fragment {
     public  static String picklat, picklong, riderID;
     public static  Double proximity;
     private String rider_id_found, deliveryLocatioName, pickupLocationName;
-    public static Activity delipackEventloader;
+    public static Activity delipackEventloader, homedasboardactivity;
     private AsyncHttpClient getCompanyInformation;
     private float [] distdiff;
     private Boolean isDismissed, riderFound;
     private List<String> searchingString;
-    public static GeoQuery geoQuery;
+    private GeoQuery geoQuery;
+    private GeoFire geoFire;
     Intent sendRiderID;
     private NetworkAllowanceCheck networkAllowanceCheck;
     private ManageNetworkConnectionClass manageNetworkConnectionClass;
@@ -106,6 +108,7 @@ public class SearchRiderFragment extends Fragment {
     Boolean isComing = false;
     CustomerLocalPushNotification customerLocalPushNotification;
     private String pickMessage, deliveryMessage;
+    private ImageButton showmoredisappear;
 
 
 
@@ -145,6 +148,8 @@ public class SearchRiderFragment extends Fragment {
 
         DeliPackEventLoader.searchRiderActivity = getActivity();
         TripCompletedRatingMessage.tripCompletedSearchActivity = getActivity();
+        showmoredisappear =  getActivity().findViewById(R.id.showmoretripinprogress);
+
         RateCompanyRider.searchriderfragment = getActivity();
         networkAllowanceCheck = new NetworkAllowanceCheck(getActivity());
         manageNetworkConnectionClass = new ManageNetworkConnectionClass(getActivity());
@@ -425,6 +430,13 @@ public class SearchRiderFragment extends Fragment {
                                         Intent rateIntent = new Intent(getActivity(), RateCompanyRider.class);
                                         startActivity(rateIntent);
                                     }
+                                } else if (dataSnapshot.getValue().equals("cancelled")){
+                                    if(getActivity() != null){
+                                            searchRiderCardView.setVisibility(View.VISIBLE);
+                                            searchriderwelcomecard.setVisibility(View.VISIBLE);
+                                            showmoredisappear.setVisibility(View.INVISIBLE);
+
+                                    }
                                 }
                             }
                     }
@@ -434,6 +446,9 @@ public class SearchRiderFragment extends Fragment {
 
                     }
                 });
+
+
+
     }
 
 
@@ -635,7 +650,7 @@ public class SearchRiderFragment extends Fragment {
     public void findClosestBiker(){
         System.out.println("find rider called");
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("RiderLocationAvailable");
-        GeoFire geoFire = new GeoFire(databaseReference);
+        geoFire = new GeoFire(databaseReference);
 
         if(searchingString.size() == 0){
             picklat = Double.toString(pickUpFromLatLng.latitude);
@@ -662,6 +677,8 @@ public class SearchRiderFragment extends Fragment {
                         riderFound = true;
                         riderID = key;
                         // Create a structure for driver found for customer
+                        autocompleteFragment.setText("");
+                        autocompleteFragment1.setText("");
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference databasecustomer = database.getReference().child("CustomerRiderRequest").child(customer_id); //set first child value to customer id
                         databasecustomer.child("rideraccepted").setValue("");

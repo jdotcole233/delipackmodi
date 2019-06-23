@@ -99,6 +99,7 @@ public class Homedashboard_user extends AppCompatActivity {
         showmorebtn = findViewById(R.id.showmoretripinprogress);
         showmorebtn.setVisibility(View.INVISIBLE);
         homeactivity = this;
+        SearchRiderFragment.homedasboardactivity = this;
         customerContract = new CustomerContract(this);
 
         for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){

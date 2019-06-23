@@ -1,5 +1,6 @@
 package com.example.delipackmobi;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -32,6 +33,7 @@ public class TripInSessionCancel extends AppCompatActivity {
     private ProgressBar cancelSession;
     private CustomerLocalPushNotification customerLocalPushNotification;
     private DatabaseReference customerRequest, riderfoundforcustomer;
+    public static Activity packageinprogresstripsessioncancel;
 
 
     @Override
@@ -100,6 +102,7 @@ public class TripInSessionCancel extends AppCompatActivity {
                                 riderfoundforcustomer.child(rider_id).child("assigned").setValue("not assigned");
                                 cancelButton.setFocusable(true);
                                 donotcancelButton.setFocusable(true);
+                                packageinprogresstripsessioncancel.finish();
                                 finish();
 
                             }

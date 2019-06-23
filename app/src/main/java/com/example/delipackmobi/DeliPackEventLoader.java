@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
@@ -32,8 +33,9 @@ public class DeliPackEventLoader extends AppCompatActivity implements UpdateDown
     private Button endridersearch;
     private CustomerContract customerContract;
     public static Activity searchRiderActivity;
-    private String customerID;
+    private String customerID, rider_id;
     private TextView downloadtext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,13 @@ public class DeliPackEventLoader extends AppCompatActivity implements UpdateDown
 
                 }catch (Exception e){
                     System.out.println(e.getMessage());
+                }
+            } else if (cookie.getName().equals("company_details")){
+                try{
+                    JSONObject jsonObj = new JSONObject(cookie.getValue());
+                    rider_id = jsonObj.getString("company_rider_id");
+                }catch (JSONException e){
+                    e.printStackTrace();
                 }
             }
         }
@@ -87,9 +96,12 @@ public class DeliPackEventLoader extends AppCompatActivity implements UpdateDown
             public void onClick(View v) {
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest").child(customerID);
                 databaseReference.removeValue();
+                DatabaseReference riderfoundforcustomer = FirebaseDatabase.getInstance().getReference().child("RiderFoundForCustomer");
+                riderfoundforcustomer.child(rider_id).child("assigned").setValue("not assigned");
                 SearchRiderFragment.picklat = "";
                 SearchRiderFragment.picklong = "";
                 SearchRiderFragment.proximity = 0.1;
+
                 finish();
             }
         });

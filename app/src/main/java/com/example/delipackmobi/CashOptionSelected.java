@@ -23,6 +23,8 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.cookie.Cookie;
 
@@ -192,8 +194,11 @@ public class CashOptionSelected extends AppCompatActivity {
                     transactionParameters.put("commission_charge", transactionSearch.getDouble("commission_charge"));
                     transactionParameters.put("payment_type", transactionSearch.getString("pickup"));
 //                    transactionParameters.put("ETA","22:33");
+                    Double expectedPayment = Double.parseDouble(transactionSearch.getString("delivery_charge")) + Double.parseDouble(transactionSearch.getString("commission_charge"));
                     updateAccepted.child("deliverlatlong")
                             .child("pickuplocationname").setValue(transactionSearch.getString("pickup"));
+                    updateAccepted.child("deliverlatlong")
+                            .child("totalCharge").setValue(new DecimalFormat("#.#").format(expectedPayment));
 
                 } catch (JSONException e) {
                     e.printStackTrace();

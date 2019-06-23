@@ -54,6 +54,7 @@ public class PackageInProgress extends AppCompatActivity {
         regnumber = findViewById(R.id.inprogressbikeregnumber);
         pickuplocation = findViewById(R.id.inprogresspickup);
         deliverylocation = findViewById(R.id.inprogressdelivery);
+        TripInSessionCancel.packageinprogresstripsessioncancel = this;
 
         for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
             if(cookie.getName().equals("searchdata")){
