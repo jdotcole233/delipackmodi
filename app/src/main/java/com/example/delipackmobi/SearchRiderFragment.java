@@ -222,6 +222,8 @@ public class SearchRiderFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                riderAvailable = true;
+
                 if (!manageNetworkConnectionClass.checkConnectivity()){
                     Intent networkIntent = new Intent(getActivity(), NetworkConnectionView.class);
                     startActivity(networkIntent);
@@ -407,8 +409,9 @@ public class SearchRiderFragment extends Fragment {
         });
 
 
-
-        getRiderResponse();
+//        if(riderAvailable){
+            getRiderResponse();
+//        }
         if (riderID != null){
             getRiderCordinatesToPlot(customer_id);
 
@@ -636,6 +639,7 @@ public class SearchRiderFragment extends Fragment {
 
 
     boolean isSearching = false;
+    boolean riderAvailable = true;
 
 
     /*
@@ -648,109 +652,125 @@ public class SearchRiderFragment extends Fragment {
      */
 
     public void findClosestBiker(){
-        System.out.println("find rider called");
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("RiderLocationAvailable");
-        geoFire = new GeoFire(databaseReference);
-
-        if(searchingString.size() == 0){
-            picklat = Double.toString(pickUpFromLatLng.latitude);
-            picklong = Double.toString(pickUpFromLatLng.longitude);
-        } else {
-            picklat = searchingString.get(0);
-            picklong = searchingString.get(1);
-        }
-
-        System.out.println("lat is " + picklat + " lng is " + picklong);
-        Log.i("DeliPackMessage","lat is " + picklat + " lng is " + picklong + riderFound);
 
 
-        if(!picklat.isEmpty() && !picklong.isEmpty()){
-            System.out.println("lat is " + picklat + " lng is " + picklong + " In if statement");
-            Log.i("DeliPackMessage","lat is " + picklat + " lng is " + picklong + " In if statement " + riderFound );
+//            System.out.println("find rider called");
+            final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("RiderLocationAvailable");
+            geoFire = new GeoFire(databaseReference);
 
-            geoQuery = geoFire.queryAtLocation(new GeoLocation(Double.parseDouble(picklat), Double.parseDouble(picklong)), proximity);
-            geoQuery.removeAllListeners();
-            geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-                @Override
-                public void onKeyEntered(String key, GeoLocation location) {
-                    if (!riderFound){
-                        riderFound = true;
-                        riderID = key;
-                        // Create a structure for driver found for customer
-                        autocompleteFragment.setText("");
-                        autocompleteFragment1.setText("");
-                        FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference databasecustomer = database.getReference().child("CustomerRiderRequest").child(customer_id); //set first child value to customer id
-                        databasecustomer.child("rideraccepted").setValue("");
-                        databasecustomer.child("riderid").setValue(key);
-                        System.out.println("found rider");
+            if(searchingString.size() == 0){
+                picklat = Double.toString(pickUpFromLatLng.latitude);
+                picklong = Double.toString(pickUpFromLatLng.longitude);
+            } else {
+                picklat = searchingString.get(0);
+                picklong = searchingString.get(1);
+            }
 
-                        DatabaseReference databaserider = database.getReference().child("RiderFoundForCustomer").child(riderID);
-                        databaserider.child("customer_id").setValue(customer_id);
-                        databaserider.child("assigned").setValue("true");
+//            System.out.println("lat is " + picklat + " lng is " + picklong);
+//            Log.i("DeliPackMessage","lat is " + picklat + " lng is " + picklong + riderFound);
 
 
-                        savedeliveryinformationafterriderisfound(databasecustomer);
+            if(!picklat.isEmpty() && !picklong.isEmpty()){
+
+                geoQuery = geoFire.queryAtLocation(new GeoLocation(Double.parseDouble(picklat), Double.parseDouble(picklong)), proximity);
+                geoQuery.removeAllListeners();
+                geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                    @Override
+                    public void onKeyEntered(String key, GeoLocation location) {
+                        if (riderAvailable){
+                            if (!riderFound){
+                                riderFound = true;
+                                riderID = key;
 
 
 
+                                // Create a structure for driver found for customer
+                                autocompleteFragment.setText("");
+                                autocompleteFragment1.setText("");
+                                rider_search_btn.setEnabled(false);
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                DatabaseReference databasecustomer = database.getReference().child("CustomerRiderRequest").child(customer_id); //set first child value to customer id
+                                databasecustomer.child("rideraccepted").setValue("");
+                                databasecustomer.child("riderid").setValue(key);
 
-                        isDismissed = true;
-                        System.out.println("key has entered searching for rider");
-                        proximity = 0.1;
+                                DatabaseReference databaserider = database.getReference().child("RiderFoundForCustomer").child(riderID);
+                                databaserider.child("customer_id").setValue(customer_id);
+                                databaserider.child("assigned").setValue("true");
 
-//                        pickUpDeliveryModel.resetFromInformation();
-//                        pickUpDeliveryModel.resetsetDeliveryInformation();
-
-//                    progressBar.setVisibility(View.INVISIBLE);
-//                    loadertext.setText("Rider should accept");
-//                    rider_search_btn.setVisibility(View.VISIBLE);
-//                    searchRiderCardView.setVisibility(View.INVISIBLE);
+                                savedeliveryinformationafterriderisfound(databasecustomer);
 
 
-                    }
-                }
+                                Intent endIntent = new Intent(getActivity(), DeliPackEventLoader.class);
+                                endIntent.putExtra("rider_id", key);
+                                startActivity(endIntent);
 
-                @Override
-                public void onKeyExited(String key) {
-                    Log.i("DeliPackMessage","On key existed while searching for rider");
-                }
+                                isDismissed = true;
+                                proximity = 0.1;
 
-                @Override
-                public void onKeyMoved(String key, GeoLocation location) {
-                    Log.i("DeliPackMessage","On key moved while searching for rider");
+    //                        pickUpDeliveryModel.resetFromInformation();
+    //                        pickUpDeliveryModel.resetsetDeliveryInformation();
 
-                    System.out.println("On key moved while searching for rider");
-                }
+    //                    progressBar.setVisibility(View.INVISIBLE);
+    //                    loadertext.setText("Rider should accept");
+    //                    rider_search_btn.setVisibility(View.VISIBLE);
+    //                    searchRiderCardView.setVisibility(View.INVISIBLE);
 
-                @Override
-                public void onGeoQueryReady() {
-                    if(!riderFound){
-                        proximity += 0.1;
-                        System.out.println("searching " + proximity );
-                        if (proximity >= 20){
-                            geoQuery.removeAllListeners();
-                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest").child(customer_id);
-                            databaseReference.removeValue();
-                            String message = "Rider not found\nYou can try again later";
-                            SearchRiderFragment.delipackEventloader.finish();
-                            new DeliPackAlert(getActivity(), "Search complete", message).showDeliPackAlert();
-                            return;
+
+                            }
+
                         }
-                        findClosestBiker();
+                    }
+
+                    @Override
+                    public void onKeyExited(final String key) {
+                        Log.i("DeliPackMessage","On key existed while searching for rider " + key);
+
 
                     }
-                }
 
-                @Override
-                public void onGeoQueryError(DatabaseError error) {
-                    System.out.println("Some went wrong while searching for rider");
-                }
-            });
-        } else {
-            System.out.println("Trip cancelled");
-            return;
-        }
+                    @Override
+                    public void onKeyMoved(String key, GeoLocation location) {
+                        Log.i("DeliPackMessage","On key moved while searching for rider " + key + " " + location);
+
+                        System.out.println("On key moved while searching for rider");
+                    }
+
+                    @Override
+                    public void onGeoQueryReady() {
+                        if(!riderFound){
+                            proximity += 0.1;
+                            System.out.println("searching " + proximity );
+                            if (proximity >= 20){
+//                            proximity = 5000.0;
+                                riderAvailable = false;
+                                autocompleteFragment1.setText("");
+                                autocompleteFragment.setText("");
+                                rider_search_btn.setEnabled(false);
+                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest").child(customer_id);
+                                databaseReference.removeValue();
+//                            geoQuery.removeAllListeners();
+                                String message = "Rider not found\nYou can try again later";
+                                SearchRiderFragment.delipackEventloader.finish();
+                                new DeliPackAlert(getActivity(), "Search complete", message).showDeliPackAlert();
+                                geoQuery.removeAllListeners();
+                                return;
+                            } else{
+                                findClosestBiker();
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onGeoQueryError(DatabaseError error) {
+                        System.out.println("Some went wrong while searching for rider");
+                    }
+                });
+            } else {
+                System.out.println("Trip cancelled");
+                return;
+            }
+
 
         return;
     }

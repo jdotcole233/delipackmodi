@@ -1,6 +1,7 @@
 package com.example.delipackmobi;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,6 +36,8 @@ public class DeliPackEventLoader extends AppCompatActivity implements UpdateDown
     public static Activity searchRiderActivity;
     private String customerID, rider_id;
     private TextView downloadtext;
+    String rID = "";
+
 
 
     @Override
@@ -69,6 +72,15 @@ public class DeliPackEventLoader extends AppCompatActivity implements UpdateDown
             }
         }
 
+        Intent endIntent = getIntent();
+        if(endIntent != null){
+            rID = endIntent.getStringExtra("rider_id");
+            System.out.println("In create rID " + rID);
+
+        } else {
+            System.out.println("Bad Intent..");
+        }
+
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance()
                 .getReference().child("CustomerRiderRequest")
                 .child(customerID);
@@ -95,14 +107,43 @@ public class DeliPackEventLoader extends AppCompatActivity implements UpdateDown
             @Override
             public void onClick(View v) {
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest").child(customerID);
-                databaseReference.removeValue();
                 DatabaseReference riderfoundforcustomer = FirebaseDatabase.getInstance().getReference().child("RiderFoundForCustomer");
-                riderfoundforcustomer.child(rider_id).child("assigned").setValue("not assigned");
+
+                System.out.println("End Rider search ");
+                databaseReference.child("riderid").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            System.out.println("End Rider search " + dataSnapshot.getValue());
+                            rID = dataSnapshot.getValue().toString();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                if (rider_id != null){
+                    System.out.println("In rider_id");
+                    riderfoundforcustomer.child(rider_id).child("assigned").setValue("not assigned");
+                    databaseReference.removeValue();
+
+                } else {
+                    if(rID != null){
+                        System.out.println("In rID " + rID);
+                        riderfoundforcustomer.child(rID).child("assigned").setValue("not assigned");
+                        databaseReference.removeValue();
+
+                    }
+
+                }
+
                 SearchRiderFragment.picklat = "";
                 SearchRiderFragment.picklong = "";
                 SearchRiderFragment.proximity = 0.1;
-
-                finish();
+//                finish();
             }
         });
     }
@@ -121,7 +162,7 @@ public class DeliPackEventLoader extends AppCompatActivity implements UpdateDown
                 } else {
                     databaseReference.removeValue();
                     finish();
-                    SearchRiderFragment.geoQuery.removeAllListeners();
+//                    SearchRiderFragment.geoQuery.removeAllListeners();
                 }
             }
 
