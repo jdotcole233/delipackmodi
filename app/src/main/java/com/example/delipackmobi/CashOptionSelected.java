@@ -1,7 +1,9 @@
 package com.example.delipackmobi;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.example.delipackmobi.CustomerContract.CustomerContract;
+import com.example.delipackmobi.Model.ConfirmCashTransaction;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
@@ -40,6 +43,7 @@ public class CashOptionSelected extends AppCompatActivity {
     private CustomerContract customerContract;
     private CountDownTimer countDownTimer;
     private DatabaseReference customerRequest, riderfoundforcustomer;
+    public static Activity cashoptionselectedActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class CashOptionSelected extends AppCompatActivity {
         Intent getRiderID = getIntent();
         riderIDFound = getRiderID.getStringExtra("bikerID");
         customerContract = new CustomerContract(this);
+        cashoptionselectedActivity = this;
 
 
         ArrayAdapter<CharSequence> cashspinner = ArrayAdapter.createFromResource(getApplicationContext(), R.array.cash_payment_option, R.layout.dropdown_selection_color);
@@ -102,12 +107,21 @@ public class CashOptionSelected extends AppCompatActivity {
                 if (cashoptionselected.equals("Pay at pick up")){
                     SearchResult.sc.finish();
                     if(riderIDFound != null){
-                        updatePaymentValueForRider(riderIDFound, customerID,CashOptionSelected.this, PackageInProgress.class);
+                        Intent transactionLoader = new Intent(CashOptionSelected.this, TransactionLoader.class);
+                        transactionLoader.putExtra("riderID", riderIDFound);
+                        transactionLoader.putExtra("customerID", customerID);
+                        transactionLoader.putExtra("cashoptionSelected", cashoptionselected);
+                        startActivity(transactionLoader);
                     }
                 } else if (cashoptionselected.equals("Pay on delivery")){
                     SearchResult.sc.finish();
                     if(riderIDFound != null){
-                        updatePaymentValueForRider(riderIDFound, customerID,CashOptionSelected.this, PackageInProgress.class);
+                        Intent transactionLoader = new Intent(CashOptionSelected.this, TransactionLoader.class);
+                        transactionLoader.putExtra("riderID", riderIDFound);
+                        transactionLoader.putExtra("customerID", customerID);
+                        transactionLoader.putExtra("cashoptionSelected", cashoptionselected);
+                        startActivity(transactionLoader);
+
                     }
                 }else {
                     return;
@@ -145,103 +159,6 @@ public class CashOptionSelected extends AppCompatActivity {
         countDownTimer.start();
     }
 
-    public void updatePaymentValueForRider(String riderID, String customerIdent,final Context context, final Class switchto){
-        DatabaseReference confirmpayment = FirebaseDatabase.getInstance().getReference()
-                .child("RiderFoundForCustomer")
-                .child(riderID)
-                .child("paymentapproved");
-        confirmpayment.setValue("true");
-
-        DatabaseReference updateAccepted = FirebaseDatabase.getInstance().getReference()
-                .child("CustomerRiderRequest").child(customerIdent);
-        updateAccepted.child("rideraccepted").setValue("paid");
-        updateAccepted.child("deliverlatlong").child("paymentType").setValue(cashoptionselected);
-        updateAccepted.child("acceptbuttonvisibility").setValue("false");
-
-
-        AsyncHttpClient updateTrasaction = new AsyncHttpClient();
-        RequestParams transactionParameters = new RequestParams();
-
-        for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
-            if(cookie.getName().equals("company_details")){
-                try {
-                    JSONObject transaction = new JSONObject(cookie.getValue());
-                    transactionParameters.put("company_riderscompany_rider_id",transaction.getString("company_rider_id"));
-                    transactionParameters.put("companiescompanies_id",transaction.getString("companies_id"));
-                    transactionParameters.put("motor_bikesbike_id",transaction.getString("bike_id"));
-                    transactionParameters.put("company_riderscompany_rider_id", riderID);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            } else if (cookie.getName().equals("customerInfomation")){
-                try {
-                    JSONObject transactionCustomer = new JSONObject(cookie.getValue());
-                    transactionParameters.put("customerscustomer_id",transactionCustomer.getString("customer_id"));
-                    transactionParameters.put("delivery_status","ACTIVE");
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            } else if (cookie.getName().equals("searchdata")){
-                try {
-                    JSONObject transactionSearch = new JSONObject(cookie.getValue());
-                    transactionParameters.put("destination", transactionSearch.getString("delivery"));
-                    transactionParameters.put("source",transactionSearch.getString("pickup"));
-                    transactionParameters.put("delivery_charge",  transactionSearch.getDouble("delivery_charge"));
-                    transactionParameters.put("commission_charge", transactionSearch.getDouble("commission_charge"));
-                    transactionParameters.put("payment_type", transactionSearch.getString("pickup"));
-//                    transactionParameters.put("ETA","22:33");
-                    Double expectedPayment = Double.parseDouble(transactionSearch.getString("delivery_charge")) + Double.parseDouble(transactionSearch.getString("commission_charge"));
-                    updateAccepted.child("deliverlatlong")
-                            .child("pickuplocationname").setValue(transactionSearch.getString("pickup"));
-                    updateAccepted.child("deliverlatlong")
-                            .child("totalCharge").setValue(new DecimalFormat("#.#").format(expectedPayment));
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-
-
-        updateTrasaction.post(UPDATEDTRANSACTION_URL, transactionParameters, new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-
-                if (response.length() != 0){
-                    try {
-                        if (response.getString("success").equals("Done")){
-                            Log.i("DeliPackMessage", response.toString());
-                            customerContract.setBasicCookies("transaction_id",response.toString(),6,"/");
-                            finish();
-                            Intent changeActivitiies = new Intent(context, switchto);
-                            startActivity(changeActivitiies);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                System.out.println(errorResponse);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                System.out.println(responseString);
-            }
-        });
-    }
-
 
     @Override
     protected void onStop() {
@@ -257,4 +174,7 @@ public class CashOptionSelected extends AppCompatActivity {
         System.out.println("On destroy cash option in  called");
 
     }
+
+
+
 }

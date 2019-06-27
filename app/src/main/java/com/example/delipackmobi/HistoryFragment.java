@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.delipackmobi.CustomerContract.CustomerContract;
 import com.example.delipackmobi.CustomerContract.UpdateHistory;
@@ -68,10 +69,16 @@ public class HistoryFragment extends Fragment implements UpdateHistory {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
 
-        recyclerView = getActivity().findViewById(R.id.history_list_display);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        if (getActivity() != null ){
+            recyclerView = getActivity().findViewById(R.id.history_list_display);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(linearLayoutManager);
+        }
+
         customerHistoryContract = new CustomerContract(getActivity());
 
         if (customerHistoryModel != null){

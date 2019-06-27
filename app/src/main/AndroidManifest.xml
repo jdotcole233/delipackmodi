@@ -15,7 +15,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:replace="android:theme">
-        <activity android:name=".TripInSessionCancel"></activity>
+        <activity android:name=".TransactionLoader"
+            android:theme="@style/AppTheme.TransparentTheme"
+            android:launchMode="singleTask"
+            ></activity>
+        <activity android:name=".TripInSessionCancel"
+            android:theme="@style/AppTheme.TransparentTheme"
+            android:launchMode="singleTask"
+            />
         <activity
             android:name=".RegisterWelcomeFinalWalkthrough"
             android:launchMode="singleTask" />

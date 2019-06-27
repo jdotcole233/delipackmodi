@@ -49,7 +49,7 @@ public class ManageHistoryClass implements Runnable {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
 
-                if (response.length() != 0){
+                if (response != null){
                     Log.i("DeliPackMessage", "in Objects " + response.toString());
                 }
 
@@ -59,7 +59,7 @@ public class ManageHistoryClass implements Runnable {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
 
-                if (response.length() != 0){
+                if (response != null){
                     for (int i = 0; i < response.length(); i++){
                         try {
 //                            Log.i("DeliPackMessage",response.getJSONObject(i).toString());
@@ -84,7 +84,7 @@ public class ManageHistoryClass implements Runnable {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-                if (errorResponse.length() != 0){
+                if (errorResponse != null){
                     Log.i("DeliPackMessage", "Error in object " + errorResponse.toString());
                 }
             }

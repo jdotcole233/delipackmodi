@@ -114,7 +114,7 @@ public class SigninActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
-                            System.out.println(errorResponse);
+                            System.out.println("Response from on failure " + errorResponse);
 //                            progressBar.setVisibility(View.INVISIBLE);
                             activateWidgets();
 
@@ -123,7 +123,7 @@ public class SigninActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
-                            System.out.println(responseString);
+                            System.out.println("Response from on failure throwable " + responseString);
 //                            progressBar.setVisibility(View.INVISIBLE);
                             activateWidgets();
                         }

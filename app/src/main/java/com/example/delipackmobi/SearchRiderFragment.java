@@ -109,6 +109,9 @@ public class SearchRiderFragment extends Fragment {
     CustomerLocalPushNotification customerLocalPushNotification;
     private String pickMessage, deliveryMessage;
     private ImageButton showmoredisappear;
+    private Thread thread;
+    private AsyncHttpClient asyncHttpClient;
+
 
 
 
@@ -153,6 +156,7 @@ public class SearchRiderFragment extends Fragment {
         RateCompanyRider.searchriderfragment = getActivity();
         networkAllowanceCheck = new NetworkAllowanceCheck(getActivity());
         manageNetworkConnectionClass = new ManageNetworkConnectionClass(getActivity());
+        asyncHttpClient = new AsyncHttpClient();
 
         riderFound = false;
         proximity = 0.1;
@@ -245,13 +249,13 @@ public class SearchRiderFragment extends Fragment {
                             autocompleteFragment.setText(searchingString.get(4));
                             autocompleteFragment1.setText(searchingString.get(5));
                             Location.distanceBetween(Double.parseDouble(searchingString.get(0)),Double.parseDouble(searchingString.get(1)), Double.parseDouble(searchingString.get(2)),Double.parseDouble(searchingString.get(3)), distdiff);
-                            getSearchDetails(searchingString.get(4), searchingString.get(5), getPriceAndCommission((double)Math.round(distdiff[0]/1000), 5.0,4.0)[0],
-                                    getPriceAndCommission((double)Math.round(distdiff[0]/1000), 5.0, 4.0)[1]);
+                            getSearchDetails(searchingString.get(4), searchingString.get(5), getPriceAndCommission((double)Math.round(distdiff[0]/1000), 10.0,6.4)[0],
+                                    getPriceAndCommission((double)Math.round(distdiff[0]/1000), 10.0, 6.4)[1]);
 
                         } else {
                             System.out.println(pickUpDeliveryModel.getFromInformation().size());
                             Location.distanceBetween(pickUpFromLatLng.latitude,pickUpFromLatLng.longitude, deliverToLatLng.latitude,deliverToLatLng.longitude, distdiff);
-                            getSearchDetails(pickUpDeliveryModel.getFromInformation().get("pickup"), pickUpDeliveryModel.getDeliveryInformation().get("delivery"), getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[0], getPriceAndCommission((double)Math.round(distdiff[0]/1000),5.0,4.0)[1]);
+                            getSearchDetails(pickUpDeliveryModel.getFromInformation().get("pickup"), pickUpDeliveryModel.getDeliveryInformation().get("delivery"), getPriceAndCommission((double)Math.round(distdiff[0]/1000),10.0,6.4)[0], getPriceAndCommission((double)Math.round(distdiff[0]/1000),10.0,6.4)[1]);
                         }
 
 
@@ -722,18 +726,15 @@ public class SearchRiderFragment extends Fragment {
                     }
 
                     @Override
-                    public void onKeyExited(final String key) {
-                        Log.i("DeliPackMessage","On key existed while searching for rider " + key);
-
+                    public void onKeyExited(String key) {
 
                     }
 
                     @Override
                     public void onKeyMoved(String key, GeoLocation location) {
-                        Log.i("DeliPackMessage","On key moved while searching for rider " + key + " " + location);
 
-                        System.out.println("On key moved while searching for rider");
                     }
+
 
                     @Override
                     public void onGeoQueryReady() {
@@ -1089,23 +1090,19 @@ public class SearchRiderFragment extends Fragment {
     }
 
     public void makeDirectionRequest(final LatLng pickupDirection, final LatLng deliverDirection, final int pickupresID, final int deliverresID){
+        Log.i("DeliPackMessage", "make direction request called");
 
         try{
-            AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
             String networkURL = "";
             if (getActivity() != null){
                 networkURL = parseDirectionsURL(pickupDirection, deliverDirection);
             }
 
-            Log.i("DeliPackMessage", networkURL);
             asyncHttpClient.get(networkURL, new JsonHttpResponseHandler(){
-
-
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     super.onSuccess(statusCode, headers, response);
-                    if (response.length() != 0){
-                        Log.i("DeliPackMessage", response.toString());
+                    if (response != null){
                         map.addMarker(new MarkerOptions().position(pickupDirection).icon(BitmapDescriptorFactory.fromResource(pickupresID)));
                         map.addMarker(new MarkerOptions().position(deliverDirection).icon(BitmapDescriptorFactory.fromResource(deliverresID)));
 
@@ -1117,7 +1114,6 @@ public class SearchRiderFragment extends Fragment {
 
                             String points_link = object.getJSONObject("overview_polyline").getString("points");
                             List<LatLng> latLngs = decodePoly(points_link);
-                            Log.i("DeliPackMessage", "Decoded " + latLngs.toString());
                             polylineOptions = new PolylineOptions().addAll(latLngs).color(Color.parseColor("#1565c0"));
                             map.addPolyline(polylineOptions);
 

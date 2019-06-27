@@ -142,10 +142,15 @@ public class RateCompanyRider extends AppCompatActivity {
                         cardView.setVisibility(View.VISIBLE);
 
                         customerContract.deleteCookie(cookie);
+
                         finish();
                     } else if (cookie.getName().equals("search_data")){
                         customerContract.deleteCookie(cookie);
                     }
+
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest");
+                    databaseReference.child(customerID).removeValue();
+
                 }
             }
         });
@@ -167,7 +172,9 @@ public class RateCompanyRider extends AppCompatActivity {
                         super.onSuccess(statusCode, headers, response);
 
 
-                        if (response.length() != 0){
+                        if (response != null){
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest");
+                            databaseReference.child(customerID).removeValue();
                             Intent thankyouIntent = new Intent(RateCompanyRider.this, TripCompletedRatingMessage.class);
                             startActivity(thankyouIntent);
                             finish();
@@ -177,7 +184,7 @@ public class RateCompanyRider extends AppCompatActivity {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
-                        Log.i("DeliPackMessage", errorResponse.toString());
+                        Log.i("DeliPackMessage", errorResponse + "");
                     }
 
                     @Override

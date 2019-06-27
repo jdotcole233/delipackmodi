@@ -39,9 +39,17 @@ public class TripCompletedRatingMessage extends AppCompatActivity {
                 CardView cardView = tripCompletedSearchActivity.findViewById(R.id.searchridercardview);
                 CardView welcomecardview = tripCompletedSearchActivity.findViewById(R.id.cardsearchwelcome);
                 ImageButton imageButton = tripCompletedSearchActivity.findViewById(R.id.showmoretripinprogress);
-                imageButton.setVisibility(View.INVISIBLE);
-                welcomecardview.setVisibility(View.VISIBLE);
-                cardView.setVisibility(View.VISIBLE);
+                if (welcomecardview != null){
+                    welcomecardview.setVisibility(View.VISIBLE);
+                }
+
+                if (imageButton != null){
+                    imageButton.setVisibility(View.INVISIBLE);
+                }
+
+                if (cardView != null){
+                    cardView.setVisibility(View.VISIBLE);
+                }
 
                 for (Cookie cookie : contract.getPersistentCookieStore().getCookies()){
                        if (cookie.getName().equals("searchdata")){
