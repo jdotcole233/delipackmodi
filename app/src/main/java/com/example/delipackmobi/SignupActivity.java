@@ -19,6 +19,7 @@ import com.thrivecom.ringcaptcha.RingcaptchaApplicationHandler;
 import com.thrivecom.ringcaptcha.RingcaptchaVerification;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -110,11 +111,24 @@ public class SignupActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                                             // If the response is JSONObject instead of expected JSONArray
-                                            Log.i("delipack", response.toString());
-                                            customerContract.setBasicCookies("customerInfomation", response.toString(),1,"/");
-                                            finish();
-                                            Intent registerconfirmed = new Intent(SignupActivity.this, RegisteredWelcomeWalkThrough.class);
-                                            startActivity(registerconfirmed);
+
+                                            if (response != null){
+                                                try {
+                                                    String responded = response.getString("success_cue");
+                                                    if (responded.equals("Success")){
+                                                        Log.i("delipack", response.toString());
+                                                        customerContract.setBasicCookies("customerInfomation", response.toString(),1,"/");
+                                                        finish();
+                                                        Intent registerconfirmed = new Intent(SignupActivity.this, RegisteredWelcomeWalkThrough.class);
+                                                        startActivity(registerconfirmed);
+                                                    } else if (responded.equals("Failed")){
+                                                        new DeliPackAlert(SignupActivity.this, "Duplicate Phone Number", "Please use a different valid phone number or contact support@delivpack.com for help").showDeliPackAlert();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+
                                         }
 
                                         @Override

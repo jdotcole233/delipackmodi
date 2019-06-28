@@ -90,7 +90,7 @@ public class ConfirmCashTransaction extends AsyncTask <String, Void, Boolean> {
                         try {
                             JSONObject transactionCustomer = new JSONObject(cookie.getValue());
                             transactionParameters.put("customerscustomer_id",transactionCustomer.getString("customer_id"));
-                            transactionParameters.put("delivery_status","ACTIVE");
+                            transactionParameters.put("delivery_status","DELIVERED");
 
 
                         } catch (JSONException e) {
