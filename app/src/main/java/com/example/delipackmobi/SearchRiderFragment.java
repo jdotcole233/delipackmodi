@@ -1126,11 +1126,11 @@ public class SearchRiderFragment extends Fragment {
 //                    map.addPolyline(polylineOptions);
                         if(deliverToLatLng == null){
                             if(searchingString != null){
-                                map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.parseDouble(searchingString.get(2)), Double.parseDouble(searchingString.get(3)))));
+//                                map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.parseDouble(searchingString.get(2)), Double.parseDouble(searchingString.get(3)))));
 //                                map.animateCamera(CameraUpdateFactory.zoomTo(11));
                             }
                         } else {
-                            map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
+//                            map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
 //                            map.animateCamera(CameraUpdateFactory.zoomTo(11));
 
                         }

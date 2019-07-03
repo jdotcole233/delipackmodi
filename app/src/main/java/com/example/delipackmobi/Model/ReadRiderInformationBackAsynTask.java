@@ -81,14 +81,14 @@ public class ReadRiderInformationBackAsynTask extends AsyncTask<String, Void, Bo
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
-                        System.out.println(errorResponse);
+                        System.out.println("On failure in Read Rider information1 " + errorResponse);
                         isRead = false;
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         super.onFailure(statusCode, headers, responseString, throwable);
-                        System.out.println(throwable.getMessage());
+                        System.out.println("On failure in Read Rider information2 "  + throwable.getMessage() + " " + responseString + " " + statusCode);
                         isRead = false;
                     }
                 });

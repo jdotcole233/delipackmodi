@@ -74,7 +74,7 @@ public class CustomerHistoryAdapter extends RecyclerView.Adapter<CustomerHistory
                 intent.putExtra("created_at", customerHistoryList.get(i).getTransaction_date());
                 intent.putExtra("transaction_number", customerHistoryList.get(i).getTransaction_id() );
                 intent.putExtra("transaction_status", customerHistoryList.get(i).getTransaction_status());
-                intent.putExtra("paynent_type", customerHistoryList.get(i).getPayment_type());
+                intent.putExtra("payment_type", customerHistoryList.get(i).getPayment_type());
                v.getContext().startActivity(intent);
             }
         });

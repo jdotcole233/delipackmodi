@@ -82,4 +82,10 @@
             android:textColor="#FFF"
             />
     </LinearLayout>
+    <ProgressBar
+        android:id="@+id/ratingloader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        />
 </LinearLayout>

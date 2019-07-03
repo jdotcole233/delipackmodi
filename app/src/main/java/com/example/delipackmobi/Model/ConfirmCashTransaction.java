@@ -104,7 +104,7 @@ public class ConfirmCashTransaction extends AsyncTask <String, Void, Boolean> {
                             transactionParameters.put("source",transactionSearch.getString("pickup"));
                             transactionParameters.put("delivery_charge",  transactionSearch.getDouble("delivery_charge"));
                             transactionParameters.put("commission_charge", transactionSearch.getDouble("commission_charge"));
-                            transactionParameters.put("payment_type", transactionSearch.getString("pickup"));
+                            transactionParameters.put("payment_type", strings[2]);
 //                    transactionParameters.put("ETA","22:33");
                             Double expectedPayment = Double.parseDouble(transactionSearch.getString("delivery_charge")) + Double.parseDouble(transactionSearch.getString("commission_charge"));
                             updateAccepted.child("deliverlatlong")

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 
 import com.example.delipackmobi.CustomerContract.CustomerContract;
@@ -42,6 +43,7 @@ public class RateCompanyRider extends AppCompatActivity {
     private RequestParams requestParams;
     public static Activity searchriderfragment;
     private CustomerLocalPushNotification customerLocalPushNotification;
+    private ProgressBar ratingloader;
 
 
     @Override
@@ -61,6 +63,7 @@ public class RateCompanyRider extends AppCompatActivity {
         rateNextButton = findViewById(R.id.ratingnextButton);
         riderRated = findViewById(R.id.raterider);
         closerating = findViewById(R.id.cancelrating);
+        ratingloader = findViewById(R.id.ratingloader);
         ratevalue = 0.0f;
 
         System.out.println("Customer cookies " + customerContract.getPersistentCookieStore().getCookies());
@@ -159,6 +162,7 @@ public class RateCompanyRider extends AppCompatActivity {
         rateNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ratingloader.setVisibility(View.VISIBLE);
                 requestParams = new RequestParams();
                 requestParams.put("rate_value", Float.toString(ratevalue));
                 requestParams.put("company_riderscompany_rider_id", companyRiderID);
@@ -170,9 +174,8 @@ public class RateCompanyRider extends AppCompatActivity {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
-
-
                         if (response != null){
+                            ratingloader.setVisibility(View.INVISIBLE);
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest");
                             databaseReference.child(customerID).removeValue();
                             Intent thankyouIntent = new Intent(RateCompanyRider.this, TripCompletedRatingMessage.class);
@@ -185,12 +188,16 @@ public class RateCompanyRider extends AppCompatActivity {
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
                         Log.i("DeliPackMessage", errorResponse + "");
+                        ratingloader.setVisibility(View.INVISIBLE);
+
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         super.onFailure(statusCode, headers, responseString, throwable);
                         Log.i("DeliPackMessage", responseString);
+                        ratingloader.setVisibility(View.INVISIBLE);
+
                     }
                 });
             }

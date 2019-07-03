@@ -51,7 +51,7 @@ public class HistoryDetails extends AppCompatActivity {
         created_date.setText(historyIntent.getStringExtra("created_at"));
         transaction_number.setText(historyIntent.getStringExtra("transaction_number"));
         status.setText(historyIntent.getStringExtra("transaction_status"));
-        payment_type.setText(historyIntent.getStringExtra("paynent_type"));
+        payment_type.setText(historyIntent.getStringExtra("payment_type"));
         charges.setText("GHC " + historyIntent.getStringExtra("charges"));
 
         close_history.setOnClickListener(new View.OnClickListener() {
