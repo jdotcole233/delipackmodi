@@ -28,12 +28,10 @@
         <activity android:name="com.delipackport.delipackmobi.TransactionLoader"
             android:theme="@style/AppTheme.TransparentTheme"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
             ></activity>
         <activity android:name="com.delipackport.delipackmobi.TripInSessionCancel"
             android:theme="@style/AppTheme.TransparentTheme"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
             />
         <activity
             android:name="com.delipackport.delipackmobi.RegisterWelcomeFinalWalkthrough"
@@ -76,29 +74,24 @@
             android:name="com.delipackport.delipackmobi.TripCompletedRatingMessage"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.TransparentTheme"
-            android:screenOrientation="portrait"
             />
         <activity
             android:name="com.delipackport.delipackmobi.RateCompanyRider"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.TransparentTheme"
-            android:screenOrientation="portrait"
             />
         <activity
             android:name="com.delipackport.delipackmobi.PackageCancel"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.TransparentTheme"
-            android:screenOrientation="portrait"
             />
         <activity
             android:name="com.delipackport.delipackmobi.PackageInProgress"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.TransparentTheme"
-            android:screenOrientation="portrait"
             />
         <activity
             android:name="com.delipackport.delipackmobi.RiderPickedUpInformation"
-            android:screenOrientation="portrait"
 
             />
         <activity
@@ -140,7 +133,6 @@
         <activity
             android:name="com.delipackport.delipackmobi.HistoryDetails"
             android:theme="@style/AppTheme.HistoryCustomTheme"
-            android:screenOrientation="portrait"
             />
         <activity
             android:name="com.delipackport.delipackmobi.MobileMoneyPayment"
@@ -157,7 +149,6 @@
             android:name="com.delipackport.delipackmobi.DeliPackEventLoader"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.TransparentTheme"
-            android:screenOrientation="portrait"
             />
 
         <meta-data

@@ -123,11 +123,12 @@ public class ProfileFragment extends Fragment implements UpdateHistory {
         tellfriendbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message = "Finding a delivery guy has never been this easy.\n" +
+                String message = customerfirstname + " " + customerlastname + " is excited to share DeliPack with you.\n" +
+                        "A new and exciting way to run your errands/move your packages around without any hustle." +
                         "You are 2 simple taps away from finding a delivery guy and receiving real time feed of your delivery.\n" +
                         "The future is now on your phone.\n" +
                         "Download DeliPack and be part of an exciting family " +
-                        "https://play.google.com/store/apps/details?id=com.delipackport.delipackmobi";
+                        "http://bit.ly/2XJ3Unu";
                 Intent shareinfointent = new Intent();
                 shareinfointent.setAction(Intent.ACTION_SEND);
                 shareinfointent.putExtra(Intent.EXTRA_TEXT, message);
