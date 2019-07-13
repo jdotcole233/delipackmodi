@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.delipackmobi">
+    package="com.delipackport.delipackmobi">
+
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_SMS" tools:node="remove"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" tools:node="remove"/>
+    <uses-permission android:name="android.permission.WRITE_SMS" tools:node="remove"/>
+
+
+
+
 
     <application
         android:allowBackup="true"
@@ -15,84 +25,140 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:replace="android:theme">
-        <activity android:name=".TransactionLoader"
+        <activity android:name="com.delipackport.delipackmobi.TransactionLoader"
             android:theme="@style/AppTheme.TransparentTheme"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             ></activity>
-        <activity android:name=".TripInSessionCancel"
+        <activity android:name="com.delipackport.delipackmobi.TripInSessionCancel"
             android:theme="@style/AppTheme.TransparentTheme"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             />
         <activity
-            android:name=".RegisterWelcomeFinalWalkthrough"
-            android:launchMode="singleTask" />
+            android:name="com.delipackport.delipackmobi.RegisterWelcomeFinalWalkthrough"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".RegisterWelcomeSecondWalkThrough"
-            android:launchMode="singleTask" />
+            android:name="com.delipackport.delipackmobi.RegisterWelcomeSecondWalkThrough"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".RegisteredWelcomeWalkThrough"
-            android:launchMode="singleTask" />
+            android:name="com.delipackport.delipackmobi.RegisteredWelcomeWalkThrough"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".NetworkConnectionView"
-            android:launchMode="singleTask" />
+            android:name="com.delipackport.delipackmobi.NetworkConnectionView"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".ReportProblemView" />
-        <activity android:name=".CustomerSupportView" />
+        <activity android:name="com.delipackport.delipackmobi.ReportProblemView"
+            android:screenOrientation="portrait"
+
+            />
+        <activity android:name="com.delipackport.delipackmobi.CustomerSupportView"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".PromotionsView"
-            android:windowSoftInputMode="stateVisible" />
+            android:name="com.delipackport.delipackmobi.PromotionsView"
+            android:windowSoftInputMode="stateVisible"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".TripCompletedRatingMessage"
+            android:name="com.delipackport.delipackmobi.TripCompletedRatingMessage"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.TransparentTheme" />
+            android:theme="@style/AppTheme.TransparentTheme"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".RateCompanyRider"
+            android:name="com.delipackport.delipackmobi.RateCompanyRider"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.TransparentTheme" />
+            android:theme="@style/AppTheme.TransparentTheme"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".PackageCancel"
+            android:name="com.delipackport.delipackmobi.PackageCancel"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.TransparentTheme" />
+            android:theme="@style/AppTheme.TransparentTheme"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".PackageInProgress"
+            android:name="com.delipackport.delipackmobi.PackageInProgress"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.TransparentTheme" />
-        <activity android:name=".RiderPickedUpInformation" />
+            android:theme="@style/AppTheme.TransparentTheme"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".CashOptionSelected"
-            android:launchMode="singleTask" />
-        <activity android:name=".EditCustomerProfile" />
+            android:name="com.delipackport.delipackmobi.RiderPickedUpInformation"
+            android:screenOrientation="portrait"
+
+            />
         <activity
-            android:name=".Homedashboard_user"
-            android:label="@string/title_activity_homedashboard_user" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SplashActivity">
+            android:name="com.delipackport.delipackmobi.CashOptionSelected"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name="com.delipackport.delipackmobi.EditCustomerProfile"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name="com.delipackport.delipackmobi.Homedashboard_user"
+            android:label="@string/title_activity_homedashboard_user"
+            android:screenOrientation="portrait"
+
+            />
+        <activity android:name="com.delipackport.delipackmobi.MainActivity"
+            android:screenOrientation="portrait"
+
+            />
+        <activity android:name="com.delipackport.delipackmobi.SplashActivity"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SigninActivity" />
-        <activity android:name=".SignupActivity" />
         <activity
-            android:name=".HistoryDetails"
-            android:theme="@style/AppTheme.HistoryCustomTheme" />
+            android:name="com.delipackport.delipackmobi.SigninActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".MobileMoneyPayment"
-            android:theme="@style/AppTheme.HistoryCustomTheme" />
+            android:name="com.delipackport.delipackmobi.SignupActivity"
+            android:screenOrientation="portrait"
+
+            />
         <activity
-            android:name=".SearchResult"
+            android:name="com.delipackport.delipackmobi.HistoryDetails"
+            android:theme="@style/AppTheme.HistoryCustomTheme"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name="com.delipackport.delipackmobi.MobileMoneyPayment"
+            android:theme="@style/AppTheme.HistoryCustomTheme"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name="com.delipackport.delipackmobi.SearchResult"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.HistoryCustomTheme" />
+            android:theme="@style/AppTheme.HistoryCustomTheme"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".DeliPackEventLoader"
+            android:name="com.delipackport.delipackmobi.DeliPackEventLoader"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.TransparentTheme" />
+            android:theme="@style/AppTheme.TransparentTheme"
+            android:screenOrientation="portrait"
+            />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -104,7 +170,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <service android:name=".CustomerContract.HistoryServiceClass">
+        <service android:name="com.delipackport.delipackmobi.CustomerContract.HistoryServiceClass">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
@@ -113,3 +179,4 @@
     </application>
 
 </manifest>
+

@@ -11,6 +11,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="confirm_pick_up">Confirm pick up</string>
+    <string name="choose_cash_payment_option">Choose cash payment option</string>
+    <string name="cash_option">Cash Option</string>
+    <string name="cancel_cash_option_selected">cancel cash option selected</string>
 
     <string-array name="payment_option">
         <item></item>

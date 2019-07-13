@@ -8,6 +8,93 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:636386670726:android:9e0e675b31e08d98",
+        "android_client_info": {
+          "package_name": "com.delipackport.delipackmobi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "636386670726-5gsjsq2vngti64d5ljrgkiff3i64h3e6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDaLumzTw3OcmHsutV5VxSSbEu0C99r44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "636386670726-5gsjsq2vngti64d5ljrgkiff3i64h3e6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636386670726:android:f373600dc3159887",
+        "android_client_info": {
+          "package_name": "com.delivpack.delipackdriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "636386670726-5gsjsq2vngti64d5ljrgkiff3i64h3e6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDaLumzTw3OcmHsutV5VxSSbEu0C99r44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "636386670726-5gsjsq2vngti64d5ljrgkiff3i64h3e6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636386670726:android:9e51514f52d61bcc",
+        "android_client_info": {
+          "package_name": "com.delivpack.delipackmobi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "636386670726-5gsjsq2vngti64d5ljrgkiff3i64h3e6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDaLumzTw3OcmHsutV5VxSSbEu0C99r44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "636386670726-5gsjsq2vngti64d5ljrgkiff3i64h3e6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:636386670726:android:1219b02061f1b55c",
         "android_client_info": {
           "package_name": "com.example.delipackdriver"
@@ -21,7 +108,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCjef3_8TQCY_XqpomqnSeTXYCdBHAYIXU"
+          "current_key": "AIzaSyDDaLumzTw3OcmHsutV5VxSSbEu0C99r44"
         }
       ],
       "services": {
@@ -50,7 +137,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCjef3_8TQCY_XqpomqnSeTXYCdBHAYIXU"
+          "current_key": "AIzaSyDDaLumzTw3OcmHsutV5VxSSbEu0C99r44"
         }
       ],
       "services": {
