@@ -1,8 +1,10 @@
 package com.delipackport.delipackmobi;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -156,11 +158,27 @@ public class Homedashboard_user extends AppCompatActivity {
                     switchFragments(profileFragment);
                     return true;
                 case R.id.logout_user:
-                    customerContract.signoutcookies();
-                    System.out.println("Sign out cookies " + customerContract.getPersistentCookieStore().getCookies().toString());
-                    Intent signout = new Intent(Homedashboard_user.this, MainActivity.class);
-                    startActivity(signout);
-                    finish();
+                    AlertDialog.Builder signoutAlert = new AlertDialog.Builder(Homedashboard_user.this);
+                    signoutAlert.setTitle("We Hope to see you soon");
+                    signoutAlert.setMessage("Are you sure you want to Logout?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    customerContract.signoutcookies();
+                                    System.out.println("Sign out cookies " + customerContract.getPersistentCookieStore().getCookies().toString());
+                                    Intent signout = new Intent(Homedashboard_user.this, MainActivity.class);
+                                    startActivity(signout);
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    return;
+                                }
+                            });
+                    signoutAlert.create();
+                    signoutAlert.show();
                     return true;
             }
             return true;
