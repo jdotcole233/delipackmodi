@@ -25,7 +25,7 @@
             android:orientation="horizontal"
             >
 
-            <ImageView
+            <com.loopj.android.image.SmartImageView
                 android:id="@+id/company_history_logo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"

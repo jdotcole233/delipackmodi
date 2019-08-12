@@ -5,11 +5,11 @@ import java.io.Serializable;
 public class CustomerHistoryModel implements Serializable {
     private String company_name, company_id;
     private String pickup_location;
-    private String delivery_location, transaction_status, payment_type;
+    private String delivery_location, transaction_status, payment_type, company_logo_path;
     private String price, ridername, bike_registration, transaction_date, transaction_id;
 
 
-    public CustomerHistoryModel(String company_id, String company_name, String pickup_location, String delivery_location, String transaction_status, String payment_type, String price, String ridername, String bike_registration, String transaction_date, String transaction_id) {
+    public CustomerHistoryModel(String company_id, String company_name, String pickup_location, String delivery_location, String transaction_status, String payment_type, String price, String ridername, String bike_registration, String transaction_date, String transaction_id, String company_logo_path) {
         this.company_id = company_id;
         this.company_name = company_name;
         this.pickup_location = pickup_location;
@@ -21,7 +21,10 @@ public class CustomerHistoryModel implements Serializable {
         this.bike_registration = bike_registration;
         this.transaction_date = transaction_date;
         this.transaction_id = transaction_id;
+        this.company_logo_path = company_logo_path;
     }
+
+
 
     public void setCompany_name(String company_name) {
         this.company_name = company_name;
@@ -105,5 +108,9 @@ public class CustomerHistoryModel implements Serializable {
 
     public String getCompany_id() {
         return company_id;
+    }
+
+    public String getCompany_logo_path() {
+        return company_logo_path;
     }
 }

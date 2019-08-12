@@ -6,12 +6,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.delipackport.delipackmobi.CustomerContract.CustomerContract;
+import com.delipackport.delipackmobi.CustomerContract.ManageNetworkConnectionClass;
 import com.delipackport.delipackmobi.CustomerContract.UpdateDownloadText;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +35,7 @@ public class DeliPackEventLoader extends AppCompatActivity implements UpdateDown
     private String customerID, rider_id;
     private TextView downloadtext;
     String rID = "";
+    private ManageNetworkConnectionClass manageNetworkConnectionClass;
 
 
 
@@ -47,6 +52,8 @@ public class DeliPackEventLoader extends AppCompatActivity implements UpdateDown
         downloadtext = findViewById(R.id.downloadtext);
         customerContract = new CustomerContract(this);
         SearchRiderFragment.delipackEventloader = this;
+        manageNetworkConnectionClass = new ManageNetworkConnectionClass(this);
+
         for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
             if (cookie.getName().equals("customerInfomation")){
                 try {
@@ -100,44 +107,72 @@ public class DeliPackEventLoader extends AppCompatActivity implements UpdateDown
         endridersearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest").child(customerID);
-                DatabaseReference riderfoundforcustomer = FirebaseDatabase.getInstance().getReference().child("RiderFoundForCustomer");
 
-                System.out.println("End Rider search ");
-                databaseReference.child("riderid").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()){
-                            System.out.println("End Rider search " + dataSnapshot.getValue());
-                            rID = dataSnapshot.getValue().toString();
+                if (manageNetworkConnectionClass.checkConnectivity()){
+                    final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("CustomerRiderRequest").child(customerID);
+                    DatabaseReference riderfoundforcustomer = FirebaseDatabase.getInstance().getReference().child("RiderFoundForCustomer");
+
+                    System.out.println("End Rider search ");
+                    databaseReference.child("riderid").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()){
+                                System.out.println("End Rider search " + dataSnapshot.getValue());
+                                rID = dataSnapshot.getValue().toString();
+                            } else {
+                                Log.i("Delipack", "Does not exist");
+                                databaseReference.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.i("Delipack", "Done successfully ");
+                                        SearchRiderFragment.isSearchInProgress = false;
+                                        SearchRiderFragment.proximity = 0.1;
+                                        finish();
+                                        return;
+                                    }
+                                }).addOnCanceledListener(new OnCanceledListener() {
+                                    @Override
+                                    public void onCanceled() {
+                                        Log.i("Delipack", "On Cancelled ");
+                                    }
+                                });
+
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
+                        }
+                    });
 
-                if (rider_id != null){
-                    System.out.println("In rider_id");
-                    riderfoundforcustomer.child(rider_id).child("assigned").setValue("not assigned");
-                    databaseReference.removeValue();
-
-                } else {
-                    if(rID != null){
-                        System.out.println("In rID " + rID);
-                        riderfoundforcustomer.child(rID).child("assigned").setValue("not assigned");
+                    if (rider_id != null){
+                        System.out.println("In rider_id");
+                        riderfoundforcustomer.child(rider_id).child("assigned").setValue("not assigned");
                         databaseReference.removeValue();
 
+                    } else {
+                        if(rID != null){
+                            System.out.println("In rID " + rID);
+                            riderfoundforcustomer.child(rID).child("assigned").setValue("not assigned");
+                            databaseReference.removeValue();
+
+                        }
+
                     }
 
+                    SearchRiderFragment.picklat = "";
+                    SearchRiderFragment.picklong = "";
+                    SearchRiderFragment.proximity = 0.1;
+//                finish();
+                } else {
+                    SearchRiderFragment.isSearchInProgress = false;
+                    SearchRiderFragment.proximity = 0.1;
+                    finish();
+                    return;
                 }
 
-                SearchRiderFragment.picklat = "";
-                SearchRiderFragment.picklong = "";
-                SearchRiderFragment.proximity = 0.1;
-//                finish();
+
             }
         });
     }
@@ -171,7 +206,7 @@ public class DeliPackEventLoader extends AppCompatActivity implements UpdateDown
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        System.out.println("On destrouyeeed called");
+        System.out.println("On destroyed called");
     }
 
 

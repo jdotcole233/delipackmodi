@@ -17,6 +17,7 @@ import com.delipackport.delipackmobi.HistoryDetails;
 import com.delipackport.delipackmobi.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
+import com.loopj.android.image.SmartImageView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,6 +31,8 @@ public class CustomerHistoryAdapter extends RecyclerView.Adapter<CustomerHistory
 
     private List<CustomerHistoryModel> customerHistoryList;
     private Context context;
+    private final String LOGO_BASE_URL = "https://superuser.delipackport.com/company_logos/";
+
 
     public CustomerHistoryAdapter(List<CustomerHistoryModel> customerHistoryList, Context context) {
         this.customerHistoryList = customerHistoryList;
@@ -50,8 +53,9 @@ public class CustomerHistoryAdapter extends RecyclerView.Adapter<CustomerHistory
             myViewHolder.company_name.setText(customerHistoryList.get(i).getCompany_name());
             myViewHolder.pickup.setText(customerHistoryList.get(i).getPickup_location());
             myViewHolder.delivery.setText(customerHistoryList.get(i).getDelivery_location());
+            myViewHolder.company_history_logo.setImageUrl(LOGO_BASE_URL + customerHistoryList.get(i).getCompany_logo_path());
 
-        loadCompanyLogo(context, customerHistoryList.get(i).getCompany_name(), customerHistoryList.get(i).getCompany_id(), myViewHolder.company_history_logo);
+//        loadCompanyLogo(context, customerHistoryList.get(i).getCompany_name(), customerHistoryList.get(i).getCompany_id(), myViewHolder.company_history_logo);
 
 //            myViewHolder.price.setText(customerHistoryList.get(i).getPrice());
 
@@ -94,7 +98,7 @@ public class CustomerHistoryAdapter extends RecyclerView.Adapter<CustomerHistory
         private TextView delivery;
         private TextView price;
         private Button detailsBtn;
-        private ImageView company_history_logo;
+        private SmartImageView company_history_logo;
 
         public MyViewHolder(View itemView) {
             super(itemView);

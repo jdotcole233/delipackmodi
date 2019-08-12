@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.loopj.android.image.SmartImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,12 +28,15 @@ import cz.msebera.android.httpclient.cookie.Cookie;
 public class PackageInProgress extends AppCompatActivity {
 
     private ImageView showlessormorebtn, showmorebtn;
+    private SmartImageView inprogresslogo;
     private Button cancelbtn;
     private Button callclientbtn;
     public static Activity Homedardboardactivity;
     private CustomerContract customerContract;
     private TextView companyname, regnumber, pickuplocation, deliverylocation;
     private String riderID, customerID, riderPhoneNumber;
+    private final String LOGO_BASE_URL = "https://superuser.delipackport.com/company_logos/";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class PackageInProgress extends AppCompatActivity {
         regnumber = findViewById(R.id.inprogressbikeregnumber);
         pickuplocation = findViewById(R.id.inprogresspickup);
         deliverylocation = findViewById(R.id.inprogressdelivery);
+        inprogresslogo = findViewById(R.id.inprogresslogo);
         TripInSessionCancel.packageinprogresstripsessioncancel = this;
 
         for (Cookie cookie: customerContract.getPersistentCookieStore().getCookies()){
@@ -72,6 +77,7 @@ public class PackageInProgress extends AppCompatActivity {
                     companyname.setText("Company: " + riderInprogressInfor.getString("company_name"));
                     riderID = riderInprogressInfor.getString("company_rider_id");
                     riderPhoneNumber = riderInprogressInfor.getString("work_phone");
+                    inprogresslogo.setImageUrl(LOGO_BASE_URL + riderInprogressInfor.getString("company_logo_path"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

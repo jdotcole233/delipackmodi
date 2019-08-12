@@ -8,6 +8,7 @@
 
     >
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -43,7 +44,8 @@
             android:orientation="vertical"
             >
 
-            <ImageView
+            <com.loopj.android.image.SmartImageView
+                android:id="@+id/inprogresslogo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@drawable/deli_s"

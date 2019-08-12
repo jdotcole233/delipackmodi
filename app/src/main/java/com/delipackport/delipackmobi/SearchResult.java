@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
+import com.loopj.android.image.SmartImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +43,7 @@ public class SearchResult extends AppCompatActivity {
 
     private Button confirmButton;
     private ImageButton cancelButton;
+    private SmartImageView resultCompanyLogo;
     private Spinner paymentMethod;
     private String payment_selection;
     private String riderID, customerID, company_name, company_ID;
@@ -52,7 +54,8 @@ public class SearchResult extends AppCompatActivity {
     public static int countDownTime;
     private CountDownTimer paymentCountDown;
     private DatabaseReference customerRequest, riderfoundforcustomer;
-    private ImageView resultCompanyLogo;
+//    private ImageView resultCompanyLogo;
+    private final String LOGO_BASE_URL = "https://superuser.delipackport.com/company_logos/";
 
 
     @Override
@@ -70,7 +73,7 @@ public class SearchResult extends AppCompatActivity {
         confirmButton = findViewById(R.id.make_payment);
         cancelButton = findViewById(R.id.cancelsearchresult);
         paymentMethod = findViewById(R.id.payment_choice);
-        resultCompanyLogo = findViewById(R.id.resultCompanyLogo);
+        resultCompanyLogo =  findViewById(R.id.resultCompanyLogo);
         customerContract = new CustomerContract(this);
         sc = this;
         countDownTime = 90000;
@@ -95,12 +98,13 @@ public class SearchResult extends AppCompatActivity {
                     riderID = displayCompanyData.getString("company_rider_id");
                     company_name = displayCompanyData.getString("company_name");
                     company_ID = displayCompanyData.getString("companies_id");
+                    String logo_path = displayCompanyData.getString("company_logo_path");
 
                     companyname.setText("Company: " + displayCompanyData.getString("company_name"));
                     bikeregistration.setText("Reg number:" + displayCompanyData.getString("registered_number"));
                     bikername.setText("Rider name: " + displayCompanyData.getString("first_name") + " " + displayCompanyData.getString("last_name"));
-
-                    loadCompanyLogo(this, company_name, company_ID, resultCompanyLogo);
+                    resultCompanyLogo.setImageUrl(LOGO_BASE_URL + logo_path);
+//                    loadCompanyLogo(this, company_name, company_ID, resultCompanyLogo);
 //                    try {
 //                        String logourl = "http://superuser.delipackport.com/company_logos/"+company_name.toLowerCase()+company_ID;
 //                        URL url = new URL(logourl);

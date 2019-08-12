@@ -15,25 +15,22 @@ public class ManageNetworkConnectionClass {
 
 
     public  boolean checkConnectivity() {
-        Boolean isConnected = false;
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         if(networkInfo != null && networkInfo.isConnected()){
-            isConnected = true;
+            return  true;
 //            Intent networkIntent = new Intent("networkConnectionCheck");
 //            networkIntent.putExtra("connectionstatus", "connected");
 //            LocalBroadcastManager.getInstance(context).sendBroadcast(networkIntent);
 //            System.out.println("connection alive");
         } else {
-            isConnected = false;
+            return false;
 //            Intent networkIntent = new Intent("networkConnectionCheck");
 //            networkIntent.putExtra("connectionstatus", "not connected");
 //            LocalBroadcastManager.getInstance(context).sendBroadcast(networkIntent);
 //            System.out.println("connection not alive");
 
         }
-
-        return isConnected;
     }
 }

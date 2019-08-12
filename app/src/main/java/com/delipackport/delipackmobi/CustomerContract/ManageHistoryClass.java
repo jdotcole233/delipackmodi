@@ -66,7 +66,7 @@ public class ManageHistoryClass implements Runnable {
                                     transactionObject.getString("destination"), transactionObject.getString("delivery_status")
                                     , transactionObject.getString("payment_type"), transactionObject.getString("total_charge")
                                     , transactionObject.getString("first_name") + " " + transactionObject.getString("last_name")
-                                    , transactionObject.getString("registered_number"), transactionObject.getString("created_at"), transactionObject.getString("transaction_number")));
+                                    , transactionObject.getString("registered_number"), transactionObject.getString("created_at"), transactionObject.getString("transaction_number"), transactionObject.getString("company_logo_path")));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
