@@ -5,16 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/login_screen_background">
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/splashscreen_background"
-        >
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:orientation="horizontal"
+            android:background="@drawable/splashscreen_background"
             >
 
             <ImageButton
@@ -23,21 +20,20 @@
                 android:layout_height="50dp"
                 app:srcCompat="@drawable/ic_close_black_24dp"
                 android:background="@drawable/close_background"
+                android:contentDescription="@string/close_result"
                 />
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginVertical="@dimen/activity_vertical_margin"
                 android:fontFamily="@font/amiko_semibold"
                 android:gravity="center"
-                android:text="Search Result"
+                android:text="@string/search_result"
                 android:textColor="#FFF"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
-    </FrameLayout>
 
 
     <android.support.v7.widget.CardView
@@ -51,7 +47,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_marginTop="10dp"
             >
 
             <LinearLayout
@@ -63,16 +58,16 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Found a rider near you"
+                    android:text="@string/found_a_rider_near_you"
                     android:textColor="@color/colorAccent"
                     android:padding="10dp"
-                    android:textSize="18sp"
+                    android:textSize="13sp"
                     android:fontFamily="sans-serif-light"
                     android:textAlignment="center"
-
                     />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
@@ -98,8 +93,8 @@
                         android:id="@+id/companyname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Company Name"
-                        android:textSize="18dp"
+                        android:text="@string/company_name"
+                        android:textSize="13sp"
                         android:textColor="@color/colorAccent"
                         android:padding="5dp"
                         android:fontFamily="sans-serif-light"
@@ -109,8 +104,8 @@
                         android:id="@+id/riderbikeregistration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Number: GS-234"
-                        android:textSize="18dp"
+                        android:text="@string/number_gs_234"
+                        android:textSize="13sp"
                         android:textColor="@color/colorAccent"
                         android:padding="5dp"
                         android:fontFamily="sans-serif-light"
@@ -120,13 +115,12 @@
                         android:id="@+id/companyridername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Rider: Kwasi Amoako"
-                        android:textSize="18dp"
+                        android:text="@string/rider_kwasi_amoako"
+                        android:textSize="13sp"
                         android:textColor="@color/colorAccent"
                         android:padding="5dp"
                         android:fontFamily="sans-serif-light"
                         />
-
                 </LinearLayout>
 
             </LinearLayout>
@@ -151,8 +145,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Price (GHS)"
-                        android:textSize="14dp"
+                        android:text="@string/price_ghs"
+                        android:textSize="13sp"
                         android:textColor="#000"
                         android:padding="5dp"
                         android:textAlignment="center"
@@ -162,20 +156,18 @@
                         android:id="@+id/transactionprice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text=" 15.0"
+                        android:text="@string/_15_0"
                         android:textAlignment="center"
-                        android:textSize="32dp"
+                        android:textSize="26sp"
                         android:textColor="#000"
                         android:padding="5dp"
                         android:fontFamily="sans-serif-light"
                         android:layout_marginTop="30dp"
                         />
-
                 </android.support.v7.widget.CardView>
 
 
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -193,12 +185,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
-                    android:textSize="18sp"
-                    android:text="Select your payment method"
+                    android:textSize="13sp"
+                    android:text="@string/select_your_payment_method"
                     android:fontFamily="sans-serif-light"
                     android:padding="5dp"
                     android:layout_marginLeft="10dp"
-                    />
+                        android:layout_marginStart="10dp" />
 
                     <Button
                     android:id="@+id/confirm_payment"
@@ -208,7 +200,7 @@
                     android:layout_marginTop="50dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/confirm_button_bg"
-                    android:text="confirm payment"
+                    android:text="@string/confirm_payment"
                     android:textColor="#FFF"
                     android:textSize="20sp"
                     android:visibility="invisible"
@@ -216,12 +208,12 @@
                     <Spinner
                     android:id="@+id/payment_choice"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="40dp"
                     android:background="@drawable/rounded_input_signin"
                     android:spinnerMode="dropdown"
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="50dp"
                     >
                     </Spinner>
 
@@ -235,15 +227,16 @@
                         <Button
                             android:id="@+id/make_payment"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
+                            android:layout_height="40dp"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="110dp"
                             android:layout_marginRight="5dp"
-                            android:background="@drawable/history_header_background"
-                            android:text="Confirm payment"
+                            android:background="@drawable/register_btn_background"
+                            android:text="@string/confirm_payment"
                             android:textColor="#FFF"
-                            android:textSize="15sp"
+                            android:textSize="13sp"
                             android:fontFamily="@font/amiko_semibold"
+                            android:textAllCaps="false"
                             />
                     </LinearLayout>
                 </RelativeLayout>

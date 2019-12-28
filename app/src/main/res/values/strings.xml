@@ -15,11 +15,74 @@
     <string name="choose_cash_payment_option">Choose cash payment option</string>
     <string name="cash_option">Cash Option</string>
     <string name="cancel_cash_option_selected">cancel cash option selected</string>
+    <string name="happy_to_have_you_join_us">Happy to have you join us!!</string>
+    <string name="alredy_have_a_account_sign_in">Alredy have a account? Sign in</string>
+    <string name="sign_up_now">Sign up now</string>
+    <string name="password_again">Password again</string>
+    <string name="password">Password</string>
+    <string name="email_optional">Email (optional)</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+    <string name="join_us">Join us!</string>
+    <string name="close_result">close result</string>
+    <string name="search_result">Search Result</string>
+    <string name="found_a_rider_near_you">Found a rider near you</string>
+    <string name="number_gs_234">Number: GS-234</string>
+    <string name="company_name">Company Name</string>
+    <string name="rider_kwasi_amoako">Rider: Kwasi Amoako</string>
+    <string name="price_ghs">Price (GHS)</string>
+    <string name="_15_0">15.0</string>
+    <string name="confirm_payment">Confirm payment</string>
+    <string name="select_your_payment_method">Select your payment method</string>
+    <string name="pay">Pay</string>
+    <string name="mobile_money_number">Mobile Money Number</string>
+    <string name="close_mobile_money">close mobile money</string>
+    <string name="_1_900">1,900</string>
+    <string name="ghs_15_89">GHS 15.89</string>
+    <string name="charges">Charges</string>
+    <string name="mobile_money">Mobile Money</string>
+    <string name="payment">Payment</string>
+    <string name="success">Success</string>
+    <string name="status">Status</string>
+    <string name="tg63552635">TG63552635</string>
+    <string name="trans_id">Trans ID</string>
+    <string name="tue_apr_16_2019_17_43_21">Tue Apr 16 2019 17:43:21</string>
+    <string name="date">Date</string>
+    <string name="gs_3472">GS-3472</string>
+    <string name="bike">Bike</string>
+    <string name="kwasi_asamoah">Kwasi Asamoah</string>
+    <string name="rider">Rider</string>
+    <string name="vickavelli_delivery">VickaVelli delivery</string>
+    <string name="company">Company</string>
+    <string name="wisconsin_abokobi_road">Wisconsin-Abokobi Road</string>
+    <string name="deliver_to">Deliver to</string>
+    <string name="ashonmang_abokobi_road">Ashonmang-Abokobi Road</string>
+    <string name="pick_up">Pick up</string>
+    <string name="history_details">History Details</string>
+    <string name="deliveries">Deliveries</string>
+    <string name="rating">4.34</string>
+    <string name="rating_label">Rating</string>
+    <string name="months_value">8</string>
+    <string name="months_label">Months</string>
+    <string name="back_key">TODO</string>
+    <string name="pick_up_from">Pick up from :</string>
+    <string name="delivery_to">Delivery to:</string>
+    <string name="details">Details</string>
+    <string name="search_rider">Search Rider</string>
+    <string name="requesting_ride">Requesting ride ....</string>
+    <string name="nice_to_see_you_cole">Nice to see you! Cole</string>
+    <string name="where_to_pickup">Where to pickup?</string>
+    <string name="report_a_problem">Report a problem</string>
+    <string name="_0">0</string>
+    <string name="orders">Orders</string>
+    <string name="emma_philips">Emma Philips</string>
+    <string name="n_a">N/A</string>
+    <string name="todo">TODO</string>
 
     <string-array name="payment_option">
-        <item></item>
+        <item> Choose option</item>
         <item>Cash</item>
-        <item>Mobile Money</item>
+        <item>Mobile money</item>
     </string-array>
 
 
@@ -30,6 +93,7 @@
     </string-array>
 
     <string-array name="cash_payment_option">
+        <item>Choose option</item>
         <item>Pay at pick up</item>
         <item>Pay on delivery</item>
     </string-array>

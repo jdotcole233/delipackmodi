@@ -6,19 +6,13 @@
     android:orientation="vertical"
     android:background="#FFF">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/splashscreen_background"
-        >
-
         <LinearLayout
             android:id="@+id/cashoptiontop"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:orientation="horizontal"
+            android:background="@drawable/splashscreen_background"
             >
-
             <ImageButton
                 android:id="@+id/cancelcashoption"
                 android:layout_width="70dp"
@@ -26,7 +20,6 @@
                 app:srcCompat="@drawable/ic_arrow_back_black_24dp"
                 android:background="@drawable/history_header_background"
                 android:contentDescription="@string/cancel_cash_option_selected"
-
                 />
 
             <TextView
@@ -41,7 +34,6 @@
                 android:textSize="15sp" tools:targetApi="o"/>
 
         </LinearLayout>
-    </FrameLayout>
 
     <TextView
         android:id="@+id/alertMessage"

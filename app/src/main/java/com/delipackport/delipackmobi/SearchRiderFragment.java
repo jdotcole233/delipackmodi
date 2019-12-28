@@ -215,7 +215,6 @@ public class SearchRiderFragment extends Fragment {
 
 
 
-
         rider_search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -619,29 +618,6 @@ public class SearchRiderFragment extends Fragment {
 
 
 
-    public void transactionInProgress(){
-        Intent transactInProg = new Intent(getActivity(), PackageInProgress.class);
-        startActivity(transactInProg);
-
-//        map.addMarker(new MarkerOptions().position(pickUpFromLatLng).title("Pick up"));
-//
-//
-//
-//        PolylineOptions polylineOptions = new PolylineOptions().add(pickUpFromLatLng)
-//                .add(deliverToLatLng).color(Color.RED);
-//        map.addPolyline(polylineOptions);
-//        map.addMarker(new MarkerOptions()
-//                .position(deliverToLatLng)
-//                .title("Deliver to")
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-//
-//        );
-//        map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
-//        map.animateCamera(CameraUpdateFactory.zoomTo(11));
-
-
-    }
-
 
     boolean isSearching = false;
     boolean riderAvailable = true;
@@ -712,15 +688,6 @@ public class SearchRiderFragment extends Fragment {
 
                                 isDismissed = true;
                                 proximity = 0.1;
-
-    //                        pickUpDeliveryModel.resetFromInformation();
-    //                        pickUpDeliveryModel.resetsetDeliveryInformation();
-
-    //                    progressBar.setVisibility(View.INVISIBLE);
-    //                    loadertext.setText("Rider should accept");
-    //                    rider_search_btn.setVisibility(View.VISIBLE);
-    //                    searchRiderCardView.setVisibility(View.INVISIBLE);
-
 
                             }
 
@@ -1105,69 +1072,68 @@ public class SearchRiderFragment extends Fragment {
             String networkURL = "";
             if (getActivity() != null){
                 networkURL = parseDirectionsURL(pickupDirection, deliverDirection);
-            }
-
-            asyncHttpClient.get(networkURL, new JsonHttpResponseHandler(){
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    if (response != null){
-                        map.addMarker(new MarkerOptions().position(pickupDirection).icon(BitmapDescriptorFactory.fromResource(pickupresID)));
-                        map.addMarker(new MarkerOptions().position(deliverDirection).icon(BitmapDescriptorFactory.fromResource(deliverresID)));
+                asyncHttpClient.get(networkURL, new JsonHttpResponseHandler(){
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        if (response != null){
+                            map.addMarker(new MarkerOptions().position(pickupDirection).icon(BitmapDescriptorFactory.fromResource(pickupresID)));
+                            map.addMarker(new MarkerOptions().position(deliverDirection).icon(BitmapDescriptorFactory.fromResource(deliverresID)));
 
 
-                        try {
+                            try {
 //                         if(response.has("overview_polyline")){
-                            JSONObject object =  new JSONObject(response.getJSONArray("routes").get(0).toString());
+                                JSONObject object =  new JSONObject(response.getJSONArray("routes").get(0).toString());
 //                               Log.i("DeliPack", "Decoded json object "  + object.getJSONObject("overview_polyline").getString("points"));
 
-                            String points_link = object.getJSONObject("overview_polyline").getString("points");
-                            List<LatLng> latLngs = decodePoly(points_link);
-                            polylineOptions = new PolylineOptions().addAll(latLngs).color(Color.parseColor("#1565c0"));
-                            map.addPolyline(polylineOptions);
+                                String points_link = object.getJSONObject("overview_polyline").getString("points");
+                                List<LatLng> latLngs = decodePoly(points_link);
+                                polylineOptions = new PolylineOptions().addAll(latLngs).color(Color.parseColor("#1565c0"));
+                                map.addPolyline(polylineOptions);
 
 //                         }
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
 //                    map.addPolyline(polylineOptions);
-                        if(deliverToLatLng == null){
-                            if(searchingString != null){
+                            if(deliverToLatLng == null){
+                                if(searchingString != null){
 //                                map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.parseDouble(searchingString.get(2)), Double.parseDouble(searchingString.get(3)))));
 //                                map.animateCamera(CameraUpdateFactory.zoomTo(11));
-                            }
-                        } else {
+                                }
+                            } else {
 //                            map.moveCamera(CameraUpdateFactory.newLatLng(deliverToLatLng));
 //                            map.animateCamera(CameraUpdateFactory.zoomTo(11));
 
+                            }
+
                         }
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
 
                     }
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        Log.i("DeliPackMessage", errorResponse + "");
+                        return;
+                    }
 
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        Log.i("DeliPackMessage", responseString);
+                        return;
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    Log.i("DeliPackMessage", errorResponse + "");
-                    return;
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    Log.i("DeliPackMessage", responseString);
-                    return;
-
-                }
-            });
+                    }
+                });
+            }
 
         } catch (Exception e){
             return;

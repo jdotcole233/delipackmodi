@@ -56,6 +56,7 @@ public class ManageHistoryClass implements Runnable {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
+                Log.i("DeliPackMessage", "in  of history " + response.toString());
 
                 if (response != null){
                     for (int i = 0; i < response.length(); i++){
@@ -69,7 +70,10 @@ public class ManageHistoryClass implements Runnable {
                                     , transactionObject.getString("registered_number"), transactionObject.getString("created_at"), transactionObject.getString("transaction_number"), transactionObject.getString("company_logo_path")));
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.i("DeliPackMessage", "Catch of history " + response.toString());
                         }
+                        Log.i("DeliPackMessage", "not Catch of history " + response.toString());
+
                     }
                     Intent historyDataIntent = new Intent("historyDataIntent");
                     historyDataIntent.putExtra("historydata", (Serializable) customerHistoryModel);

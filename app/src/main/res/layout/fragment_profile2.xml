@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             >
 
@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_marginRight="20dp"
-                >
+                android:layout_marginEnd="20dp">
                 <ImageView
                     android:id="@+id/profile_edit_button"
                     android:layout_width="30dp"
@@ -29,7 +29,8 @@
                     android:layout_gravity="center"
                     android:layout_alignParentRight="true"
 
-                    />
+                    android:contentDescription="@string/todo"
+                    android:layout_alignParentEnd="true" />
             </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -44,13 +45,13 @@
                     android:layout_height="wrap_content"
                     android:elevation="15dp"
                     app:cardBackgroundColor="@color/quantum_white_100"
-                    >
+                    tools:targetApi="lollipop">
                     <ImageView
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:src="@drawable/deli_s"
                         android:layout_gravity="center"
-                        />
+                        android:contentDescription="TODO" />
                 </android.support.v7.widget.CardView>
 
                 <LinearLayout
@@ -64,8 +65,8 @@
                         android:id="@+id/customerbigname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="25dp"
-                        android:text="Emma Philips"
+                        android:textSize="25sp"
+                        android:text="@string/emma_philips"
                         android:textColor="#38466F"
                         android:fontFamily="@font/amiko_bold"
                         />
@@ -74,8 +75,8 @@
                         android:id="@+id/customerbigemail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="13dp"
-                        android:text="N/A"
+                        android:textSize="13sp"
+                        android:text="@string/n_a"
                         android:textColor="#989CAF"
                         android:fontFamily="sans-serif"
                         android:textStyle="bold"
@@ -86,55 +87,30 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/customersmallnumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:paddingLeft="10dp"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_call_black_24dp"
+                android:drawableLeft="@drawable/ic_call_black_24dp"
+                android:drawablePadding="15dp"
+                android:layout_marginHorizontal="10dp"
+                android:text="(233) 243 788 9827"
+                android:textColor="#989CAF"
+                android:fontFamily="sans-serif-light"
+                />
 
-                    />
-                <TextView
-                    android:id="@+id/customersmallnumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="(233) 243 788 9827"
-                    android:textColor="#989CAF"
-                    android:paddingLeft="15dp"
-                    android:fontFamily="sans-serif-light"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/customersmallemail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:paddingLeft="10dp"
-                android:layout_marginTop="5dp"
+                android:drawableLeft="@drawable/ic_mail_outline_black_24dp"
+                android:layout_marginHorizontal="10dp"
+                android:text="N/A"
+                android:drawablePadding="15dp"
+                android:textColor="#989CAF"
+                android:fontFamily="sans-serif-light"
+                />
 
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_mail_outline_black_24dp"
-
-                    />
-                <TextView
-                    android:id="@+id/customersmallemail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="N/A"
-                    android:textColor="#989CAF"
-                    android:fontFamily="sans-serif-light"
-                    android:paddingLeft="15dp"
-                    />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -157,16 +133,16 @@
                         android:id="@+id/customerOrderTotal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="0"
+                        android:text="@string/_0"
                         android:textColor="#06184F"
                         android:fontFamily="@font/amiko_semibold"
-                        android:textSize="23dp"
+                        android:textSize="23sp"
                         android:textAlignment="center"
                         />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Orders"
+                        android:text="@string/orders"
                         android:textColor="#989CAF"
                         android:fontFamily="sans-serif-light"
                         android:textAlignment="center"
@@ -272,7 +248,7 @@
                     android:drawablePadding="10dp"
                     android:fontFamily="sans-serif-light"
                     android:paddingLeft="10dp"
-                    android:text="Report a problem"
+                    android:text="@string/report_a_problem"
                     android:textAlignment="textStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="#636B94" />

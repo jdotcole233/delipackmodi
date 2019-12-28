@@ -11,13 +11,14 @@ import cz.msebera.android.httpclient.cookie.Cookie;
 import cz.msebera.android.httpclient.impl.cookie.BasicClientCookie;
 
 public class CustomerContract {
-    public static final String LOGIN_URL = "http://delipackport.com/api/customer_login";
-    public static final String GETCOMPANYDATA_URL = "http://delipackport.com/api/companydata";
-    public static final String UPDATEDTRANSACTION_URL = "http://delipackport.com/api/updateTransaction";
-    public static final String RATING_URL = "http://delipackport.com/api/ratedelivery";
-    public static final String CUSTOMERTRANSACTIONHISTORY_URL = "http://delipackport.com/api/customertransactionhistory";
-    public static final String CUSTOMERREPORT_URL = "http://delipackport.com/api/sendandroidcustomerreport";
-    public static final String CUSTOMERERRANDSESSIONCANCEL_URL = "http://delipackport.com/api/customererrandsessioncancel";
+    public static final String DOMAIN = "192.168.100.5:8000";
+    public static final String LOGIN_URL = "http://"+ DOMAIN + "/api/customer_login";
+    public static final String GETCOMPANYDATA_URL = "http://" + DOMAIN + "/api/companydata";
+    public static final String UPDATEDTRANSACTION_URL = "http://" + DOMAIN + "/api/updateTransaction";
+    public static final String RATING_URL = "http://" + DOMAIN + "/api/ratedelivery";
+    public static final String CUSTOMERTRANSACTIONHISTORY_URL = "http://" + DOMAIN + "/api/customertransactionhistory";
+    public static final String CUSTOMERREPORT_URL = "http://" + DOMAIN + "/api/sendandroidcustomerreport";
+    public static final String CUSTOMERERRANDSESSIONCANCEL_URL = "http://" + DOMAIN +"/api/customererrandsessioncancel";
 
 
     private PersistentCookieStore persistentCookieStore;
