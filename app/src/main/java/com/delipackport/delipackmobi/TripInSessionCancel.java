@@ -3,9 +3,11 @@ package com.delipackport.delipackmobi;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.delipackport.delipackmobi.CustomerContract.CustomerContract;
@@ -36,11 +38,11 @@ public class TripInSessionCancel extends AppCompatActivity {
     public static Activity packageinprogresstripsessioncancel;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_in_session_cancel);
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
@@ -92,27 +94,47 @@ public class TripInSessionCancel extends AppCompatActivity {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
-                        customerLocalPushNotification.publishNotification("Errand Cancelled", null, "Your errand has been cancelled successfully");
-                        cancelSession.setVisibility(View.INVISIBLE);
-                        if(customer_id != null && rider_id != null){
-                            if (!customer_id.isEmpty() && !rider_id.isEmpty()){
-                                customerRequest = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest");
-                                customerRequest.child(customer_id).removeValue();
-                                riderfoundforcustomer = FirebaseDatabase.getInstance().getReference().child("RiderFoundForCustomer");
-                                riderfoundforcustomer.child(rider_id).child("assigned").setValue("not assigned");
-                                cancelButton.setFocusable(true);
-                                donotcancelButton.setFocusable(true);
-                                packageinprogresstripsessioncancel.finish();
-                                finish();
+                        try {
+                            if(response.getString("success").equals("Cancelled")){
+                                customerLocalPushNotification.publishNotification("Errand Cancelled", null, "Your errand has been cancelled successfully");
+                                cancelSession.setVisibility(View.INVISIBLE);
+                                if(customer_id != null && rider_id != null){
+                                    if (!customer_id.isEmpty() && !rider_id.isEmpty()){
+                                        customerRequest = FirebaseDatabase.getInstance().getReference().child("CustomerRiderRequest");
+                                        customerRequest.child(customer_id).removeValue();
+                                        riderfoundforcustomer = FirebaseDatabase.getInstance().getReference().child("RiderFoundForCustomer");
+                                        riderfoundforcustomer.child(rider_id).child("assigned").setValue("not assigned");
+                                        cancelButton.setFocusable(true);
+                                        donotcancelButton.setFocusable(true);
+                                        packageinprogresstripsessioncancel.finish();
+                                        View view = SearchRiderFragment.searchRiderFragment.getView();
+                                        CardView cardView = view.findViewById(R.id.searchridercardview);
+                                        CardView details_cardView = view.findViewById(R.id.cardsearchwelcome);
+                                        ImageButton imageButton = view.findViewById(R.id.showmoretripinprogress);
+                                        cardView.setVisibility(View.VISIBLE);
+                                        details_cardView.setVisibility(View.VISIBLE);
+                                       if (imageButton != null)
+                                           imageButton.setVisibility(View.INVISIBLE);
+                                        finish();
 
+                                    }
+                                }
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
                         System.out.println("cancelling errand session json object error" + errorResponse.toString());
+                        try {
+                            new DeliPackAlert(TripInSessionCancel.this, "Cancellation error", errorResponse.getString("error"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override

@@ -7,8 +7,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -63,7 +66,7 @@ public class Homedashboard_user extends AppCompatActivity {
 
         manageNetworkConnectionClass = new ManageNetworkConnectionClass(this);
         if(!Places.isInitialized()){
-            Places.initialize(this, "AIzaSyDKBYaQubmWi0ockGK4hmMAPG_RcKcZ7mk");
+            Places.initialize(this, getResources().getString(R.string.places_api));
         }
 
 
@@ -94,6 +97,7 @@ public class Homedashboard_user extends AppCompatActivity {
 
         navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         switchFragments(searchRiderFragment);
 
 
@@ -146,7 +150,7 @@ public class Homedashboard_user extends AppCompatActivity {
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        public boolean onNavigationItemSelected(MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_history:
                     switchFragments(historyFragment);
@@ -195,6 +199,7 @@ public class Homedashboard_user extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentFrame, fragment);
         fragmentTransaction.commit();
+
         System.out.println("In fragement " + fragment);
     }
 

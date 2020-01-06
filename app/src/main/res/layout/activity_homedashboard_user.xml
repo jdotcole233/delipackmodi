@@ -42,8 +42,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:itemTextColor="#FFF"
-        app:itemIconTint="#FFF"
+        app:itemTextColor="@color/bottom_navigation_color"
+        app:itemIconTint="@color/bottom_navigation_color"
         android:background="@drawable/bottom_navigation_background"
         app:menu="@menu/navigation" />
 

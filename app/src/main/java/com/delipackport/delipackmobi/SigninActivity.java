@@ -95,13 +95,6 @@ public class SigninActivity extends AppCompatActivity {
                                     startActivity(new Intent(SigninActivity.this, Homedashboard_user.class));
                                     finish();
 
-                                } else if (response_validate.contains("Deactivated")){
-                                    String message = "Sorry!! This account has been deactivated. Contact us at 'https://delivpack.com' to resolve any issues";
-                                    new DeliPackAlert(SigninActivity.this, "Deactivated",  message).showDeliPackAlert();
-
-                                } else if (response_validate.contains("Failed")){
-                                    String message = "Attempt to login failed, check credentials and try again";
-                                    new DeliPackAlert(SigninActivity.this, "Login Failure", message).showDeliPackAlert();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -113,6 +106,21 @@ public class SigninActivity extends AppCompatActivity {
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
                             System.out.println("Response from on failure " + errorResponse);
+                            String response_validate;
+                            try {
+                                response_validate = errorResponse.getString("success_cue");
+                                if (response_validate.contains("Deactivated")){
+                                    String message = "Sorry!! This account has been deactivated. Contact us at 'https://delivpack.com' to resolve any issues";
+                                    new DeliPackAlert(SigninActivity.this, "Deactivated",  message).showDeliPackAlert();
+
+                                } else if (response_validate.contains("Failed")){
+                                    String message = "Attempt to login failed, check credentials and try again";
+                                    new DeliPackAlert(SigninActivity.this, "Login Failure", message).showDeliPackAlert();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
 //                            progressBar.setVisibility(View.INVISIBLE);
                             activateWidgets();
 

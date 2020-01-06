@@ -31,7 +31,7 @@
                 android:gravity="center"
                 android:text="@string/cash_option"
                 android:textColor="#FFF"
-                android:textSize="15sp" tools:targetApi="o"/>
+                android:textSize="13sp" tools:targetApi="o"/>
 
         </LinearLayout>
 
@@ -41,8 +41,8 @@
         android:layout_height="wrap_content"
         android:text="@string/choose_cash_payment_option"
         android:textColor="#000"
-        android:textSize="22sp"
-        android:padding="15dp"
+        android:textSize="13sp"
+        android:padding="13dp"
         android:fontFamily="sans-serif-light"
         android:textAlignment="center"
         />
@@ -55,7 +55,7 @@
         <Spinner
             android:id="@+id/cash_choice"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
@@ -74,14 +74,14 @@
             <Button
                 android:id="@+id/cash_payment_button"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/history_header_background"
+                android:background="@drawable/register_btn_background"
                 android:text="@string/confirm_pick_up"
                 android:textColor="#FFF"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:fontFamily="@font/amiko_semibold"
                 />
 

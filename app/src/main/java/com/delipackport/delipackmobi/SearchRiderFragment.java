@@ -73,7 +73,7 @@ public class SearchRiderFragment extends Fragment {
     private  AutocompleteSupportFragment autocompleteFragment, autocompleteFragment1;
     private Button rider_search_btn, confirm_button, confirm_payment, make_payment;
     private PickUpDeliveryModel pickUpDeliveryModel;
-    private CardView resultcard, confirmcardview, searchRiderCardView, searchriderwelcomecard;
+    private CardView resultcard, confirmcardview,searchRiderCardView, searchriderwelcomecard;
     private TextView confirm_textview, loadertext, welcomeText;
     private Spinner paymentSpinner;
     private MapView mapView;
@@ -87,6 +87,7 @@ public class SearchRiderFragment extends Fragment {
     public static  Double proximity;
     private String rider_id_found, deliveryLocatioName, pickupLocationName;
     public static Activity delipackEventloader, homedasboardactivity;
+    public static Fragment searchRiderFragment;
     private AsyncHttpClient getCompanyInformation;
     private float [] distdiff;
     private Boolean isDismissed, riderFound;
@@ -165,6 +166,7 @@ public class SearchRiderFragment extends Fragment {
         searchriderwelcomecard = getActivity().findViewById(R.id.cardsearchwelcome);
         welcomeText = getActivity().findViewById(R.id.welcomemessage);
         customerContract = new CustomerContract(getActivity());
+        searchRiderFragment = this;
         readRiderInformationBackAsynTask = new ReadRiderInformationBackAsynTask(getActivity());
         customerLocalPushNotification = new CustomerLocalPushNotification(getActivity());
         distdiff = new float[1];
@@ -667,9 +669,12 @@ public class SearchRiderFragment extends Fragment {
 
 
                                 // Create a structure for driver found for customer
-                                autocompleteFragment.setText("");
-                                autocompleteFragment1.setText("");
-                                rider_search_btn.setEnabled(false);
+                                if (autocompleteFragment != null){
+                                    autocompleteFragment.setText("");
+                                    autocompleteFragment1.setText("");
+                                    rider_search_btn.setEnabled(false);
+                                }
+
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference databasecustomer = database.getReference().child("CustomerRiderRequest").child(customer_id); //set first child value to customer id
                                 databasecustomer.child("rideraccepted").setValue("");
