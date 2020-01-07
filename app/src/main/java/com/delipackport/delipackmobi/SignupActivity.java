@@ -32,7 +32,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText password;
     private EditText confirmPassword;
     private  Button registerButton;
-    private final static String POSTURL = "http://delipackport.com/api/registercutomer";
+    private final static String POSTURL = "https://www.delipackport.com/api/registercutomer";
     private DeliPackAlert deliPackAlert;
     private CustomerContract customerContract;
 
@@ -117,8 +117,6 @@ public class SignupActivity extends AppCompatActivity {
                                                         finish();
                                                         Intent registerconfirmed = new Intent(SignupActivity.this, RegisteredWelcomeWalkThrough.class);
                                                         startActivity(registerconfirmed);
-                                                    } else if (responded.equals("Failed")){
-                                                        new DeliPackAlert(SignupActivity.this, "Duplicate Phone Number", "Please use a different valid phone number or contact support@delivpack.com for help").showDeliPackAlert();
                                                     }
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
@@ -128,22 +126,16 @@ public class SignupActivity extends AppCompatActivity {
                                         }
 
                                         @Override
-                                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-//                                            super.onSuccess(statusCode, headers, responseString);
-                                            Log.i("delipack", "in Stiring response " + responseString);
-                                        }
-
-                                        @Override
-                                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                                            super.onSuccess(statusCode, headers, response);
-                                            Log.i("delipack", "in Array response" +  response);
-                                        }
-
-                                        @Override
                                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                                            new DeliPackAlert(SignupActivity.this, "Network failure", "Something went wrong with the internet, please try again").showDeliPackAlert();
-                                            Log.i("delipack", errorResponse + "status code in object response");
+                                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                                            try {
+                                                if (errorResponse.getString("success_cue").equals("Failed")){
+                                                    new DeliPackAlert(SignupActivity.this, "Duplicate Phone Number", "Please use a different valid phone number or contact support@delivpack.com for help").showDeliPackAlert();
+                                                    return;
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
 
                                         }
 
@@ -163,8 +155,6 @@ public class SignupActivity extends AppCompatActivity {
                                 @Override
                                 public void onCancel() {
                                     new DeliPackAlert(SignupActivity.this, "Verification canceled", "You cancelled verfication process").showDeliPackAlert();
-
-//                                    Log.i("delipack", "canceled");
                                 }
                             });
 

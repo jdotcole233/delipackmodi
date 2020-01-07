@@ -121,7 +121,10 @@
                          android:textColor="@color/colorAccent"
                          android:textColorHint="@color/colorAccent"
                          android:importantForAutofill="no"
-                         android:drawableStart="@drawable/ic_lock_outline_black_24dp" tools:targetApi="lollipop" />
+                         android:drawableStart="@drawable/ic_lock_outline_black_24dp"
+                         tools:targetApi="lollipop"
+                         android:textSize="13sp"
+                         />
 
                      <EditText
                          android:id="@+id/confirm_password"

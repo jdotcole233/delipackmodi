@@ -169,7 +169,7 @@
                       android:layout_height="wrap_content"
                       android:layout_alignParentStart="true"
                       android:layout_alignParentLeft="true"
-                      android:text="Alredy have a account? Sign in"
+                      android:text="@string/alredy_have_a_account_sign_in"
                       android:background="#00ffffff"
                       android:gravity="center"
                       android:layout_gravity="center"

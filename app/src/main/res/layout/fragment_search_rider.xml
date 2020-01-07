@@ -116,8 +116,8 @@
                             android:layout_marginLeft="20dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="20dp"
-                            android:background="@drawable/confirm_button"
-                            android:elevation="10dp"
+                            android:background="@drawable/register_btn_background"
+                            android:elevation="13dp"
                             android:fontFamily="@font/amiko_semibold"
 
                             />
